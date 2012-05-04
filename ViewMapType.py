@@ -6,6 +6,7 @@
 
 ## View Map 
 class CViewMapElement(object):
-    mHashCode = "12345678"              ## hex string <Hash Code of WindowState Object>
-    mTriggerHashCode = "12345678"       ## same as above
-    mNextElementHashCode= "12345678"    ## same as above
+    def __init__(self):
+        self.mHashCode = "12345678"              ## hex string <Hash Code of WindowState Object>
+        self.mTriggerHashCode = "12345678"       ## same as above
+        self.mNextElementHashCode= "12345678"    ## same as above

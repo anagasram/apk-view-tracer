@@ -4,7 +4,6 @@
 ## kun for Apk View Tracing
 ## GlobalVariable.py
 
-import os
 
 
 ## ------------------------------------------
@@ -16,15 +15,6 @@ time_out = 60
 
 list_view_cmd = "LIST"
 dump_view_cmd = "DUMP -1"
-
-## -------------------------------------------
-## dir path
-## -------------------------------------------
-curDir = os.getcwd()
-conf_dir = curDir + os.sep + "conf" + os.sep
-rules_dir = curDir + os.sep + "rules" + os.sep
-
-
 
 ## -----------------------------------------
 ## data structures

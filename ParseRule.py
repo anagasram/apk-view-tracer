@@ -17,7 +17,6 @@ from toolkit import getRuleDir
 ## dragEventsCount=50
 ## ......
 
-
 class ParseRule():
     
     def __init__(self):

@@ -30,3 +30,9 @@ def getConfDir():
 
 def getRuleDir():
     return os.getcwd() + os.sep + "rule"
+
+def getToolsDir():
+    return os.getcwd() + os.sep + "tools"
+
+def getPlatformToolsDir():
+    return os.getcwd() + os.sep + "platform-tools"

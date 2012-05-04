@@ -4,9 +4,8 @@
 ## kun for Apk View Tracing
 ## ParseView.py
 
-
-from GlobalVariable import host, port, time_out
 from InitDevice import init_service
+from GetConfigInfo import GetViewServerInfo
 import telnetlib
 
 class ParseView():
@@ -65,7 +64,10 @@ def DiffCheck_Views():
         print "failed to init service!"
         return False
         #return None
-    
+    config = GetViewServerInfo()
+    host = config.getServerHost()
+    port = config.getServerPort()
+    time_out = config.getServerTimeOut()
     tn = telnetlib.Telnet(host, port, time_out)
     tn.write("GET_FOCUS\n")
     CurView_Data = tn.read_until("DONE")

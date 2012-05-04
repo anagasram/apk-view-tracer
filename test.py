@@ -5,9 +5,9 @@
 ## test.py
 
 import telnetlib
-from GlobalVariable import host, port, time_out
 from ParseView import ParseView
 from InitDevice import init_service
+from GetConfigInfo import GetViewServerInfo
 
 
 def GetMoreInfos():
@@ -16,7 +16,11 @@ def GetMoreInfos():
         print "failed to init service!"
         return False
         #return None
-    
+
+    config = GetViewServerInfo()
+    host = config.getServerHost()
+    port = config.getServerPort()
+    time_out = config.getServerTimeOut()
     tn = telnetlib.Telnet(host, port, time_out)
     tn.write("GET_FOCUS\n")
     CurView_Data = tn.read_until("DONE")
@@ -40,6 +44,11 @@ def GetMoreInfos():
 # # so "dump -1" means "dump %s" %focused_view_hashcode
 #===========================================================================
 def testDumpFile():
+    config = GetViewServerInfo()
+    host = config.getServerHost()
+    port = config.getServerPort()
+    time_out = config.getServerTimeOut()
+    
     tn = telnetlib.Telnet(host, port, time_out)
     tn.write("DUMP -1\n")
     default_dump_data = tn.read_until("DONE")

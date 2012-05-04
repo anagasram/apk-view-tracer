@@ -5,35 +5,9 @@
 ## GlobalVariable.py
 
 
-
-## ------------------------------------------
-## Android Windows View Server Info
-## ------------------------------------------
-host = 'localhost'
-port = 4939
-time_out = 60
-
-list_view_cmd = "LIST"
-dump_view_cmd = "DUMP -1"
-
-## -----------------------------------------
-## data structures
-## -----------------------------------------
-
-##rect_dict = {"left": "mLeft",
-##             "right": "mRight",
-##             "top": "mTop",
-##             "bottom": "mBottom"}
-##
-#### a tree node is a dict type
-##type_tree_node={"id": "mId",
-##		"text": "mText",
-##		"rect": rect_dict,
-##                "element": "element_data",
-##		"parent_node": {},
-##		"child_nodes": [],
-##                "depth": 0}
-
+#===============================================================================
+# # data structures
+#===============================================================================
 class CRect(object):
     mLeft = 0
     mRight = 0
@@ -45,8 +19,8 @@ class CTreeNode(object):
     mText = "mText"
     mAbsoluteRect=CRect()
     mRect = CRect()
-    mElement = "element_data"
-    mParentNode = {}
+    mElement = "element_data" ## just init, it was string data which was dumped from telnet
+    mParentNode = {} ## just init, but it also was CTreeNode object
     mChildNodes = []
     mDepth = 0
     mActive = False ## currently, I get this value from (DRAWN, Visiable, Clickable)

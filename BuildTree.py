@@ -10,7 +10,7 @@ from GlobalVariable import *
 from toolkit import *
 from DeviceConnection import getInfosByTelnet
 from ParseElement import *
-from GetViewState import *
+from GetViewState import GetViewState
 
 
 def buildTree(elements_list, blanks_list):
@@ -118,7 +118,8 @@ def setNodeValue(node):
     node.mId = parse_ID(element)
     node.mText = parse_Text(element)
     node.mRect = getRectArea(element)
-    node.mActive = getActiveState(node)
+    active_state = GetViewState()
+    node.mActive = active_state.getActiveState(node)
     node.mAbsoluteRect = getAbsoluteRect(node)
 
 

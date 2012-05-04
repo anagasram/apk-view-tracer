@@ -6,20 +6,20 @@
 
 from GlobalVariable import *
 from toolkit import *
-from ParseElement import *
+from ParseElement import ParseElement
 
 
 class GetViewState():
     def __init__(self):
-        pass    
+        self.element_parser = ParseElement()
     
     ## The Visible state of parent node decide the Visible state of child node
     ## 应该是遍历所有的父节点的，但是下面的setNodeValue()函数是从root node开始，从上往下填值的，所以可以只判断自己和直接父节点的状态即可
     def getVisibleState(self, node):
         if None == node.mParentNode:
-            return parse_Visible(node.mElement)
+            return self.element_parser.parse_Visible(node.mElement)
         else:
-            return (parse_Visible(node.mElement) and parse_Visible(node.mParentNode.mElement))
+            return (self.element_parser.parse_Visible(node.mElement) and self.element_parser.parse_Visible(node.mParentNode.mElement))
     
     ## 遍历所有父节点的方法
     def getVisibleState_2(self, node):
@@ -30,14 +30,12 @@ class GetViewState():
     ## for example, ListView is
     def getClickableState(self, node):
         parent_node = node.mParentNode
-        parent_ClassName = parse_ClassName(parent_node.mElement)
+        parent_ClassName = self.element_parser.parse_ClassName(parent_node.mElement)
         print parent_ClassName
         if "android.widget.ListView" == parent_ClassName:
-            return parse_Clickable(parent_node.mElement)
+            return self.element_parser.parse_Clickable(parent_node.mElement)
         else:
-            return parse_Clickable(node.mElement)
-    
-        
+            return self.element_parser.parse_Clickable(node.mElement)        
             
     
     ## mActive = False means it can not handle events
@@ -45,7 +43,7 @@ class GetViewState():
     def getActiveState(self, node):
         element = node.mElement
         try:
-            if parse_WillNotDraw(element):
+            if self.element_parser.parse_WillNotDraw(element):
                 print "Will Not Draw!"
                 return False
             if not self.getVisibleState(node):
@@ -54,7 +52,7 @@ class GetViewState():
             if not self.getClickableState(node):
                 print "Not Clickable!"
                 return False
-            if not parse_DRAWN(element):
+            if not self.element_parser.parse_DRAWN(element):
                 print "Not Drawn!"
                 return False
             else:

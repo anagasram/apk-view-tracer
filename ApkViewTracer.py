@@ -7,7 +7,7 @@
 import platform,sys,os
 from DeviceCommand import DeviceCommand
 from InitDevice import init_service
-from ParseElement import parse_structure
+from ParseElement import ParseElement
 from BuildTree import build
 from GenerateViewFile import generateViewPointList,generateViewFile
 
@@ -35,7 +35,8 @@ def main():
         raise Exception
     deviceCmd = DeviceCommand()
     data = deviceCmd.getCurrentViewInfo()
-    parse_structure(data)
+    element_parser = ParseElement()
+    element_parser.parse_structure(data)
     
     test()
     

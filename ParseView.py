@@ -5,9 +5,8 @@
 ## ParseView.py
 
 
-from GlobalVariable import *
+from GlobalVariable import host, port, time_out
 from InitDevice import init_service
-from DeviceConnection import getInfosByTelnet
 import telnetlib
 
 class ParseView():
@@ -60,8 +59,7 @@ class ParseView():
         print viewListHashCode_List
         return viewListHashCode_List, viewListHashCode_Dict
 
-
-def GetMoreInfos():
+def DiffCheck_Views():
     # List View and get Current Focus
     if False == init_service():
         print "failed to init service!"
@@ -86,36 +84,6 @@ def GetMoreInfos():
     
     return CurView_Data, ViewList_Data
 
-#===========================================================================
-# # these two files are same, (sha1 are same)
-# # so "dump -1" means "dump %s" %focused_view_hashcode
-#===========================================================================
-def test():
-    tn = telnetlib.Telnet(host, port, time_out)
-    tn.write("DUMP -1\n")
-    default_dump_data = tn.read_until("DONE")
-    tn.close()
-    f=open("default_dump_data", "w")
-    f.write(default_dump_data)
-    f.close()
-    
-    t = GetMoreInfos()[0]
-    parser = ParseView()
-    ViewHashCode = parser.parseViewListData(t)[0][0]  ## focused view hash code
-    tn = telnetlib.Telnet(host, port, time_out)
-    tn.write("DUMP %s\n" %ViewHashCode)
-    assign_dump_data = tn.read_until("DONE")
-    tn.close()
-    f=open("assign_dump_data", "w")
-    f.write(assign_dump_data)
-    f.close()
-
-def DiffCheck_Views():
-    Infos = GetMoreInfos()
-    curViewData = Infos[0]
-    viewListData = Infos[1]
-
 if __name__=="__main__":
-    test()
     DiffCheck_Views()
     

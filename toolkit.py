@@ -17,9 +17,16 @@ def octstr2int(s):
     return int(s,8)
 
 
-## get parent directory
+#===============================================================================
+# # get parent directory
+#===============================================================================
 def getParDir():
     return os.path.abspath(os.path.join(os.getcwd(), os.path.pardir))
 
+
+
 def getConfDir():
     return os.getcwd() + os.sep + "conf"
+
+def getRuleDir():
+    return os.getcwd() + os.sep + "rule"

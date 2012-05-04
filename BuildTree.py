@@ -4,10 +4,8 @@
 ## kun for Apk View Tracking
 ## BuildTree.py
 
-import os
 import copy
-from GlobalVariable import *
-from toolkit import *
+from TreeType import CRect,CTreeNode
 from DeviceConnection import getInfosByTelnet
 from ParseElement import ParseElement
 from GetViewState import GetViewState
@@ -128,6 +126,7 @@ def setNodeValue(node):
 def getChildNodesList(tree_nodes_list, tree_node):
 
     for node in tree_nodes_list:
+        print node
         pass
 
 

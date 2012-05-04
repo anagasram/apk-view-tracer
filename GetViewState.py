@@ -4,8 +4,6 @@
 ## kun for Apk View Tracing
 ## GetViewState.py
 
-from GlobalVariable import *
-from toolkit import *
 from ParseElement import ParseElement
 
 

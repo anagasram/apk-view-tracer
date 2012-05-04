@@ -5,12 +5,18 @@
 ## GenerateViewFile.py
 
 from BuildTree import build
-from GlobalVariable import click_action_list,touch_action_list,drag_action_list,Action_Sequence_Map
 
 class GenerateViewFile():
+    ## class variables
+    ## Action List and Map which ensure action sequence
+    click_action_list=[]
+    touch_action_list=[]
+    drag_action_list=[]
+    Action_Sequence_Map = {"click": click_action_list,
+                           "touch": touch_action_list,
+                           "drag": drag_action_list}
     def __init__(self):
-        pass
-    
+        pass 
 
     def getViewCenterPoint(self, node):
         width = node.mAbsoluteRect.mRight - node.mAbsoluteRect.mLeft

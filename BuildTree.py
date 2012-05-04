@@ -17,8 +17,7 @@ def buildTree(elements_list, blanks_list):
     tree_nodes_list=[]
     
     root_node= CTreeNode()
-    root_node.mParentNode=None
-    
+    root_node.mParentNode=None    
 
     total_count = len(blanks_list)
 
@@ -46,14 +45,17 @@ def buildTree(elements_list, blanks_list):
             delta_depth = (depth - pre_depth)
             if (1 == delta_depth):
                 ## 本节点是上一个节点的子节点
+                ## current node is a child node of last node
                 node.mParentNode = tree_nodes_list[pre_index]
                 tree_nodes_list.append(node)
             elif (0 == delta_depth):
                 ## 等深度， 取上一个的父节点作为自己的父节点
+                ## these two nodes have same depth, so that they have same parent node
                 node.mParentNode = tree_nodes_list[pre_index].mParentNode
                 tree_nodes_list.append(node)
             elif (0 > delta_depth):
                 ## 向上递归寻找和自己等深度的节点
+                ## Recurse down to up, seek the node which has same depth
                 new_delta_depth = delta_depth
                 new_pre_depth = pre_depth
                 new_pre_index = pre_index
@@ -68,8 +70,7 @@ def buildTree(elements_list, blanks_list):
                         new_delta_depth = depth - new_pre_depth
             else:
                 raise Exception, "Raise an Exception when Build Elements Tree!"
-                break
-           
+                break           
 
     return tree_nodes_list
 
@@ -129,7 +130,7 @@ def getChildNodesList(tree_nodes_list, tree_node):
 
 
 def build():
-    data = getInfosByTelnet(dump_view_cmd)
+    data = getInfosByTelnet("DUMP -1")
     elements_list, blanks_list = parse_structure(data)
     tree_nodes_list = buildTree(elements_list, blanks_list)
 

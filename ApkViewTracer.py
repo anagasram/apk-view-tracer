@@ -36,6 +36,7 @@ def main():
     deviceCmd = DeviceCommand()
     data = deviceCmd.getCurrentViewInfo()
     parse_structure(data)
+    
     test()
     
     script_file=""

@@ -29,9 +29,6 @@ PhysicalButton={"HOME": "KEYCODE_HOME",
               "DPAD_CENTER": "DPAD_CENTER", 
               "ENTER": "enter"}
 
-
-
-
 def clickEvent(device):
 
     device.press("KEYCODE_1", "DOWN_AND_UP")
@@ -60,19 +57,19 @@ def clickEvent(device):
 def dragEvent(device):
     pass
 
-##def drag_Down(device):
-##    cd = ChangeData
-##    log = Logs()
-##    list = cd.coordinate()
-##    if len(list) > 0:
-##        startX = list[0]
-##        startY = list[1]
-##        endX = list[2]
-##        endY = list[3]
-##        device.drag((startX,startY),(endX,endY),3,2)
-##        log.writeLog('device.drag(('+str(startX)+','+str(startY)+'),('+str(endX)+','+str(endY)+'),'+str(3)+','+str(2)+')')
-##    else:
-##       log.writeLog('List is null') 
+#def drag_Down(device):
+#    cd = ChangeData
+#    log = Logs()
+#    list = cd.coordinate()
+#    if len(list) > 0:
+#        startX = list[0]
+#        startY = list[1]
+#        endX = list[2]
+#        endY = list[3]
+#        device.drag((startX,startY),(endX,endY),3,2)
+#        log.writeLog('device.drag(('+str(startX)+','+str(startY)+'),('+str(endX)+','+str(endY)+'),'+str(3)+','+str(2)+')')
+#    else:
+#       log.writeLog('List is null') 
 
 
 def snapShot(device):
@@ -92,10 +89,12 @@ def startActivity(device):
     pass
 
 
-## Left: newLeft = (Root Node)->mLeft + (ParentNode)->mLeft + ... + self->mLeft
-## Right: newRight = newLeft + (self->mRight - self->mLeft)
-## Top : newTop = (Root Node)->mTop + (ParentNode)->mTop + ... + self->mTop
-## Bottom: newBottom = newTop + (self->mBottom - self->mTop)
+#===============================================================================
+# # Left: newLeft = (Root Node)->mLeft + (ParentNode)->mLeft + ... + self->mLeft
+# # Right: newRight = newLeft + (self->mRight - self->mLeft)
+# # Top : newTop = (Root Node)->mTop + (ParentNode)->mTop + ... + self->mTop
+# # Bottom: newBottom = newTop + (self->mBottom - self->mTop)
+#===============================================================================
 def clickEvent_Point(device):
     ## calculate (digit 7 : 80/370)
     print "begin"
@@ -109,9 +108,7 @@ def clickEvent_Point(device):
     ## Notification (y: 0-37  / x: 8-471 )
     print "begin"
     device.touch(471, 37, "DOWN_AND_UP")
-    print "end"
-
-    
+    print "end"    
 
     MonkeyRunner.sleep(2)
     device.press("KEYCODE_MENU", "DOWN_AND_UP");
@@ -136,8 +133,10 @@ def main():
         t = (int(l[0],10),int(l[1],10))
         view_point_list.append(t)
     device = MonkeyRunner.waitForConnection()
-    #clickEvent(device)
-    clickEvent_Point(device)
+    
+    #clickEvent(device)    
+#    clickEvent_Point(device) ## this is just for testing
+
     process_ViewPointList(view_point_list,device)
 
 if __name__=="__main__":

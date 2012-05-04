@@ -9,9 +9,5 @@ import os
 def buildViewMap():
     pass
 
-
-
-
-
 if __name__=="__main__":
     buildViewMap()

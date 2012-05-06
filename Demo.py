@@ -135,7 +135,7 @@ def main():
     device = MonkeyRunner.waitForConnection()
     
     #clickEvent(device)    
-#    clickEvent_Point(device) ## this is just for testing
+    clickEvent_Point(device) ## this is just for testing
 
     process_ViewPointList(view_point_list,device)
 

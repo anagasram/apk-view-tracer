@@ -11,6 +11,7 @@ encoding/GetViewState.py=utf-8
 encoding/GlobalVariable.py=utf-8
 encoding/InitDevice.py=utf-8
 encoding/InitEnv.py=utf-8
+encoding/MonkeyRunner.py=utf-8
 encoding/ParseElement.py=utf-8
 encoding/ParseRule.py=utf-8
 encoding/ParseView.py=utf-8

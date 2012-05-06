@@ -18,86 +18,87 @@ import sys
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice, MonkeyImage
 from com.android.monkeyrunner.recorder import MonkeyRecorder
 
+class MonkeyRunner():
+    def __init__(self):
+        ## command map
+        self.CMD_MAP = {"TOUCH": lambda dev, arg: dev.touch(**arg),
+                        "DRAG": lambda dev, arg: dev.drag(**arg),
+                        "PRESS": lambda dev, arg: dev.press(**arg),
+                        "TYPE": lambda dev, arg: dev.type(**arg),
+                        "SLEEP": lambda dev, arg: MonkeyRunner.sleep(**arg)
+                        }
 
-## command map
-CMD_MAP = {
-    "TOUCH": lambda dev, arg: dev.touch(**arg),
-    "DRAG": lambda dev, arg: dev.drag(**arg),
-    "PRESS": lambda dev, arg: dev.press(**arg),
-    "TYPE": lambda dev, arg: dev.type(**arg),
-    "SLEEP": lambda dev, arg: MonkeyRunner.sleep(**arg)
-    }
+        self.PhysicalButton={"HOME": "KEYCODE_HOME", 
+                             "SEARCH": "KEYCODE_SEARCH", 
+                              "MENU": "KEYCODE_MENU", 
+                              "BACK": "KEYCODE_BACK", 
+                              "DPAD_UP": "DPAD_UP", 
+                              "DPAD_DOWN": "DPAD_DOWN", 
+                              "DPAD_LEFT": "DPAD_LEFT", 
+                              "DPAD_RIGHT": "DPAD_RIGHT", 
+                              "DPAD_CENTER": "DPAD_CENTER", 
+                              "ENTER": "enter"
+                            }
+        self.action_type_list=["DOWN", "UP", "DOWN_AND_UP"]
 
-PhysicalButton={"HOME": "KEYCODE_HOME", 
-              "SEARCH": "KEYCODE_SEARCH", 
-              "MENU": "KEYCODE_MENU", 
-              "BACK": "KEYCODE_BACK", 
-              "DPAD_UP": "DPAD_UP", 
-              "DPAD_DOWN": "DPAD_DOWN", 
-              "DPAD_LEFT": "DPAD_LEFT", 
-              "DPAD_RIGHT": "DPAD_RIGHT", 
-              "DPAD_CENTER": "DPAD_CENTER", 
-              "ENTER": "enter"}
-action_type_list=["DOWN", "UP", "DOWN_AND_UP"]
+    def action(self, device, key_code, action_type):
+        device.press(key_code, action_type)
+    
+    def click(self, device, key_code):
+        device.press(key_code, "DOWN_AND_UP")
+    
+    def clickHomeButton(self, device):
+        device.press("KEYCODE_HOME", "DOWN_AND_UP")
+    
+    def clickMenuButton(self, device):
+        device.press("KEYCODE_MENU", "DOWN_AND_UP")
+    
+    def clickBackButton(self, device):
+        device.press("KEYCODE_BACK", "DOWN_AND_UP")
+    
+    def clickSearchButton(self, device):
+        device.press("KEYCODE_SEARCH", "DOWN_AND_UP")
+    
+    
+    def sleep(self, time_sec):
+        MonkeyRunner.sleep(time_sec)
+    
+    def dragEvent(self, device):
+        pass
 
-def action(device, key_code, action_type):
-    device.press(key_code, action_type)
-
-def click(device, key_code):
-    device.press(key_code, "DOWN_AND_UP")
-
-def clickHomeButton(device):
-    device.press("KEYCODE_HOME", "DOWN_AND_UP")
-
-def clickMenuButton(device):
-    device.press("KEYCODE_MENU", "DOWN_AND_UP")
-
-def clickBackButton(device):
-    device.press("KEYCODE_BACK", "DOWN_AND_UP")
-
-def clickSearchButton(device):
-    device.press("KEYCODE_SEARCH", "DOWN_AND_UP")
-
-
-def sleep(time_sec):
-    MonkeyRunner.sleep(time_sec)
-
-def dragEvent(device):
-    pass
-
-##def drag_Down(device):
-##    cd = ChangeData
-##    log = Logs()
-##    list = cd.coordinate()
-##    if len(list) > 0:
-##        startX = list[0]
-##        startY = list[1]
-##        endX = list[2]
-##        endY = list[3]
-##        device.drag((startX,startY),(endX,endY),3,2)
-##        log.writeLog('device.drag(('+str(startX)+','+str(startY)+'),('+str(endX)+','+str(endY)+'),'+str(3)+','+str(2)+')')
-##    else:
-##       log.writeLog('List is null') 
-
-
-def touchEvent(device):
-    pass
-
-def snapShot(device):
-    result = device.takeSnapshot()
-    return result
-
-def saveShot(result, degree):
-    result.writeToFile("./shot"+str(degree)+".png", "png")
-
-def typeText(device):
-    pass
-
-def installPkg(device):
-    pass
-
-def startActivity(device):
-    pass
+    #def drag_Down(self, device):
+    #    cd = ChangeData
+    #    log = Logs()
+    #    list = cd.coordinate()
+    #    if len(list) > 0:
+    #        startX = list[0]
+    #        startY = list[1]
+    #        endX = list[2]
+    #        endY = list[3]
+    #        device.drag((startX,startY),(endX,endY),3,2)
+    #        log.writeLog('device.drag(('+str(startX)+','+str(startY)+'),('+str(endX)+','+str(endY)+'),'+str(3)+','+str(2)+')')
+    #    else:
+    #       log.writeLog('List is null') 
+    
+    
+    def touchEvent(self, device):
+        pass
+    
+    def snapShot(self, device):
+        result = device.takeSnapshot()
+        return result
+    
+    def saveShot(self, result, degree):
+        result.writeToFile("./shot"+str(degree)+".png", "png")
+    
+    def typeText(self, device):
+        pass
+    
+    def installPkg(self, device):
+        pass
+    
+    def startActivity(self, device):
+        pass
 
 
 ## Left: newLeft = (Root Node)->mLeft + (ParentNode)->mLeft + ... + self->mLeft

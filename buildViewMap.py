@@ -2,12 +2,16 @@
 ## -*- coding: utf-8 -*-
 
 ## kun for Apk View Tracing
-## buildViewMap.py
+## BuildViewMap.py
+
+# because some views are created dynamic, and their ID will change
+# so Build View Map might be impossible 
 
 import os
 
-def buildViewMap():
-    pass
-
-if __name__=="__main__":
-    buildViewMap()
+class BuildViewMap():
+    def __init__(self):
+        pass
+    
+    def run(self):
+        pass

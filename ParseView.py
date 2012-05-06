@@ -57,6 +57,10 @@ class ParseView():
     
         print viewListHashCode_List
         return viewListHashCode_List, viewListHashCode_Dict
+    
+    def getViewTextDict(self, view_list_data):
+        view_text_dict = {}
+        return view_text_dict
 
 def DiffCheck_Views():
     # List View and get Current Focus

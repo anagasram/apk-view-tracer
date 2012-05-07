@@ -37,7 +37,7 @@ def main():
     deviceCmd = DeviceCommand()
     data = deviceCmd.getCurrentViewInfo()
     element_parser = ParseElement()
-    element_parser.parse_structure(data)
+    element_parser.getStructure(data)
     
     test()
     

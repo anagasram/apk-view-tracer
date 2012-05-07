@@ -114,8 +114,8 @@ def setNodeValue(node):
         return False
     
     element_parser = ParseElement()
-    node.mId = element_parser.parse_ID(element)
-    node.mText = element_parser.parse_Text(element)
+    node.mId = element_parser.getID(element)
+    node.mText = element_parser.getText(element)
     node.mRect = element_parser.getRectArea(element)
     active_state = GetViewState()
     node.mActive = active_state.getActiveState(node)
@@ -133,7 +133,7 @@ def getChildNodesList(tree_nodes_list, tree_node):
 def build():
     data = getInfosByTelnet("DUMP -1")
     element_parser = ParseElement()
-    elements_list, blanks_list = element_parser.parse_structure(data)
+    elements_list, blanks_list = element_parser.getStructure(data)
     tree_nodes_list = buildTree(elements_list, blanks_list)
 
     for node in tree_nodes_list:

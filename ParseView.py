@@ -6,6 +6,7 @@
 
 from InitDevice import init_service
 from GetConfigInfo import GetViewServerInfo
+from ParseElement import ParseElement
 import telnetlib
 
 class ParseView():
@@ -58,9 +59,23 @@ class ParseView():
         print viewListHashCode_List
         return viewListHashCode_List, viewListHashCode_Dict
     
-    def getViewTextDict(self, view_list_data):
-        view_text_dict = {}
-        return view_text_dict
+    
+    # parse view data by dump, then get the view text list
+    def getViewTextList(self, view_dump_data):
+        view_text_list = []
+        element_parser = ParseElement()
+        element_list = element_parser.getStructure(view_dump_data)
+        for element in element_list:
+            text = element_parser.getText(element)
+            view_text_list.append(text)       
+        
+        return view_text_list
+    
+    def isEqualTextList(self, view_dump_data1, view_dump_data2):
+        text_list1 = self.getViewTextList(view_dump_data1)     
+        text_list2 = self.getViewTextList(view_dump_data2) 
+        
+        return (text_list1 == text_list2) 
 
 def DiffCheck_Views():
     # List View and get Current Focus

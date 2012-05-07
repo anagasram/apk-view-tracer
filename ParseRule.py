@@ -10,7 +10,7 @@ from toolkit import getRuleDir
 
 ## for example
 ## xxx.rule
-## depth = 3
+## depth = 5
 ## event_type = touch, click, drag
 ## clickEventsCount=50
 ## touchEventsCount=50

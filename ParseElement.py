@@ -21,7 +21,7 @@ class ParseElement():
     def __init__(self):
         pass
 
-    def parse_structure(self, data):
+    def getStructure(self, data):
         list_data = data.split("\n")
         print "length of list: %s" %len(list_data)
     
@@ -40,16 +40,13 @@ class ParseElement():
             blanks_list.append(count)
             elements_list.append(element)
     
-    #        parse element
-    #        parse_ID(element)
-    #        print parse_Text(element)
-    #        parse_Clickable(element)
-    #        parse_Visible(element)
-    #        print getRectArea(element)
-    #        print getRectMidPoint(element)
-    
-        #print elements_list
-        print blanks_list
+#            #parse element
+#            self.getID(element)
+#            print self.getText(element)
+#            self.getClickable(element)
+#            self.getVisible(element)
+#            print self.getRectArea(element)
+#            print self.getRectMidPoint(element)
         
         return elements_list,blanks_list
 
@@ -59,7 +56,7 @@ class ParseElement():
     # # android.widget.ListView@44ed6480
     # # android.widget.TextView@44ed7e08
     #===============================================================================
-    def parse_ClassName(self, element):
+    def getClassName(self, element):
         tag_list = element.split(" ")
         for tag in tag_list:
             if ''==tag:
@@ -80,7 +77,7 @@ class ParseElement():
     ##            class_name = l[0]
         return class_name
 
-    def parse_RID(self, element):
+    def getHashCode(self, element):
         tag_list = element.split(" ")
         for tag in tag_list:
             if ''==tag:
@@ -94,18 +91,18 @@ class ParseElement():
     
         string = tag_list[0]
         l = string.split("@")
-        resource_id = l[1]
+        hash_code = l[1]
     ##    for tag in tag_list:
     ##        if "@" in tag:
     ##            l = tag.split("@")
-    ##            resource_id = l[1]
-        return resource_id
+    ##            hash_code = l[1]
+        return hash_code
         
 
     #===============================================================================
     # # etc. mID=7,id/sqrt
     #===============================================================================
-    def parse_ID(self, element):
+    def getID(self, element):
         tag_list = element.split(" ")
         for tag in tag_list:
             if "mID=" in tag:
@@ -119,7 +116,7 @@ class ParseElement():
     # # getVisibility()=n, xxx
     # # three states: VISIBLE, GONE, 
     #===============================================================================
-    def parse_Visible(self, element):
+    def getVisible(self, element):
         tag_list = element.split(" ")
         for tag in tag_list:
             if "getVisibility()=" in tag:
@@ -137,7 +134,7 @@ class ParseElement():
     # # isClickable()=4,true
     # # isClickable()=5,false
     #===============================================================================
-    def parse_Clickable(self, element):
+    def getClickable(self, element):
         tag_list = element.split(" ")
         for tag in tag_list:
             if "isClickable()=" in tag:
@@ -150,7 +147,7 @@ class ParseElement():
     #===============================================================================
     # # isEnabled()=4,true
     #===============================================================================
-    def parse_Enable(self, element):
+    def getEnable(self, element):
         tag_list = element.split(" ")
         for tag in tag_list:
             if "isEnabled()=" in tag:
@@ -166,7 +163,7 @@ class ParseElement():
     # # willNotDraw()=5,false
     # # willNotDraw()=4,true
     #===============================================================================
-    def parse_WillNotDraw(self, element):
+    def getWillNotDraw(self, element):
         tag_list = element.split(" ")
         for tag in tag_list:
             if "willNotDraw()=" in tag:
@@ -181,7 +178,7 @@ class ParseElement():
     # #  mPrivateFlags_NOT_DRAWN=3,0x0   false
     # #  mPrivateFlags_DRAWN=4,0x20      true
     #===============================================================================
-    def parse_DRAWN(self, element):
+    def getDRAWN(self, element):
         tag_list = element.split(" ")
         drawn_flag = "mPrivateFlags_DRAWN=4,0x20"
         not_drawn_flag = "mPrivateFlags_NOT_DRAWN=3,0x0"
@@ -197,14 +194,14 @@ class ParseElement():
     # # etc. mText=3,log
     # # etc. mText=1,√
     #===============================================================================
-    def parse_Text(self, element):
+    def getText(self, element):
         tag_list = element.split(" ")
         for tag in tag_list:
             if "mText=" in tag:
                 l = tag.split(",")
                 return l[-1]
     
-    def parse_EditText(self, element):
+    def getEditText(self, element):
         pass       
     
     
@@ -265,4 +262,4 @@ class ParseElement():
 if __name__=="__main__":
     data = getInfosByTelnet("DUMP -1")
     element_parser = ParseElement()
-    element_parser.parse_structure(data)
+    element_parser.getStructure(data)

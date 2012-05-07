@@ -64,7 +64,7 @@ class ParseView():
     def getViewTextList(self, view_dump_data):
         view_text_list = []
         element_parser = ParseElement()
-        element_list = element_parser.getStructure(view_dump_data)
+        element_list = element_parser.getStructure(view_dump_data)[0]
         for element in element_list:
             text = element_parser.getText(element)
             view_text_list.append(text)       
@@ -75,7 +75,16 @@ class ParseView():
         text_list1 = self.getViewTextList(view_dump_data1)     
         text_list2 = self.getViewTextList(view_dump_data2) 
         
-        return (text_list1 == text_list2) 
+        return (text_list1 == text_list2)
+    
+    
+    def deleteHashCode(self, view_dump_data):
+        element_parser = ParseElement()
+        element_list = element_parser.getStructure(view_dump_data)[0]
+        for element in element_list:
+            pass
+        
+        return element_list
 
 def DiffCheck_Views():
     # List View and get Current Focus

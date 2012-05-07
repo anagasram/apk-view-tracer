@@ -97,6 +97,9 @@ class ParseElement():
     ##            l = tag.split("@")
     ##            hash_code = l[1]
         return hash_code
+    
+    def deleteHashCode(self):
+        pass
         
 
     #===============================================================================

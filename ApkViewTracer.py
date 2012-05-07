@@ -43,7 +43,7 @@ def main():
     
     script_file=""
     if None == sys.argv or 2>len(sys.argv):
-        script_file=curDir+"Demo.py"
+        script_file=curDir+"MonkeyRunnerImpl.py"
     else:
         script_file = sys.argv[1]
         

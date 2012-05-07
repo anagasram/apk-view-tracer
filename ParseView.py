@@ -12,7 +12,7 @@ import telnetlib
 class ParseView():
     
     def __init__(self):
-        pass
+        self.element_parser = ParseElement()
     
     #406c1d58 com.android.internal.service.wallpaper.ImageWallpaper
     #4054bf40 com.android.launcher/com.android.launcher2.Launcher
@@ -38,7 +38,7 @@ class ParseView():
         else:
             return False
     
-    def parseViewListData(self, view_list_data):
+    def getViewListData(self, view_list_data):
         viewListHashCode_List = []
         viewListHashCode_Dict = {}
         lines_list = view_list_data.split("\n")
@@ -63,10 +63,9 @@ class ParseView():
     # parse view data by dump, then get the view text list
     def getViewTextList(self, view_dump_data):
         view_text_list = []
-        element_parser = ParseElement()
-        element_list = element_parser.getStructure(view_dump_data)[0]
+        element_list = self.element_parser.getStructure(view_dump_data)[0]
         for element in element_list:
-            text = element_parser.getText(element)
+            text = self.element_parser.getText(element)
             view_text_list.append(text)       
         
         return view_text_list
@@ -75,16 +74,7 @@ class ParseView():
         text_list1 = self.getViewTextList(view_dump_data1)     
         text_list2 = self.getViewTextList(view_dump_data2) 
         
-        return (text_list1 == text_list2)
-    
-    
-    def deleteHashCode(self, view_dump_data):
-        element_parser = ParseElement()
-        element_list = element_parser.getStructure(view_dump_data)[0]
-        for element in element_list:
-            pass
-        
-        return element_list
+        return (text_list1 == text_list2)       
 
 def DiffCheck_Views():
     # List View and get Current Focus
@@ -107,10 +97,10 @@ def DiffCheck_Views():
     print "Current Focused Window:"    
     view_parser = ParseView()
     print CurView_Data
-    view_parser.parseViewListData(CurView_Data)
+    view_parser.getViewListData(CurView_Data)
     print "Current Windows List:"
     print ViewList_Data
-    view_parser.parseViewListData(ViewList_Data)
+    view_parser.getViewListData(ViewList_Data)
     
     return CurView_Data, ViewList_Data
 

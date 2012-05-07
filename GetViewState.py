@@ -4,6 +4,7 @@
 ## kun for Apk View Tracing
 ## GetViewState.py
 
+import copy
 from ParseElement import ParseElement
 
 
@@ -19,13 +20,19 @@ class GetViewState():
         else:
             return (self.element_parser.getVisible(node.mElement) and self.element_parser.getVisible(node.mParentNode.mElement))
     
-    ## 遍历所有父节点的方法
-    def getVisibleState_2(self, node):
-        pass
+    # 遍历所有父节点的方法
+    # What does this method can do?  
+    def getVisibleState_All(self, node):
+        bResult = None
+        temp_node = copy.deepcopy(node)
+        while (None != temp_node.mParentNode):
+            bResult = self.element_parser.getVisible(temp_node.mElement) and self.element_parser.getVisible(temp_node.mParentNode.mElement)
+            temp_node = temp_node.mParentNode
+        return bResult
     
     ## Some Views 本身的 isClickable()=false, but its parent node 的 isClickable()=true
     ## so, these Views should be clickable
-    ## for example, ListView is
+    ## for example, ListView, GridView,  etc. container View 
     def getClickableState(self, node):
         parent_node = node.mParentNode
         parent_ClassName = self.element_parser.getClassName(parent_node.mElement)

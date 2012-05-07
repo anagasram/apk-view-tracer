@@ -20,7 +20,7 @@ elements_list=[]
 class ParseElement():
     def __init__(self):
         pass
-
+    
     def getStructure(self, data):
         list_data = data.split("\n")
         print "length of list: %s" %len(list_data)
@@ -36,7 +36,15 @@ class ParseElement():
             count = 0
             while " " == element[index]:
                 index = index + 1
-                count = count + 1
+                count = count + 1   
+            #===================================================================
+            # # another method which can get blanks count in head of element
+            # tag_list = element.split(" ")
+            # head_tag = tag_list[0]
+            # while (0 == len(head_tag)):
+            #     count += 1
+            #===================================================================
+            
             blanks_list.append(count)
             elements_list.append(element)
     
@@ -49,58 +57,42 @@ class ParseElement():
 #            print self.getRectMidPoint(element)
         
         return elements_list,blanks_list
-
+    
 
     #===============================================================================
-    # # get Class Name of View and its RID (Resource file ID)
+    # # get Class Name of View and its Instance Storage Address's Hash Code
     # # android.widget.ListView@44ed6480
     # # android.widget.TextView@44ed7e08
     #===============================================================================
     def getClassName(self, element):
+        # split element by blank
+        # so there will have some null string in head of tag list, as '', its length is 0
         tag_list = element.split(" ")
-        for tag in tag_list:
-            if ''==tag:
-                tag_list.remove(tag)
-        for tag in tag_list:
-            if ''==tag:
-                tag_list.remove(tag)
-        for tag in tag_list:
-            if ''==tag:
-                tag_list.remove(tag)
-    
-        string = tag_list[0]
-        l = string.split("@")
+        head_tag = tag_list[0]
+        while (0 == len(head_tag)):
+            tag_list.remove(head_tag)
+            head_tag = tag_list[0]
+            
+        l = head_tag.split("@")
         class_name = l[0]
-    ##    for tag in tag_list:
-    ##        if "@" in tag:
-    ##            l = tag.split("@")
-    ##            class_name = l[0]
         return class_name
-
+    
+    #===========================================================================
+    # # get Hash Code
+    #===========================================================================
     def getHashCode(self, element):
+        # split element by blank
+        # so there will have some null string in head of tag list, as '', its length is 0
         tag_list = element.split(" ")
-        for tag in tag_list:
-            if ''==tag:
-                tag_list.remove(tag)
-        for tag in tag_list:
-            if ''==tag:
-                tag_list.remove(tag)
-        for tag in tag_list:
-            if ''==tag:
-                tag_list.remove(tag)
+        head_tag = tag_list[0]
+        while (0 == len(head_tag)):
+            tag_list.remove(head_tag)
+            head_tag = tag_list[0]       
     
-        string = tag_list[0]
-        l = string.split("@")
+        l = head_tag.split("@")
         hash_code = l[1]
-    ##    for tag in tag_list:
-    ##        if "@" in tag:
-    ##            l = tag.split("@")
-    ##            hash_code = l[1]
         return hash_code
-    
-    def deleteHashCode(self):
-        pass
-        
+                    
 
     #===============================================================================
     # # etc. mID=7,id/sqrt
@@ -230,7 +222,7 @@ class ParseElement():
 
 
     #===============================================================================
-    # # this method is not used
+    # # this method has not used yet.
     #===============================================================================
     def getRectMidPoint(self, element):
         mid_point = {"x": None,

@@ -155,19 +155,18 @@ def clickEvent_Point(monkey_runner_impl):
     print "begin"
     monkey_runner_impl.touch(59, 406, "DOWN_AND_UP")
     monkey_runner_impl.touch(59, 277, "DOWN_AND_UP")
-    print "end"
-        
+    print "end"        
     monkey_runner_impl.sleep(1)
 
     ## Notification (y: 0-37  / x: 8-471 )
     print "begin"
     monkey_runner_impl.touch(471, 37, "DOWN_AND_UP")
     print "end"
-
     MonkeyRunner.sleep(1)
+    
     monkey_runner_impl.clickByKeyCode("KEYCODE_MENU", "DOWN_AND_UP");
-
     monkey_runner_impl.sleep(1)
+    
     monkey_runner_impl.clickByKeyCode("KEYCODE_BACK", "DOWN_AND_UP");
 
 def process_ViewFile(view_file):
@@ -195,9 +194,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#if __name__=="__main__":
-#    device = MonkeyRunner.waitForConnection()
-#    #clickEvent(device)
-#    clickEvent_Point(device)
-
+    

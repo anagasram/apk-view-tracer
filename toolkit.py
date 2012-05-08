@@ -24,7 +24,6 @@ def getParDir():
     return os.path.abspath(os.path.join(os.getcwd(), os.path.pardir))
 
 
-
 def getConfDir():
     return os.getcwd() + os.sep + "conf"
 
@@ -36,3 +35,6 @@ def getToolsDir():
 
 def getPlatformToolsDir():
     return os.getcwd() + os.sep + "platform-tools"
+
+def getViewFileDir():
+    return os.getcwd() + os.sep + "view_file"

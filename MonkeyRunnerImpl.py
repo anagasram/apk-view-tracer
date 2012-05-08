@@ -43,7 +43,10 @@ class MonkeyRunnerImpl():
         self.action_up = "UP"
         self.action_down_and_up = "DOWN_AND_UP"
         
-        self.device = MonkeyRunner.waitForConnection(deviceId=serial)
+        if None!=serial:
+            self.device = MonkeyRunner.waitForConnection(deviceId=serial)
+        else:
+            self.device = MonkeyRunner.waitForConnection()
 
    
     def press(self, key_code, action_type):
@@ -139,27 +142,34 @@ def clickEvent_Point(monkey_runner_impl):
     
     monkey_runner_impl.press("KEYCODE_BACK", "DOWN_AND_UP");
 
-def process_ViewFile(view_file):
+def touchEventByViewFile(view_file_name, monkey_runner_impl):
     pass
 
-def process_ViewPointList(view_point_list,monkey_runner_impl):
+def touchEventByViewPointList(view_point_list,monkey_runner_impl):
     for view_point in view_point_list:
         monkey_runner_impl.touch(view_point[0],view_point[1],"DOWN_AND_UP")
-        MonkeyRunner.sleep(2)
+        MonkeyRunner.sleep(0.7)
+
+def dragEventByViewFile(view_file):
+    pass
+
+def dragEventByViewPointList(view_point_list, monkey_runner_impl):
+    pass
 
 def main():
     monkey_runner_impl = MonkeyRunnerImpl()
-    view_file = open(os.getcwd()+os.sep+"demo.vf","r")
+    view_file_dir = os.getcwd() + os.sep + "view_file"
+    view_file_path = view_file_dir + os.sep + "demo.vf"
+    view_file = open(view_file_path, "r")
     view_point_list=[]
     for eachline in view_file:
         l = eachline.strip("\n").split("|")
         t = (int(l[0],10),int(l[1],10))
         view_point_list.append(t)
-            
-    #clickEvent(device)    
+      
     clickEvent_Point(monkey_runner_impl) ## this is just for testing
 
-    process_ViewPointList(view_point_list,monkey_runner_impl)
+    touchEventByViewPointList(view_point_list,monkey_runner_impl)
 
 
 if __name__ == "__main__":

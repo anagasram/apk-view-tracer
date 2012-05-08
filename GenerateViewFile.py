@@ -5,6 +5,8 @@
 ## GenerateViewFile.py
 
 from BuildTree import build
+import os
+from toolkit import getViewFileDir
 
 class GenerateViewFile():
     ## class variables
@@ -40,7 +42,9 @@ class GenerateViewFile():
     ## generate view file named "***.vf"
     ## not implement yet
     def generateViewFile(self, view_point_list, file_name):
-        view_file = open(file_name, "w")
+        view_file_dir = getViewFileDir()
+        view_file_path = view_file_dir + os.sep + file_name
+        view_file = open(view_file_path, "w")
         
         ## click events sequence
         for view_point in view_point_list:

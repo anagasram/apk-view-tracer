@@ -67,7 +67,7 @@ def main():
     viewFile_generator = GenerateViewFile()
     view_point_list = viewFile_generator.generateViewPointList(tree_nodes_list)
     #viewFile_generator.generateActionList(view_point_list)
-    viewFile_generator.generateViewFile(view_point_list, "demo.vf")
+    viewFile_generator.generateViewFile(view_point_list, "click.vf")
 
 
 if __name__=="__main__":

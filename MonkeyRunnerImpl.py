@@ -154,12 +154,15 @@ def dragEventByViewFile(view_file):
     pass
 
 def dragEventByViewPointList(view_point_list, monkey_runner_impl):
-    pass
+    print str(monkey_runner_impl.device.getProperty('display.width'))
+    print str(monkey_runner_impl.device.getProperty('display.height'))
+    monkey_runner_impl.drag(350, 370, 50, 370)
+    
 
 def main():
     monkey_runner_impl = MonkeyRunnerImpl()
     view_file_dir = os.getcwd() + os.sep + "view_file"
-    view_file_path = view_file_dir + os.sep + "demo.vf"
+    view_file_path = view_file_dir + os.sep + "click.vf"
     view_file = open(view_file_path, "r")
     view_point_list=[]
     for eachline in view_file:
@@ -170,6 +173,8 @@ def main():
     clickEvent_Point(monkey_runner_impl) ## this is just for testing
 
     touchEventByViewPointList(view_point_list,monkey_runner_impl)
+    
+    dragEventByViewPointList(view_point_list, monkey_runner_impl)
 
 
 if __name__ == "__main__":

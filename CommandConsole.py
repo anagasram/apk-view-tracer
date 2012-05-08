@@ -11,6 +11,12 @@ class CommandConsole():
         self.startActivityCmd = ""
         self.sendIntentCmd = ""
         
+    def installPkg(self):
+        pass
+    
+    def removePkg(self):
+        pass
+    
     def startActivity(self):
         try:
             os.system(self.startActivityCmd)

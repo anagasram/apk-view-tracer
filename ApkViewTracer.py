@@ -11,43 +11,49 @@ from ParseElement import ParseElement
 from BuildTree import build
 from GenerateViewFile import GenerateViewFile
 
-curDir = os.getcwd()+os.sep
+class ApkViewTracer():
+    def __init__(self):
+        self.curDir = os.getcwd()+os.sep
+        self.script_file = self.curDir + "MonkeyRunnerImpl.py"
+        
+    def prepare(self):
+        tree_nodes_list = build()
+        viewFile_generator = GenerateViewFile()
+        view_point_list = viewFile_generator.generateViewPointList(tree_nodes_list)
+        #viewFile_generator.generateActionList(view_point_list)
+        viewFile_generator.generateViewFile(view_point_list, "click.vf")
 
-def test():
-    tree_nodes_list = build()
-    viewFile_generator = GenerateViewFile()
-    view_point_list = viewFile_generator.generateViewPointList(tree_nodes_list)
-    #viewFile_generator.generateActionList(view_point_list)
-    viewFile_generator.generateViewFile(view_point_list, "demo.vf")
-
-def run(script_file):
-    curOS=platform.system()
-    if "Windows" == curOS:
-        os.system(curDir+"Run.bat %s" %script_file)
-    elif "Linux" == curOS:
-        os.system(curDir+"Run.sh %s" %script_file)
-    else:
-        print "Current OS is not Windows or Linux!"
-        return False
+    def run(self, script_file):       
+        curOS=platform.system()
+        if "Windows" == curOS:
+            os.system(self.curDir+"Run.bat %s" %script_file)
+        elif "Linux" == curOS:
+            os.system(self.curDir+"Run.sh %s" %script_file)
+        else:
+            print "Current OS is not Windows or Linux!"
+            raise Exception
 
 def main():
     if False == init_service():
         print "failed to init service!"
         raise Exception
+    
     deviceCmd = DeviceCommand()
     data = deviceCmd.getCurrentViewInfo()
     element_parser = ParseElement()
     element_parser.getStructure(data)
     
-    test()
+    apk_view_tracer = ApkViewTracer()
+    
+    apk_view_tracer.prepare()
     
     script_file=""
     if None == sys.argv or 2>len(sys.argv):
-        script_file=curDir+"MonkeyRunnerImpl.py"
+        script_file = apk_view_tracer.script_file
     else:
         script_file = sys.argv[1]
         
-    run(script_file)
+    apk_view_tracer.run(script_file)
 
 if __name__=="__main__":
     main()

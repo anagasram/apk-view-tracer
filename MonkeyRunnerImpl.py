@@ -48,6 +48,16 @@ class MonkeyRunnerImpl():
             self.device = MonkeyRunner.waitForConnection(deviceId=serial)
         else:
             self.device = MonkeyRunner.waitForConnection()
+            
+        self.easy_device = EasyMonkeyDevice(self.device)
+            
+        # this is just for testing
+        HV =  self.device.getHierarchyViewer()
+        win = HV.getFocusedWindowName()
+        print "current Focused Window Name is [ " + win + " ]"
+        
+        print "next"
+        print self.easy_device.getFocusedWindowId()
 
    
     def press(self, key_code, action_type):
@@ -116,6 +126,10 @@ class MonkeyRunnerImpl():
     # Wakes the screen of this device.
     def wake(self):
         self.device.wake()
+
+
+
+
         
         
 #===============================================================================

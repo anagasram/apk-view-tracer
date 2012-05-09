@@ -15,6 +15,7 @@
 
 import os
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice, MonkeyImage
+from com.android.monkeyrunner.easy import By, EasyMonkeyDevice 
 from com.android.monkeyrunner.recorder import MonkeyRecorder
 
 class MonkeyRunnerImpl():
@@ -68,7 +69,7 @@ class MonkeyRunnerImpl():
         MonkeyRunner.sleep(time_sec)
     
     #- Simulates a drag gesture (touch, hold, and move) on this device's screen.
-    def drag(self, fromX, fromY, toX, toY, duration=1.0, steps=10):
+    def drag(self, fromX, fromY, toX, toY, duration=0.1, steps=2):
         self.device.drag((fromX, fromY), (toX, toY), duration, steps)
     
     def touch(self, targetX, targetY, action_type):

@@ -48,18 +48,7 @@ class MonkeyRunnerImpl():
             self.device = MonkeyRunner.waitForConnection(deviceId=serial)
         else:
             self.device = MonkeyRunner.waitForConnection()
-            
-        self.easy_device = EasyMonkeyDevice(self.device)
-            
-        # this is just for testing
-        HV =  self.device.getHierarchyViewer()
-        win = HV.getFocusedWindowName()
-        print "current Focused Window Name is [ " + win + " ]"
-        
-        print "next"
-        print self.easy_device.getFocusedWindowId()
-
-   
+           
     def press(self, key_code, action_type):
         self.device.press(key_code, action_type)
     
@@ -128,9 +117,31 @@ class MonkeyRunnerImpl():
         self.device.wake()
 
 
-
-
+class EasyDevice():
+    def __init__(self):
+        self.monkey_runner_impl = MonkeyRunnerImpl()
+        self.easy_device = EasyMonkeyDevice(self.monkey_runner_impl.device)
         
+    def getFocusedWindowClassName(self):
+        return self.easy_device.getFocusedWindowId()
+
+class IChimpDevice():
+    def __init__(self):
+        self.monkey_runner_impl = MonkeyRunnerImpl()
+        self.ichimp_device = self.monkey_runner_impl.device.getImpl()
+        
+    def getFocusedWindowClassName(self):
+        HV = self.ichimp_device.getHierarchyViewer()
+        return HV.getFocusedWindowName()
+        
+        
+class HierarchyViewer():
+    def __init__(self):
+        self.monkey_runner_impl = MonkeyRunnerImpl()
+        self.hierarchy_viewer = self.monkey_runner_impl.device.getHierarchyViewer()
+    
+    def getFocusedWindowClassName(self):
+        return self.hierarchy_viewer.getFocusedWindowName()
         
 #===============================================================================
 # # Left: newLeft = (Root Node)->mLeft + (ParentNode)->mLeft + ... + self->mLeft

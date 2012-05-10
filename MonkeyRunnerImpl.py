@@ -13,9 +13,10 @@
 ## adb forward tcp:1080 tcp:1080
 ## adb shell monkey --port 1080
 
-import os
+import os, sys
+curDir = os.getcwd()
+sys.path.append(curDir)
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice, MonkeyImage
-from com.android.monkeyrunner.easy import By, EasyMonkeyDevice 
 from com.android.monkeyrunner.recorder import MonkeyRecorder
 
 class MonkeyRunnerImpl():
@@ -117,31 +118,6 @@ class MonkeyRunnerImpl():
         self.device.wake()
 
 
-class EasyDevice():
-    def __init__(self):
-        self.monkey_runner_impl = MonkeyRunnerImpl()
-        self.easy_device = EasyMonkeyDevice(self.monkey_runner_impl.device)
-        
-    def getFocusedWindowClassName(self):
-        return self.easy_device.getFocusedWindowId()
-
-class IChimpDevice():
-    def __init__(self):
-        self.monkey_runner_impl = MonkeyRunnerImpl()
-        self.ichimp_device = self.monkey_runner_impl.device.getImpl()
-        
-    def getFocusedWindowClassName(self):
-        HV = self.ichimp_device.getHierarchyViewer()
-        return HV.getFocusedWindowName()
-        
-        
-class HierarchyViewer():
-    def __init__(self):
-        self.monkey_runner_impl = MonkeyRunnerImpl()
-        self.hierarchy_viewer = self.monkey_runner_impl.device.getHierarchyViewer()
-    
-    def getFocusedWindowClassName(self):
-        return self.hierarchy_viewer.getFocusedWindowName()
         
 #===============================================================================
 # # Left: newLeft = (Root Node)->mLeft + (ParentNode)->mLeft + ... + self->mLeft
@@ -201,8 +177,8 @@ def main():
     touchEventByViewPointList(view_point_list,monkey_runner_impl)
     
     dragEventByViewPointList(view_point_list, monkey_runner_impl)
-
-
+    
 if __name__ == "__main__":
     main()
+    
     

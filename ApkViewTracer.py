@@ -12,9 +12,9 @@ from BuildTree import build
 from GenerateViewFile import GenerateViewFile
 
 class ApkViewTracer():
-    def __init__(self):
+    def __init__(self, script_file_name="MonkeyRunnerImpl.py"):
         self.curDir = os.getcwd()+os.sep
-        self.script_file = self.curDir + "MonkeyRunnerImpl.py"
+        self.script_file = self.curDir + script_file_name
         
     def prepare(self):
         tree_nodes_list = build()
@@ -43,7 +43,7 @@ def main():
     element_parser = ParseElement()
     element_parser.getStructure(data)
     
-    apk_view_tracer = ApkViewTracer()
+    apk_view_tracer = ApkViewTracer(script_file_name="testMonkeyRunnerImpl.py")
     
     apk_view_tracer.prepare()
     

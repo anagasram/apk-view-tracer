@@ -19,6 +19,7 @@ encoding/ParseElement.py=utf-8
 encoding/ParseRule.py=utf-8
 encoding/ParseView.py=utf-8
 encoding/TreeType.py=utf-8
+encoding/View.py=utf-8
 encoding/ViewMapType.py=utf-8
 encoding/test.py=utf-8
 encoding/testMonkeyRunnerImpl.py=utf-8

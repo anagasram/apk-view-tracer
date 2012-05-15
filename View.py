@@ -8,8 +8,8 @@ class View():
     '''
     View Class which describe View Object of Android System w python
     '''
-    def __init__(self):
-        pass
+    def __init__(self, device):
+        self.device = device
     
     def getLocation(self, view):
         pass
@@ -27,6 +27,9 @@ class View():
         pass
     
     def typeText(self):
+        pass
+    
+    def drag(self):
         pass
     
 if __name__=="__main__":

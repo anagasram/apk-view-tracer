@@ -7,6 +7,7 @@
 import socket
 import telnetlib
 from GetConfigInfo import GetViewServerInfo
+from InitDevice import init_service
 
 
 #===============================================================================
@@ -30,19 +31,16 @@ def getInfosBySocket(cmd):
     data=""
     end_flag = "DONE"
     while True:
-        res = s.recv(buf_size)  
-        if 0 == res.find(end_flag):
-            print "DONE."
-            break
-        else:
-            data=data+res
-            
+        res = s.recv(buf_size)
+        data+=res
+        if  0 <= res.find(end_flag, -5):
+            print "read the end flag: 'DONE' "
+            break            
+                        
     print "sucess to get receive data"
     s.close()
-    print data
-    #print repr(data)    
+    print data   
     return data
-
 
 
 #===============================================================================
@@ -59,3 +57,11 @@ def getInfosByTelnet(command):
     tn.close()
     print data
     return data
+
+if __name__ == "__main__":
+    if False == init_service():
+        print "failed to init service!"
+        raise Exception
+    
+    getInfosBySocket("DUMP -1")
+    getInfosByTelnet("DUMP -1")

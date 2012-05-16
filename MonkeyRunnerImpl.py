@@ -116,6 +116,9 @@ class MonkeyRunnerImpl():
     # Wakes the screen of this device.
     def wake(self):
         self.device.wake()
+        
+    def instrument(self, str_className, dict_args):
+        self.device.instrument(str_className, dict_args)
 
 
         

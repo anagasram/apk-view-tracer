@@ -32,3 +32,14 @@ class CommandConsole():
         except Exception,e:
             print e
             return False
+        
+    def phoneCall(self):
+        pass
+    
+    def sendSMS(self):
+        pass
+    
+    def browseWebPage(self):
+        pass
+    
+    

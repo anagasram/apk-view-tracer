@@ -35,6 +35,7 @@ class AutomatedTestingInterface():
         
         # object of Monkey Device 
         self.monkey_runner = MonkeyRunnerImpl()
+        self.easy_device = EasyDevice()
         
         # View Monitor Object which can control Views
         self.ViewMonitor = None
@@ -48,8 +49,20 @@ class AutomatedTestingInterface():
     def close(self):
         pass
     
-    def assertCurrentActivity(self, str_msg, str_name):
-        pass
+    def assertCurrentActivity(self, expectedClassName):
+        curActivityClassName = self.easy_device.getFocusedWindowClassName()
+        if curActivityClassName == expectedClassName:
+            return True
+        else:
+            return False
+        
+    def assertCurrentActivityNewInstance(self, expectedClassName, oldHashCode):
+        curActivityClassName = self.easy_device.getFocusedWindowClassName()
+        curActivityHashCode = self.device_cmd.getFocusViewHashCode()
+        if (curActivityClassName == expectedClassName) and (curActivityHashCode != oldHashCode):
+            return True
+        else:
+            return False
     
     def clearEditText(self, editText):
         pass

@@ -37,7 +37,13 @@ class DeviceCommand():
     
     # get View Info of Current Focused Window     
     def getFocusViewInfo(self):
-        return getInfosByTelnet(DeviceCommand.get_focus_cmd)   
+        return getInfosByTelnet(DeviceCommand.get_focus_cmd)
+    
+    def getFocusViewHashCode(self):
+        info = self.getFocusViewInfo()
+        currentView = info.split("\n")[0]
+        hash_code = currentView.split(" ")[0]
+        return hash_code        
     
     def getViewListInfo(self):
         return getInfosByTelnet(DeviceCommand.list_view_cmd)

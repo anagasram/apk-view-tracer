@@ -67,6 +67,9 @@ class AutomatedTestingInterface():
     def clearEditText(self, editText):
         pass
     
+    def clickOnScreen(self, x, y):
+        self.monkey_runner.touch(x, y, "DOWN_AND_UP")
+    
     def clickInList(self, objList, iIndex):
         pass
     
@@ -82,12 +85,14 @@ class AutomatedTestingInterface():
     def clickOnToggleButton(self, str_name):
         pass
     
-    def clickOnView(self, objView):
-        pass
+    def clickOnViewById(self, view_id):
+        self.easy_device.touchById(view_id)
     
     def clickOnViewByLocation(self, x, y):
         self.monkey_runner.touch(x, y, "DOWN_AND_UP")
     
+    # could not implement now
+    # it's a problem
     def drag(self, fromX, fromY, toX, toY, iSteps):
         pass
     
@@ -99,7 +104,7 @@ class AutomatedTestingInterface():
     
     def getCurrentActivity(self):
         pass
-    
+
     def getButton(self):
         pass
     

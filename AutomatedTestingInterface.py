@@ -117,7 +117,7 @@ class AutomatedTestingInterface():
     def getImageButton(self):
         pass
     
-    def getView(self):
+    def getViewClassName(self):
         pass
     
     def getViews(self):
@@ -127,7 +127,12 @@ class AutomatedTestingInterface():
         pass
     
     def goBack(self):
-        pass
+        try:
+            self.monkey_runner.clickBackButton()
+            return True
+        except Exception,e:
+            print e
+            return False
     
     def goBackToView(self, view_name):
         pass
@@ -201,5 +206,17 @@ class AutomatedTestingInterface():
         pass   
     
     def sleep(self, sec):
+        try:
+            self.monkey_runner.sleep(sec)
+            return True
+        except Exception, e:
+            print e
+            return False
+        
+    def waitForText(self, str_text, time_out_sec):
         pass
+        
+    def waitForView(self, view_class_name, time_out_sec):
+        pass
+        
     

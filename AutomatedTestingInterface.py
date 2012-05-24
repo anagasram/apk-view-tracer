@@ -4,7 +4,7 @@
 ## kun for Apk View Tracing
 ## AutomatedTestingInterface.py
 
-import os
+import os, time
 from InitDevice import init_service
 from DeviceCommand import DeviceCommand
 from MonkeyRunnerImpl import MonkeyRunnerImpl
@@ -212,11 +212,39 @@ class AutomatedTestingInterface():
         except Exception, e:
             print e
             return False
-        
+    
+    ## not implement yet    
     def waitForText(self, str_text, time_out_sec):
-        pass
+        if isinstance(str_text, str):
+            raise Exception
+        if isinstance(time_out_sec, int):
+            raise Exception
+        now_time = time.time()
+        end_time = now_time + time_out_sec
+        while ((?) and (now_time < end_time)):
+            now_time = time.time()
+        
+        if (now_time < end_time):
+            return True
+        else:
+            return False
+            
         
     def waitForView(self, view_class_name, time_out_sec):
-        pass
+        if not isinstance(view_class_name, str):
+            raise Exception
+        if not isinstance(time_out_sec, int):
+            raise Exception
+        now_time = time.time()
+        end_time = now_time + time_out_sec
+        while ( (self.easy_device.getFocusedWindowClassName()!=view_class_name) and (now_time < end_time) ):
+            now_time = time.time()
+            
+        if (now_time < end_time):
+            return True
+        else:
+            return False
+            
+        
         
     

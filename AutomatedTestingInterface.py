@@ -156,6 +156,9 @@ class AutomatedTestingInterface():
     def goBackToView(self, view_name):
         pass
     
+    def goBackToActivity(self, activity_name):
+        pass        
+        
     def findButton(self, text, onlyVisible=True):
         pass
     
@@ -165,8 +168,8 @@ class AutomatedTestingInterface():
     def findText(self, text, onlyVisible=True):
         pass
     
-    def findToggleButton(self):
-        pass
+    def findToggleButtonById(self):
+        
     
     def isCheckBoxChecked(self, param):
         if isinstance(param, int):

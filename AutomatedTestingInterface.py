@@ -23,6 +23,15 @@ class AutomatedTestingInterface():
     DELETE = None
     UP = None
     DOWN = None   
+    
+    Android_Class_Name_Dict  = { "Button":  "android.widget.Button",
+                                "CheckBox": "android.widget.CheckBox",
+                                "EditText" : "android.widget.EditText",
+                                "ImageButton": "android.widget.ImageButton",
+                                "ImageVIew": "android.widget.ImageView",
+                                "RadioButton": "android.widget.RadioButton",
+                                "TextView": "android.widget.TextView",
+                                "View": "android.view.View"}
           
     def __init__(self):
         # init device 

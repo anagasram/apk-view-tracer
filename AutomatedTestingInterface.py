@@ -24,7 +24,7 @@ class AutomatedTestingInterface():
     UP = None
     DOWN = None   
     
-    Android_Class_Name_Dict  = { "Button":  "android.widget.Button",
+    Android_Class_Name_Dict = { "Button":  "android.widget.Button",
                                 "CheckBox": "android.widget.CheckBox",
                                 "EditText" : "android.widget.EditText",
                                 "ImageButton": "android.widget.ImageButton",
@@ -73,11 +73,21 @@ class AutomatedTestingInterface():
         else:
             return False
     
-    def clearEditText(self, editText):
-        pass
+    def clearEditTextById(self, EditTextId):
+        try:
+            self.easy_device.typeInViewById(EidtTextId, "")
+            return True
+        except Exception, e:
+            print e
+            return False
     
     def clickOnScreen(self, x, y):
-        self.monkey_runner.touch(x, y, "DOWN_AND_UP")
+        try:
+            self.monkey_runner.touch(x, y, "DOWN_AND_UP")
+            return True
+        except Exception, e:
+            print e
+            return False
     
     def clickInList(self, objList, iIndex):
         pass
@@ -139,7 +149,7 @@ class AutomatedTestingInterface():
         try:
             self.monkey_runner.clickBackButton()
             return True
-        except Exception,e:
+        except Exception, e:
             print e
             return False
     
@@ -246,7 +256,7 @@ class AutomatedTestingInterface():
             raise Exception
         now_time = time.time()
         end_time = now_time + time_out_sec
-        while ( (self.easy_device.getFocusedWindowClassName()!=view_class_name) and (now_time < end_time) ):
+        while ((self.easy_device.getFocusedWindowClassName() != view_class_name) and (now_time < end_time)):
             now_time = time.time()
             
         if (now_time < end_time):

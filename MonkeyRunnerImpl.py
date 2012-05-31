@@ -16,7 +16,7 @@
 import os, sys
 curDir = os.getcwd()
 sys.path.append(curDir)
-from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice, MonkeyImage
+from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice, MonkeyImage, MonkeyView
 from com.android.monkeyrunner.recorder import MonkeyRecorder
 
 class MonkeyRunnerImpl():
@@ -45,35 +45,78 @@ class MonkeyRunnerImpl():
         self.action_up = "UP"
         self.action_down_and_up = "DOWN_AND_UP"
         
+        self.class_name = "MonkeyRunnerImpl"
+        
         if None!=serial:
             self.device = MonkeyRunner.waitForConnection(deviceId=serial)
         else:
             self.device = MonkeyRunner.waitForConnection()
            
     def press(self, key_code, action_type):
-        self.device.press(key_code, action_type)
+        try:
+            self.device.press(key_code, action_type)
+            return True
+        except Exception, e:
+            print "[%s] Failed to press [%s]" %(self.class_name, str(e))
+            return False
     
     def clickHomeButton(self):
-        self.device.press("KEYCODE_HOME", "DOWN_AND_UP")
+        try:
+            self.device.press("KEYCODE_HOME", "DOWN_AND_UP")
+            return True
+        except Exception, e:
+            print "[%s] Failed to click Home button [%s]" %(self.class_name, str(e))
+            return False
     
     def clickMenuButton(self):
-        self.device.press("KEYCODE_MENU", "DOWN_AND_UP")
+        try:
+            self.device.press("KEYCODE_MENU", "DOWN_AND_UP")
+            return True
+        except Exception, e:
+            print "[%s] Failed to click Menu button [%s]" %(self.class_name, str(e))
+            return False
     
     def clickBackButton(self):
-        self.device.press("KEYCODE_BACK", "DOWN_AND_UP")
+        try:
+            self.device.press("KEYCODE_BACK", "DOWN_AND_UP")
+            return True
+        except Exception, e:
+            print "[%s] Failed to click Back button [%s]" %(self.class_name, str(e))
+            return False
     
     def clickSearchButton(self):
-        self.device.press("KEYCODE_SEARCH", "DOWN_AND_UP")    
+        try:
+            self.device.press("KEYCODE_SEARCH", "DOWN_AND_UP")
+            return True
+        except Exception, e:
+            print "[%s] Failed to click Search button [%s]" %(self.class_name, str(e))
+            return False    
     
     def sleep(self, time_sec):
-        MonkeyRunner.sleep(time_sec)
+        try:
+            MonkeyRunner.sleep(time_sec)
+            return True
+        except Exception, e:
+            print "[%s] Failed to sleep [%s]" %(self.class_name, str(e))
+            return False
     
     #- Simulates a drag gesture (touch, hold, and move) on this device's screen.
     def drag(self, fromX, fromY, toX, toY, duration=0.1, steps=2):
-        self.device.drag((fromX, fromY), (toX, toY), duration, steps)
+        try:
+            self.device.drag((fromX, fromY), (toX, toY), duration, steps)
+            return True
+        except Exception, e:
+            print "[%s] Failed to drag [%s]" %(self.class_name, str(e))
+            return False
     
     def touch(self, targetX, targetY, action_type):
-        self.device.touch(targetX, targetY, action_type)
+        try:
+            self.device.touch(targetX, targetY, action_type)
+            return True
+        except Exception, e:
+            print "[%s] Failed to touch [%s]" %(self.class_name, str(e))
+            return False
+        
     
     def snapShot(self, file_dir, file_name):
         try:
@@ -82,7 +125,7 @@ class MonkeyRunnerImpl():
             result.writeToFile(file_path, "png")
             return True
         except Exception,e:
-            print e
+            print "[%s] Failed to snap shot [%s]" %(self.class_name, str(e))
             return False 
             
     def sameAs(self, otherImage, percent):
@@ -90,7 +133,7 @@ class MonkeyRunnerImpl():
             result = self.device.takeSnapshot()
             return result.sameAs(otherImage, percent) # otherImage should be a MonkeyImage type
         except Exception,e:
-            print e
+            print "[%s] Failed to same as [%s]" %(self.class_name, str(e))
             return None
     
     #===========================================================================
@@ -100,27 +143,55 @@ class MonkeyRunnerImpl():
     # using the key event type DOWN_AND_UP.    
     #===========================================================================
     def typeText(self, message):
-        self.device.type(message)
+        try:
+            self.device.type(message)
+            return True
+        except Exception, e:
+            print "[%s] Failed to type message [%s]" %(self.class_name, str(e))
+            return False
     
     def installPkg(self, local_apk_path):
-        self.device.installPackage(local_apk_path)
+        try:
+            self.device.installPackage(local_apk_path)
+            return True
+        except Exception, e:
+            print "[%s] Failed to install package [%s]" %(self.class_name, str(e))
+            return False
     
     def startActivity(self, package_name, activity_name):
         runComponent = package_name + "/" + activity_name
-        self.device.startActivity(component = runComponent)
+        try:
+            self.device.startActivity(component = runComponent)
+            return True
+        except Exception, e:
+            print "[%s] Failed to start activity [%s]" %(self.class_name, str(e))
+            return False
      
     # Deletes the specified package from this device, including its data and cache.
     def removePkg(self, package_name):
-        self.device.removePackage(package_name)
+        try:
+            self.device.removePackage(package_name)
+            return True
+        except Exception, e:
+            print "[%s] Failed to remove package [%s]" %(self.class_name, str(e))
+            return False
     
     # Wakes the screen of this device.
     def wake(self):
-        self.device.wake()
+        try:
+            self.device.wake()
+            return True
+        except Exception, e:
+            print "[%s] Failed to wake [%s]" %(self.class_name, str(e))
+            return False
         
     def instrument(self, str_className, dict_args):
-        self.device.instrument(str_className, dict_args)
-
-
+        try:
+            self.device.instrument(str_className, dict_args)
+            return True
+        except Exception, e:
+            print "[%s] Failed to instrument [%s]" %(self.class_name, str(e))
+            return False
         
 #===============================================================================
 # # Left: newLeft = (Root Node)->mLeft + (ParentNode)->mLeft + ... + self->mLeft

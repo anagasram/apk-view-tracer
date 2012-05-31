@@ -169,7 +169,7 @@ class AutomatedTestingInterface():
         pass
     
     def findToggleButtonById(self):
-        
+        pass        
     
     def isCheckBoxChecked(self, param):
         if isinstance(param, int):

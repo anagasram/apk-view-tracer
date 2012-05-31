@@ -18,6 +18,7 @@ class EasyDevice():
         self.action_type_dict = {"DOWN_AND_UP": MonkeyDevice.DOWN_AND_UP,
                                  "DOWN": MonkeyDevice.DOWN,
                                  "UP": MonkeyDevice.UP}
+        self.class_name = "EasyDevice"
         
     def getFocusedWindowClassName(self):
         return self.easy_device.getFocusedWindowId()
@@ -41,9 +42,13 @@ class EasyDevice():
         return self.easy_device.touch(By.id("id/" + str_id), self.action_type_dict[action_type])
     
     def typeInViewById(self, str_id, str_msg):
-        self.easy_device.type(By.id("id/" + str_id), str_msg)
+        try:
+            self.easy_device.type(By.id("id/" + str_id), str_msg)
+            return True
+        except Exception, e:
+            print "[%s] Failed to type in view [%s]" %(self.class_name, str(e))
+            return False
         
-    
     
 if __name__ == "__main__":
     # testing

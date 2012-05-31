@@ -8,7 +8,13 @@ from MonkeyRunnerImpl import MonkeyRunnerImpl
         
 class HierarchyViewer():
     def __init__(self, monkey_runner_impl):
-        self.hierarchy_viewer = monkey_runner_impl.device.getHierarchyViewer()
+        self.class_name = "HierarchyViewer"
+        try:
+            self.hierarchy_viewer = monkey_runner_impl.device.getHierarchyViewer()
+            return True
+        except Exception, e:
+            print "[%s] Failed to init [%s]" %(self.class_name, str(e))
+            return False
     
     def getFocusedWindowClassName(self):
         return self.hierarchy_viewer.getFocusedWindowName()

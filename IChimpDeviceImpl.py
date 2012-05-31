@@ -29,19 +29,44 @@ class IChimpDevice():
         return HV.getFocusedWindowName()
     
     def press(self, str_key_code, action_type="DOWN_AND_UP"):
-        self.ichimp_device.press(str_key_code, self.action_type_dict[action_type])
+        try:
+            self.ichimp_device.press(str_key_code, self.action_type_dict[action_type])
+            return True
+        except Exception, e:
+            print "Failed to press [%s]" %str(e)
+            return False
         
     def touch(self, intX, intY, action_type="DOWN_AND_UP"):
-        self.ichimp_device.touch(intX, intY, self.action_type_dict[action_type])
+        try:
+            self.ichimp_device.touch(intX, intY, self.action_type_dict[action_type])
+            return True
+        except Exception, e:
+            print "Failed to touch [%s]" %str(e)
+            return False
         
     def drag(self, int_fromX, int_fromY, int_toX, int_toY, int_duration, long_steps):
-        self.ichimp_device.drag(int_fromX, int_fromY, int_toX, int_toY, int_duration, long_steps)
+        try:
+            self.ichimp_device.drag(int_fromX, int_fromY, int_toX, int_toY, int_duration, long_steps)
+            return True
+        except Exception, e:
+            print "Failed to drag [%s]" %str(e)
+            return False
         
     def typeOnFocusedWindow(self, str_msg):
-        self.ichimp_device.type(str_msg)
+        try:
+            self.ichimp_device.type(str_msg)
+            return True
+        except Exception, e:
+            print "Failed to type on focused window [%s]" %str(e)
+            return False
         
     def shell(self, str_shell_cmd):
-        self.ichimp_device.shell(str_shell_cmd)
+        try:
+            self.ichimp_device.shell(str_shell_cmd)
+            return True
+        except Exception, e:
+            print "Failed to shell [%s]" %str(e)
+            return False
     
 if __name__ == "__main__":
     monkey_runner_impl = MonkeyRunnerImpl()

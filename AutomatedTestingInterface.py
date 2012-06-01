@@ -4,7 +4,8 @@
 ## kun for Apk View Tracing
 ## AutomatedTestingInterface.py
 
-import os, time
+import os, time, sys
+
 from InitDevice import init_service
 from DeviceCommand import DeviceCommand
 from MonkeyRunnerImpl import MonkeyRunnerImpl
@@ -34,9 +35,10 @@ class AutomatedTestingInterface():
                                 "View": "android.view.View"}
           
     def __init__(self):
+        self.class_name = "AutomatedTestingInterface"
         # init device 
         if False == init_service():
-            print "Failed to init service of Android View Server!"
+            print "[%s] Failed to init service of Android View Server!" %(self.class_name)
             raise Exception
         
         # object of DeviceCommand
@@ -47,7 +49,7 @@ class AutomatedTestingInterface():
         self.easy_device = EasyDevice()
         
         # View Monitor Object which can control Views
-        self.ViewMonitor = None
+        self.ViewMonitor = None        
         
     def __del__(self):
         # release socket connect with Monkey Server
@@ -59,26 +61,34 @@ class AutomatedTestingInterface():
         pass
     
     def assertCurrentActivity(self, expectedClassName):
-        curActivityClassName = self.easy_device.getFocusedWindowClassName()
-        if curActivityClassName == expectedClassName:
-            return True
-        else:
-            return False
+        try:
+            curActivityClassName = self.easy_device.getFocusedWindowClassName()
+            if curActivityClassName == expectedClassName:
+                return True
+            else:
+                return False
+        except Exception, e:
+            print "[%s] Failed to assert current activity [%s]" %(self.class_name, str(e))
+            return None
         
     def assertCurrentActivityNewInstance(self, expectedClassName, oldHashCode):
-        curActivityClassName = self.easy_device.getFocusedWindowClassName()
-        curActivityHashCode = self.device_cmd.getFocusViewHashCode()
-        if (curActivityClassName == expectedClassName) and (curActivityHashCode != oldHashCode):
-            return True
-        else:
-            return False
+        try:
+            curActivityClassName = self.easy_device.getFocusedWindowClassName()
+            curActivityHashCode = self.device_cmd.getFocusViewHashCode()
+            if (curActivityClassName == expectedClassName) and (curActivityHashCode != oldHashCode):
+                return True
+            else:
+                return False
+        except Exception, e:
+            print "[%s] Failed to assert current activity new instance [%s]" %(self.class_name, str(e))
+            return None
     
     def clearEditTextById(self, EditTextId):
         try:
             self.easy_device.typeInViewById(EidtTextId, "")
             return True
         except Exception, e:
-            print e
+            print "[%s] Failed to click edit text by id [%s]" %(self.class_name, str(e))
             return False
     
     def clickOnScreen(self, x, y):
@@ -86,7 +96,7 @@ class AutomatedTestingInterface():
             self.monkey_runner.touch(x, y, "DOWN_AND_UP")
             return True
         except Exception, e:
-            print e
+            print "[%s] Failed to click on screen [%s]" %(self.class_name, str(e))
             return False
     
     def clickInList(self, objList, iIndex):
@@ -105,10 +115,20 @@ class AutomatedTestingInterface():
         pass
     
     def clickOnViewById(self, view_id):
-        self.easy_device.touchById(view_id)
+        try:
+            self.easy_device.touchById(view_id)
+            return True
+        except Exception, e:
+            print "[%s] Failed to click on view by id [%s]" %(self.class_name, str(e))
+            return False
     
     def clickOnViewByLocation(self, x, y):
-        self.monkey_runner.touch(x, y, "DOWN_AND_UP")
+        try:
+            self.monkey_runner.touch(x, y, "DOWN_AND_UP")
+            return True
+        except Exception, e:
+            print "[%s] Failed to click on view by location [%s]" %(self.class_name, str(e))
+            return False
     
     # could not implement now
     # it's a problem
@@ -116,7 +136,12 @@ class AutomatedTestingInterface():
         pass
     
     def enterText(self, str_msg, objText):
-        self.monkey_runner.typeText(str_msg)
+        try:
+            self.monkey_runner.typeText(str_msg)
+            return True
+        except Exception, e:
+            print "[%s] Failed to enter text [%s]" %(self.class_name, str(e))
+            return False
     
     def getViewMonitor(self):
         return self.ViewMonitor
@@ -266,6 +291,9 @@ class AutomatedTestingInterface():
             return True
         else:
             return False
+        
+if __name__=="__main__":
+    print "test OK"
             
         
         

@@ -29,4 +29,6 @@ def main():
     touchEventByViewPointList(view_point_list,monkey_runner_impl)
 
 if __name__ == "__main__":
+    print "begin main"
     main()
+    print "end main"

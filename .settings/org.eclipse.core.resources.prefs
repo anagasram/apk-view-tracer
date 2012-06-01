@@ -1,4 +1,10 @@
 eclipse.preferences.version=1
+encoding//AutomatedTestingInterface/Assertion.py=utf-8
+encoding//AutomatedTestingInterface/Drag.py=utf-8
+encoding//AutomatedTestingInterface/ViewGetter.py=utf-8
+encoding//AutomatedTestingInterface/ViewToucher.py=utf-8
+encoding//AutomatedTestingInterface/ViewUtility.py=utf-8
+encoding//TestScripts/testMonkeyRunnerImpl.py=utf-8
 encoding/ApkViewTracer.py=utf-8
 encoding/AutomatedTestingInterface.py=utf-8
 encoding/BuildTree.py=utf-8
@@ -24,5 +30,4 @@ encoding/View.py=utf-8
 encoding/ViewClient.py=utf-8
 encoding/ViewMapType.py=utf-8
 encoding/test.py=utf-8
-encoding/testMonkeyRunnerImpl.py=utf-8
 encoding/toolkit.py=utf-8

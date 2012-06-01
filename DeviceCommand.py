@@ -21,7 +21,7 @@ class DeviceCommand():
     profile_cmd = "PROFILE"
     
     def __init__(self):
-        pass
+        self.class_name = "DeviceCommand"
     
     #===========================================================================
     # # ViewServer Command
@@ -52,13 +52,12 @@ class DeviceCommand():
         dump_command = DeviceCommand.dump_view_cmd + " -1"
         return getInfosByTelnet(dump_command)
 
-    def dumpInfosByID(self, strID):
+    def dumpInfosByID(self, strID="-1"):
         dump_command = DeviceCommand.dump_view_cmd + " " + str(strID)
         try:
             return getInfosByTelnet(dump_command)
-        except Exception,e:
-            print "[ERROR]:" + "Failed to Dump this view. The ID might be invalid!"
-            print e
+        except Exception, e:
+            print "[%s]: Failed to Dump this view. The ID might be invalid! [%s]" %(self.class_name, str(e))
             return None
     
     # this method might have problem

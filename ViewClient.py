@@ -5,6 +5,7 @@
 ## ViewClient.py
 
 import telnetlib
+import DeviceCommand
 
 class ViewClient():
     '''
@@ -15,13 +16,14 @@ class ViewClient():
     '''
     
     def __init__(self, socket, server_host, server_port):
+        self.class_name = "ViewClient"
+        self.device_cmd = DeviceCommand.DeviceCommand()
         self.socket = socket    #telnetlib
         self.server_host = "localhost"
         self.server_port = "4939"
     
     def dump_view(self, view_id="-1"):
-        dump_cmd = "DUMP %s" %str(view_id)
-        return 
+        return self.device_cmd.dumpInfosByID(view_id)
                 
     def list_view(self):
         list_cmd = "LIST"

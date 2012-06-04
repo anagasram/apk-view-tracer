@@ -8,11 +8,20 @@ import os
 import ConfigParser
 from toolkit import getConfDir
 
-class GetViewServerInfo():
+class ConfigGetter():
+    '''
+    ConfigGetter Class can get configuration info from configure files
+    '''
+    
+    __ClassName = "ConfigGetter" # class private variable
+    
     def __init__(self):
-        self.ConfigFile = os.path.abspath(getConfDir() + os.sep + "Basic.conf")
+        self.ConfigFilePath = os.path.abspath(getConfDir() + os.path.sep + "Basic.conf")
         self.config = ConfigParser.ConfigParser()
-        self.config.read(self.ConfigFile)
+        self.config.read(self.ConfigFilePath)
+        
+    def getConfigInfo(self, section, option):
+        return self.config.get(section, option)
     
     def getServerHost(self):
         return self.config.get("AndroidViewServer", "host")

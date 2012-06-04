@@ -6,7 +6,7 @@
 
 import socket
 import telnetlib
-from GetConfigInfo import GetViewServerInfo
+from GetConfigInfo import ConfigGetter
 from InitDevice import init_service
 
 
@@ -15,7 +15,7 @@ from InitDevice import init_service
 # # can not find the end flag?????
 #===============================================================================
 def getInfosBySocket(cmd):   
-    config = GetViewServerInfo()
+    config = ConfigGetter()
     host = config.getServerHost()
     port = config.getServerPort()
     ## connect the service with a socket
@@ -47,11 +47,11 @@ def getInfosBySocket(cmd):
 # # method 2 : send command by telnet
 #===============================================================================
 def getInfosByTelnet(command):
-    config = GetViewServerInfo()
+    config = ConfigGetter()
     host = config.getServerHost()
     port = config.getServerPort()
-    time_out = config.getServerTimeOut() 
-    tn = telnetlib.Telnet(host, port, time_out)
+    timeout = config.getServerTimeOut() 
+    tn = telnetlib.Telnet(host, port, timeout)
     tn.write(command + "\n")
     data = tn.read_until("DONE")    
     tn.close()

@@ -4,7 +4,6 @@
 ## kun for Apk View Tracing
 ## ViewClient.py
 
-import telnetlib
 import DeviceCommand
 
 class ViewClient():
@@ -15,8 +14,9 @@ class ViewClient():
     $android-source/frameworks/base/core/java/android/view
     '''
     
+    __ClassName = "ViewClient"
+    
     def __init__(self, socket, server_host, server_port):
-        self.class_name = "ViewClient"
         self.device_cmd = DeviceCommand.DeviceCommand()
         self.socket = socket    #telnetlib
         self.server_host = "localhost"
@@ -26,18 +26,22 @@ class ViewClient():
         return self.device_cmd.dumpInfosByID(view_id)
                 
     def list_view(self):
-        list_cmd = "LIST"
-        return 
+        return self.device_cmd.getViewListInfo()
     
     def getFocusedWindowInfo(self):
-        cmd = "GET_FOCUS"
-        return 
+        return self.device_cmd.getFocusViewInfo()
+    
+    def getFocusedWindowHashCode(self):
+        return self.device_cmd.getFocusViewHashCode()
+    
+    def getFocusedWindowClassName(self):
+        pass
     
     def getServerVersion(self):
-        pass
+        return self.device_cmd.getServerInfo()
     
     def getProtocalVersion(self):
-        pass
+        return self.device_cmd.getProtocolInfo()
     
     
 if __name__=="__main__":

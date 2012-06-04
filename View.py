@@ -32,5 +32,6 @@ class View():
     def drag(self):
         pass
     
+    
 if __name__=="__main__":
     view = View()

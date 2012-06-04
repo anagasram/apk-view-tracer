@@ -5,11 +5,8 @@
 ## ApkViewTracer.py
 
 import platform,sys,os
-from DeviceCommand import DeviceCommand
+from InitEnv import InitEnvironment
 from InitDevice import init_service
-from ParseElement import ParseElement
-from BuildTree import build
-from GenerateViewFile import GenerateViewFile
 
 class ApkViewTracer():
     def __init__(self, script_file_name="MonkeyRunnerImpl.py"):
@@ -56,4 +53,10 @@ def main():
     apk_view_tracer.run(script_file)
 
 if __name__=="__main__":
+    init_env = InitEnvironment()
+    init_env.run()
+    from DeviceCommand import DeviceCommand
+    from ParseElement import ParseElement
+    from BuildTree import build
+    from GenerateViewFile import GenerateViewFile
     main()

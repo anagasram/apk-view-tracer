@@ -4,12 +4,13 @@
 ## kun for Apk View Tracing
 ## InitEnv.py
 
-import os
+import os, sys
 from toolkit import getRuleDir,getConfDir,getToolsDir,getPlatformToolsDir
 
 class InitEnvironment():
     def __init__(self):
-        pass
+        self.device_module_dir = os.getcwd() + os.path.sep + "DeviceCommand"
+        self.current_dir = os.getcwd()
     
     ## check dir
     def checkDir(self):
@@ -50,13 +51,18 @@ class InitEnvironment():
             return False               
         return True
         
-    def init_env(self):
+    def run(self):
         if self.checkDir() and self.checkFile():
             print "Sucess to init enviroment! "
-            return True
         else:
             return False
         
+        if self.current_dir not in sys.path:
+            sys.path.append(self.current_dir)
+        if self.device_module_dir not in sys.path:
+            sys.path.append(self.device_module_dir)
+        
+        return True
 if __name__=="__main__":
     InitEnv = InitEnvironment()
     InitEnv.init_env()

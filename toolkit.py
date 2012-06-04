@@ -23,18 +23,17 @@ def octstr2int(s):
 def getParDir():
     return os.path.abspath(os.path.join(os.getcwd(), os.path.pardir))
 
-
 def getConfDir():
-    return os.getcwd() + os.sep + "conf"
+    return os.getcwd() + os.path.sep + "conf"
 
 def getRuleDir():
-    return os.getcwd() + os.sep + "rule"
+    return os.getcwd() + os.path.sep + "rule"
 
 def getToolsDir():
-    return os.getcwd() + os.sep + "tools"
+    return os.getcwd() + os.path.sep + "tools"
 
 def getPlatformToolsDir():
-    return os.getcwd() + os.sep + "platform-tools"
+    return os.getcwd() + os.path.sep + "platform-tools"
 
 def getViewFileDir():
-    return os.getcwd() + os.sep + "view_file"
+    return os.getcwd() + os.path.sep + "view_file"

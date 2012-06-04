@@ -5,13 +5,13 @@
 ## InitDevice.py
 
 import os
-from GetConfigInfo import GetViewServerInfo
+from GetConfigInfo import ConfigGetter
 
 #===============================================================================
 # init service and check
 #===============================================================================
 def init_service():
-    config = GetViewServerInfo()
+    config = ConfigGetter()
     port = config.getServerPort()
     ## check
     check_cmd = "adb shell getprop ro.secure"

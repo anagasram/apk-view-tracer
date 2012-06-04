@@ -17,6 +17,8 @@ class AutomatedTestingInterface():
     '''
     Interface for Automated Testing
     '''
+    
+    __ClassName = "AutomatedTestingInterface"
         
     ## class variables
     OPENED = None
@@ -58,7 +60,7 @@ class AutomatedTestingInterface():
         del self.device_cmd
     
     def close(self):
-        pass
+        __del__()
     
     def assertCurrentActivity(self, expectedClassName):
         try:

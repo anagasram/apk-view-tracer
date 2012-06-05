@@ -6,7 +6,7 @@
 
 import copy
 from TreeType import CRect,CTreeNode
-from DeviceConnection import getInfosByTelnet
+from DeviceCommand.DeviceConnection import getInfosByTelnet
 from ParseElement import ParseElement
 from GetViewState import GetViewState
 

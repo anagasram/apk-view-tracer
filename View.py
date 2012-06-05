@@ -6,7 +6,7 @@
 
 class View():
     '''
-    View Class which describe View Object of Android System w python
+    View Class which describe View Object of Android System with python
     '''
     def __init__(self, device):
         self.device = device

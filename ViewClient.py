@@ -21,6 +21,7 @@ class ViewClient():
         self.socket = socket    #telnetlib
         self.server_host = "localhost"
         self.server_port = "4939"
+        
     
     def dump_view(self, view_id="-1"):
         return self.device_cmd.dumpInfosByID(view_id)

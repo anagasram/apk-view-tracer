@@ -5,12 +5,12 @@
 ## InitEnv.py
 
 import os, sys
-from toolkit import getRuleDir,getConfDir,getToolsDir,getPlatformToolsDir
+from Utility import getRuleDir,getConfDir,getToolsDir,getPlatformToolsDir
 
 class InitEnvironment():
     def __init__(self):
-        self.device_module_dir = os.getcwd() + os.path.sep + "DeviceCommand"
         self.current_dir = os.getcwd()
+        self.device_module_dir = os.path.join(self.current_dir, "DeviceCommand")
     
     ## check dir
     def checkDir(self):
@@ -57,12 +57,13 @@ class InitEnvironment():
         else:
             return False
         
-        if self.current_dir not in sys.path:
-            sys.path.append(self.current_dir)
-        if self.device_module_dir not in sys.path:
-            sys.path.append(self.device_module_dir)
+#        if self.current_dir not in sys.path:
+#            sys.path.append(self.current_dir)
+#        if self.device_module_dir not in sys.path:
+#            sys.path.append(self.device_module_dir)
         
         return True
+    
 if __name__=="__main__":
     InitEnv = InitEnvironment()
     InitEnv.init_env()

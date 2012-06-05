@@ -5,10 +5,13 @@
 ## testMonkeyRunnerImpl.py
 
 import os,sys
-curDir=os.getcwd()
-sys.path.append(curDir)
-
-from MonkeyRunnerImpl import MonkeyRunnerImpl
+current_path = os.getcwd()
+parent_path = os.path.abspath(os.path.join(os.getcwd(), os.path.pardir))
+if current_path not in sys.path:
+    sys.path.append(current_path)
+if parent_path not in sys.path:
+    sys.path.append(parent_path)
+from ViewOperator.MonkeyRunnerImpl import MonkeyRunnerImpl
 
 def touchEventByViewPointList(view_point_list,monkey_runner_impl):
     for view_point in view_point_list:

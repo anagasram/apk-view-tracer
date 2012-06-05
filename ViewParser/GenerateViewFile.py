@@ -6,7 +6,7 @@
 
 from BuildTree import build
 import os
-from toolkit import getViewFileDir
+from Utility import getViewFileDir
 
 class GenerateViewFile():
     ## class variables

@@ -6,7 +6,7 @@
 
 import os
 import ConfigParser
-from toolkit import getConfDir
+from Utility import getConfDir
 
 class ConfigGetter():
     '''
@@ -16,9 +16,13 @@ class ConfigGetter():
     __ClassName = "ConfigGetter" # class private variable
     
     def __init__(self):
+
         self.ConfigFilePath = os.path.abspath(getConfDir() + os.path.sep + "Basic.conf")
         self.config = ConfigParser.ConfigParser()
-        self.config.read(self.ConfigFilePath)
+        try:
+            self.config.read(self.ConfigFilePath)
+        except Exception, e:
+            print "[%s] Failed to read configuration file: [%s]" %(ConfigGetter.__ClassName, str(e))
         
     def getConfigInfo(self, section, option):
         return self.config.get(section, option)

@@ -6,7 +6,7 @@
 
 import os
 import ConfigParser
-from toolkit import getRuleDir
+from Utility import getRuleDir
 
 ## for example
 ## xxx.rule

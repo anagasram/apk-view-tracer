@@ -4,9 +4,9 @@
 ## kun for Apk View Tracking
 ## ParseElement.py
 
-from DeviceConnection import getInfosByTelnet
+from DeviceCommand.DeviceConnection import getInfosByTelnet
 from TreeType import CRect
-from toolkit import str2int
+from Utility import str2int
 
 #===============================================================================
 # # global variable

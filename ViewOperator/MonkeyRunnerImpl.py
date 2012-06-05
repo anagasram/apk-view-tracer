@@ -15,7 +15,11 @@
 
 import os, sys
 curDir = os.getcwd()
-sys.path.append(curDir)
+parent_path = os.path.abspath(os.path.join(os.getcwd(), os.path.pardir))
+if curDir not in sys.path:
+    sys.path.append(curDir)
+if parent_path not in sys.path:
+    sys.path.append(parent_path)
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice, MonkeyImage, MonkeyView
 from com.android.monkeyrunner.recorder import MonkeyRecorder
 

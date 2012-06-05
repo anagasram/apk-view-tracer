@@ -42,8 +42,8 @@
 jarfile=monkeyrunner.jar
 #frameworkdir="$progdir"
 #libdir="$progdir"
-frameworkdir=./tools/lib
-libdir=./tools/lib
+frameworkdir=tools/lib
+libdir=tools/lib
 
 #if [ ! -r "$frameworkdir/$jarfile" ]
 #then

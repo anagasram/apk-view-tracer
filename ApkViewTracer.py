@@ -40,7 +40,7 @@ def main():
     element_parser = ParseElement()
     element_parser.getStructure(data)
     
-    apk_view_tracer = ApkViewTracer(script_file_name="testMonkeyRunnerImpl.py")
+    apk_view_tracer = ApkViewTracer(script_file_name="TestScripts/testMonkeyRunnerImpl.py")
     
     apk_view_tracer.prepare()
     
@@ -55,8 +55,8 @@ def main():
 if __name__=="__main__":
     init_env = InitEnvironment()
     init_env.run()
-    from DeviceCommand import DeviceCommand
-    from ParseElement import ParseElement
-    from BuildTree import build
-    from GenerateViewFile import GenerateViewFile
+    from DeviceCommand.DeviceCommand import DeviceCommand
+    from ViewParser.ParseElement import ParseElement
+    from ViewParser.BuildTree import build
+    from ViewParser.GenerateViewFile import GenerateViewFile
     main()

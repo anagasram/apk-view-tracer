@@ -7,8 +7,13 @@
 import os
 
 class CommandConsole():
+    '''
+    Command Console: it use adb command
+    '''
+    __ClassName = "CommandConsole"
+    
     def __init__(self):
-        self.class_name = "CommandConsole"
+        self.emulator_port = 5554
         
     def executeCommand(self, cmd):
         try:
@@ -28,11 +33,15 @@ class CommandConsole():
     
     ## for example:
     ## To start the Settings application: # am start -n com.android.settings/.Settings
+    ##                                    # am start -n com.android.settings/com.android.settings.Settings
     ## To start the Browser: # am start -n com.android.browser/.BrowserActivity
-    def startActivity(self, activity_name):
+    ##                       # am start -n com.android.browser/com.android.browser.BrowserActivity
+    ## To start the Calculator # am start -n com.android.calculator2/.Calculator
+    ##                         # am start -n com.android.calculator2/com.android.calculator2.Calculator
+    def startActivity(self, package_name, activity_name):
         # -W must be before -n
         # -W is "start" command option, and -n is <INTENT> option
-        startActivityCmd = "adb shell am start -W -n %s" %activity_name
+        startActivityCmd = "adb shell am start -W -n %s/.%s" %(package_name, activity_name)
         return self.executeCommand(startActivityCmd)
     
     ## To start the phone dialer: # am start tel:210-385-0098
@@ -51,6 +60,14 @@ class CommandConsole():
     def startInstrumentation(self, component_name):
         startInstrumentationCmd = "adb shell am instrument -w %s" %component_name
         return self.executeCommand(startInstrumentationCmd)
+    
+    def pushFile(self, local_path, emulator_path, emulator_port=5554):
+        pushFileCmd = "adb -s emulator-%s push %s %s" %(emulator_port, local_path, emulator_path)
+        return self.executeCommand(pushFileCmd)
+    
+    def pullFile(self, emulator_path, local_path, emulator_port=5554):
+        pullFileCmd = "adb -s emulator-%s pull %s %s" %(emulator_port, emulator_path, local_path)
+        return self.executeCommand(pullFileCmd)
         
     def phoneCall(self):
         pass

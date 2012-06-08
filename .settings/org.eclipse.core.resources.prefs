@@ -28,6 +28,7 @@ encoding/GetConfigInfo.py=utf-8
 encoding/GlobalVariable.py=utf-8
 encoding/InitDevice.py=utf-8
 encoding/InitEnv.py=utf-8
+encoding/Logger.py=utf-8
 encoding/ParseRule.py=utf-8
 encoding/Utility.py=utf-8
 encoding/View.py=utf-8

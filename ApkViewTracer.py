@@ -7,11 +7,20 @@
 import platform,sys,os
 from InitEnv import InitEnvironment
 from InitDevice import init_service
+import logging
+import Logger
 
 class ApkViewTracer():
+    '''
+    ApkViewTracer class is the main entry.
+    '''
+    
+    __ClassName = "ApkViewTracer"
+    
     def __init__(self, script_file_name="MonkeyRunnerImpl.py"):
         self.curDir = os.getcwd()+os.sep
         self.script_file = self.curDir + script_file_name
+        self.m_logger = Logger.InitLog("apk-view-tracer.log", logging.getLogger("apk-view-tracer.thread"))
         
     def prepare(self):
         tree_nodes_list = build()
@@ -27,12 +36,12 @@ class ApkViewTracer():
         elif "Linux" == curOS:
             os.system(self.curDir+"Run.sh %s" %script_file)
         else:
-            print "Current OS is not Windows or Linux!"
+            self.m_logger.error("Current OS is not Windows or Linux!")
             raise Exception
 
 def main():
     if False == init_service():
-        print "failed to init service!"
+        print "[Error]Failed to init service!"
         raise Exception
     
     deviceCmd = DeviceCommand()

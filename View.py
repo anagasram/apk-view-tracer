@@ -8,8 +8,9 @@ class View():
     '''
     View Class which describe View Object of Android System with python
     '''
-    def __init__(self, device):
-        self.device = device
+    def __init__(self, dump_info):
+        self.original_data = dump_info
+        self.elements_list = []
     
     def getLocation(self, view):
         pass

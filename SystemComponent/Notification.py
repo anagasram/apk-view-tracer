@@ -6,6 +6,8 @@
 # @date: 2012-06-20
 #===============================================================================
 
+from 
+
 class Notification():
     '''
     '''
@@ -13,4 +15,5 @@ class Notification():
     def __init__(self):
         pass
     
-    
+    def callNotification(self):
+        pass

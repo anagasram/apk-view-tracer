@@ -14,6 +14,7 @@ class CRect(object):
     mBottom = 0
 
 class CTreeNode(object):
+    mClassName = "mClassName"
     mId = "mId"
     mText = "mText"
     mAbsoluteRect=CRect()
@@ -22,4 +23,5 @@ class CTreeNode(object):
     mParentNode = {} ## just init, but it also was CTreeNode object
     mChildNodes = []
     mDepth = 0
+    mTreeDepth = 0 ## its depth in this view tree
     mActive = False ## currently, I get this value from (DRAWN, Visiable, Clickable)

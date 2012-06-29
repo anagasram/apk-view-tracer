@@ -1,8 +1,10 @@
 #! python2.7
 ## -*- coding: utf-8 -*-
 
-## kun for Apk View Tracing
-## testMonkeyRunnerImpl.py
+#===============================================================================
+# @author: kun
+# @date: 2012-06-29
+#===============================================================================
 
 import os,sys
 current_path = os.getcwd()
@@ -14,9 +16,24 @@ if parent_path not in sys.path:
 from ViewOperator.MonkeyRunnerImpl import MonkeyRunnerImpl
 import time
 
+
 def touchEventByViewPointList(view_point_list,monkey_runner_impl):
     for view_point in view_point_list:
         monkey_runner_impl.touch(view_point[0], view_point[1], "DOWN_AND_UP")
+        
+    monkey_runner_impl.touch(428, 74, "DOWN_AND_UP")
+        
+def dragNotification(monkey_runner_impl):
+    ## Notification (y: 0-37  / x: 8-471 )
+    print "begin drag Notification"
+    monkey_runner_impl.drag(fromX= 200, fromY = 22, toX = 200, toY = 600)
+    print "end drag Notification"
+    
+def longClickHome(monkey_runner_impl):
+    print "begin long click home button"
+    monkey_runner_impl.press("HOME", "DOWN")
+    
+    print "begin long click home button"
 
 def main():
     monkey_runner_impl = MonkeyRunnerImpl()
@@ -32,6 +49,8 @@ def main():
       
 
     touchEventByViewPointList(view_point_list,monkey_runner_impl)
+
+#    dragNotification(monkey_runner_impl)
     
     
 if __name__ == "__main__":

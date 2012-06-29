@@ -208,15 +208,19 @@ class ParseElement():
             if "mTop=" in tag:
                 l = tag.split(",")
                 rect.mTop = str2int(l[-1])
+                    
             elif "mBottom=" in tag:
                 l = tag.split(",")
                 rect.mBottom = str2int(l[-1])
+                    
             elif "mLeft=" in tag:
                 l = tag.split(",")
                 rect.mLeft = str2int(l[-1])
+                    
             elif "mRight" in tag:
                 l = tag.split(",")
                 rect.mRight = str2int(l[-1])
+
     
         return rect
 

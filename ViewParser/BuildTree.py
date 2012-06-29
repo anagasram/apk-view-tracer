@@ -25,7 +25,10 @@ def buildTree(elements_list, blanks_list):
         index = x        
         blanks_count = blanks_list[index]
         depth = blanks_count
+        
         node = CTreeNode()
+        ## set node depth in this tree
+        node.mTreeDepth = blanks_count 
         
         if 0 == blanks_count:
             root_node.mElement = elements_list[index]
@@ -114,13 +117,13 @@ def setNodeValue(node):
         return False
     
     element_parser = ParseElement()
+    node.mClassName = element_parser.getClassName(element)
     node.mId = element_parser.getID(element)
     node.mText = element_parser.getText(element)
     node.mRect = element_parser.getRectArea(element)
     active_state = GetViewState()
     node.mActive = active_state.getActiveState(node)
     node.mAbsoluteRect = getAbsoluteRect(node)
-
 
 ## not implement yet
 def getChildNodesList(tree_nodes_list, tree_node):
@@ -139,12 +142,14 @@ def build():
     for node in tree_nodes_list:
         ## set node value from root node to child node
         setNodeValue(node)
-        print "*************************************************************************"
-        print node.mRect.mTop, node.mRect.mBottom, node.mRect.mLeft, node.mRect.mRight
-        print node.mId
-        print node.mText
-        print node.mActive
-        print node.mAbsoluteRect.mTop, node.mAbsoluteRect.mBottom, node.mAbsoluteRect.mLeft, node.mAbsoluteRect.mRight
+        print "*************************************************************************"  
+        print "mClassName: %s" %node.mClassName
+        print "mTreeDepth: %s" %node.mTreeDepth
+        print "mId: %s " %node.mId
+        print "mText: %s" %node.mText
+        print "mActive: %s" %node.mActive
+        print "mRect.(mTop, mBottom, mLeft, mRight): %s %s %s %s" %(node.mRect.mTop, node.mRect.mBottom, node.mRect.mLeft, node.mRect.mRight)
+        print "mAbsoluteRect: %s %s %s %s" %(node.mAbsoluteRect.mTop, node.mAbsoluteRect.mBottom, node.mAbsoluteRect.mLeft, node.mAbsoluteRect.mRight)
         print "*************************************************************************"
 
     return tree_nodes_list

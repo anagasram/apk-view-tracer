@@ -49,7 +49,7 @@ def main():
     element_parser = ParseElement()
     element_parser.getStructure(data)
     
-    apk_view_tracer = ApkViewTracer(script_file_name="TestScripts/testMonkeyRunnerImpl.py")
+    apk_view_tracer = ApkViewTracer(script_file_name="TestScripts/testNotification.py")
     
     apk_view_tracer.prepare()
     

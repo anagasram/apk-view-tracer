@@ -14,7 +14,10 @@ class Home():
         pass
     
     
-    def getList(self):
+    def getElementList(self):
+        pass
+    
+    def getRow(self, row_num=0):
         pass
     
     

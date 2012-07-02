@@ -20,9 +20,13 @@ class Notification():
         
         self.view_info = dump_info
         
+        self.status_bar_class_name = "com.android.systemui.statusbar.ExpandedView"
+        
         self.carrierlabel_class_name = "com.android.systemui.statusbar.CarrierLabel"
-        self.ongoing_class_name = ""
+        self.ongoing_class_name = "com."
         self.notifications_class_name = ""
+        
+        self.clear_button_id = "clear_all_button"
         
         self.item_class_name = 'com.android.systemui.statusbar.LatestItemView'
         

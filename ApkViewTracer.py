@@ -39,7 +39,7 @@ class ApkViewTracer():
             self.m_logger.error("Current OS is not Windows or Linux!")
             raise Exception
 
-def main():
+def main(script_file_name):
     if False == init_service():
         print "[Error]Failed to init service!"
         raise Exception
@@ -49,7 +49,7 @@ def main():
     element_parser = ParseElement()
     element_parser.getStructure(data)
     
-    apk_view_tracer = ApkViewTracer(script_file_name="TestScripts/testNotification.py")
+    apk_view_tracer = ApkViewTracer(script_file_name)
     
     apk_view_tracer.prepare()
     
@@ -68,4 +68,9 @@ if __name__=="__main__":
     from ViewParser.ParseElement import ParseElement
     from ViewParser.BuildTree import build
     from ViewParser.GenerateViewFile import GenerateViewFile
-    main()
+    
+    script_file_name="TestScripts/testMonkeyRunnerImpl.py"
+    script_file_name="TestScripts/testNotification.py"
+    script_file_name="TestScripts/testHome.py"
+    main(script_file_name)
+    

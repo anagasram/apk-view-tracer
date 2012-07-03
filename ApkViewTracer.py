@@ -47,8 +47,8 @@ def main(script_file_name):
     deviceCmd = DeviceCommand()
     
     data = deviceCmd.getCurrentViewInfo()
-    element_parser = ParseElement()
-    element_parser.getStructure(data)
+    vt = ViewTree()
+    vt.getStructure(data)
     
     apk_view_tracer = ApkViewTracer(script_file_name)
     
@@ -67,7 +67,7 @@ if __name__=="__main__":
     init_env.run()
     from DeviceCommand.DeviceCommand import DeviceCommand
     from ViewParser.ParseElement import ParseElement
-    from ViewParser.BuildTree import build
+    from ViewParser.BuildTree import build, ViewTree
     from ViewParser.GenerateViewFile import GenerateViewFile
     
     script_file_name="TestScripts/testMonkeyRunnerImpl.py"

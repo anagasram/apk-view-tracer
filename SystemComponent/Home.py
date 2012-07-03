@@ -8,14 +8,38 @@
 
 class Home():
     '''
+    Physical Home Button
     '''
     
-    def __init__(self):
-        pass
-    
+    def __init__(self, tree_nodes_list):
+        self.tree_nodes_list = tree_nodes_list    
     
     def getElementList(self):
-        pass
+        elements_list = []
+        
+        for node in self.tree_nodes_list:
+            if node.mActive:
+                elements_list.append(node)
+                
+        return elements_list
+    
+    def getLocationByText(self, text):
+        elements_list = self.getElementList()
+        
+        for element in elements_list:
+            if text == element.mText:
+                return element.mLocation
+            
+        return None
+    
+    def getLocationByKeyText(self, key_text):
+        elements_list = self.getElementList()
+        
+        for element in elements_list:
+            if 0 <= element.mText.find(key_text):
+                return element.mLocation
+        
+        return None
     
     def getRow(self, row_num=0):
         pass

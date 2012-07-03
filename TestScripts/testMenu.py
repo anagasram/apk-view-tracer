@@ -3,9 +3,9 @@
 
 #===============================================================================
 # @author: kun
-# @date: 2012-07-01
-# @file name: testHome.py
+# @date: 2012-07-02
 #===============================================================================
+
 
 import os,sys
 current_path = os.getcwd()
@@ -23,14 +23,14 @@ python_sys_path_list = ['C:\\Python27\\Lib\\idlelib', 'C:\\Python27\\lib\\site-p
                         'C:\\Python27\\lib\\site-packages\\win32', 'C:\\Python27\\lib\\site-packages\\win32\\lib', 
                         'C:\\Python27\\lib\\site-packages\\Pythonwin']
     
-from SystemComponent.Home import Home
+from SystemComponent.Menu import Menu
 from ViewParser.BuildTree import build
 from ViewParser.GenerateViewFile import GenerateViewFile
 
-def testHome():
+def testMenu():
     tree_nodes_list = build()
-    home = Home(tree_nodes_list)
-    elements_list = home.getElementList()
+    menu = Menu(tree_nodes_list)
+    elements_list = menu.getElementList()
     
     for element in elements_list:
         print element.mText
@@ -42,4 +42,4 @@ if __name__ == "__main__":
         
     print sys.path
     
-    testHome()
+    testMenu()

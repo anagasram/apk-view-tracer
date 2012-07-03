@@ -27,8 +27,7 @@ class InitEnvironment():
         if "platform-tools" not in dir_list:
             print "It needs android sdk platform-tools dir here! "
             return False
-        if "view_file" not in dir_list:
-            print "It needs view_file dir here! "
+
         return True
 
     ## check file

@@ -117,6 +117,7 @@ def setNodeValue(node):
         return False
     
     element_parser = ParseElement()
+    element_parser.parseElmentData(node.mElement)
     node.mClassName = element_parser.getClassName(element)
     node.mId = element_parser.getID(element)
     node.mText = element_parser.getText(element)

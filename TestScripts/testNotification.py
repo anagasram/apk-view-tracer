@@ -17,6 +17,30 @@ from ViewOperator.MonkeyRunnerImpl import MonkeyRunnerImpl
 import time
 
 
+from SystemComponent.Notification import Notification
+from ViewParser.BuildTree import build
+from ViewParser.GenerateViewFile import GenerateViewFile
+
+def testNotification():
+    tree_nodes_list = build()
+    notification = Notification(tree_nodes_list)
+    
+    print "carrier info: %s" %notification.getCarrierInfo()
+    clear_location = notification.getClearButtonLocation()
+    print "clear button location: (%s, %s)" %(clear_location.x, clear_location.y)
+    
+    print  "Ongoing items: "
+    elements_list = notification.getOngoingViewNodes()
+    for element in elements_list:
+        print element.mId
+        print notification.getTextList(element)
+     
+    print "Notifications items: "   
+    elements_list = notification.getNotificationViewNodes()    
+    for element in elements_list:
+        print element.mId
+        print notification.getTextList(element)
+
 def touchEventByViewPointList(view_point_list,monkey_runner_impl):
     for view_point in view_point_list:
         monkey_runner_impl.touch(view_point[0], view_point[1], "DOWN_AND_UP")
@@ -54,6 +78,5 @@ def main():
     
     
 if __name__ == "__main__":
-    print "begin main"
-    main()
-    print "end main"
+    #main()    
+    testNotification()

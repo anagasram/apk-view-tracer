@@ -12,13 +12,19 @@ class CRect(object):
     mRight = 0
     mTop = 0
     mBottom = 0
+    
+class CPoint():
+    x = 0
+    y = 0
 
 class CTreeNode(object):
     mClassName = "mClassName"
+    mHashCode = "fffff"
     mId = "mId"
     mText = "mText"
     mAbsoluteRect=CRect()
     mRect = CRect()
+    mLocation = CPoint() 
     mElement = "element_data" ## just init, it was string data which was dumped from telnet
     mParentNode = {} ## just init, but it also was CTreeNode object
     mChildNodes = []

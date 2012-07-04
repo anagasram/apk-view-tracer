@@ -5,7 +5,7 @@
 ## BuildTree.py
 
 import copy
-from TreeType import CRect,CTreeNode
+from TreeType import CRect,CTreeNode,CPoint
 from DeviceCommand.DeviceConnection import getInfosByTelnet
 from ParseElement import ParseElement
 from GetViewState import GetViewState
@@ -147,6 +147,35 @@ class ViewTree():
     ##    print "///////////////// end trace  ///////////////////////////////"
         return absoluteRect
     
+    def getViewCenterPoint(self, node):
+        width = node.mAbsoluteRect.mRight - node.mAbsoluteRect.mLeft
+        height = node.mAbsoluteRect.mBottom - node.mAbsoluteRect.mTop
+        location = CPoint()
+        location.x = node.mAbsoluteRect.mLeft + width/2
+        location.y = node.mAbsoluteRect.mTop + height/2    
+        return location
+    
+    def getChildNodesList(self, tree_nodes_list, tree_node):
+        child_nodes_list = []
+        start_flag = False
+        end_flag = False
+        for node in tree_nodes_list:
+            if end_flag:
+                break
+            
+            if node.mHashCode == tree_node.mHashCode:
+                start_flag = True
+            
+            if (node.mDepth == (tree_node.mDepth+1)) and start_flag:
+                child_nodes_list.append(node)
+                
+            if (node.mDepth == tree_node.mDepth) and start_flag and (node.mHashCode!=tree_node.mHashCode):
+                end_flag = True
+        
+        print tree_node.mClassName
+        print len(child_nodes_list)
+        return child_nodes_list
+    
     def setNodeValue(self, node):
         element = node.mElement
         if None == element:
@@ -156,18 +185,15 @@ class ViewTree():
         element_parser = ParseElement(node.mElement)
         element_parser.parseElmentData()
         node.mClassName = element_parser.getClassName()
+        node.mHashCode = element_parser.getHashCode()
         node.mId = element_parser.getID()
         node.mText = element_parser.getText()
         node.mRect = element_parser.getRectArea()
         active_state = GetViewState(node)
         node.mActive = active_state.getActiveState()
         node.mAbsoluteRect = self.getAbsoluteRect(node)
-    
-    ## not implement yet
-    def getChildNodesList(self, tree_nodes_list, tree_node):    
-        for node in tree_nodes_list:
-            print node
-            pass
+        node.mLocation = self.getViewCenterPoint(node)
+
     
     
 def build():
@@ -180,6 +206,7 @@ def build():
     for node in tree_nodes_list:
         ## set node value from root node to child node
         vt.setNodeValue(node)
+        node.mChildNodes = vt.getChildNodesList(tree_nodes_list, node)
         print "*************************************************************************"  
         print "mClassName: %s" %node.mClassName
         print "mTreeDepth: %s" %node.mTreeDepth

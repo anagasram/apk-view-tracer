@@ -117,6 +117,75 @@ class Notification():
                 all_child_nodes_list += temp_node.mChildNodes
                 
         return text_list
+    
+    def loadAllItems(self):
+        self.ongoing_items_list = self.getOngoingViewNodes()
+        self.notification_items_list = self.getNotificationViewNodes()
+        
+        self.ongoing_items_dict = {}
+        self.notification_items_dict = {}
+        
+        for node in self.ongoing_items_list:
+            text_list = self.getTextList(node)
+            self.ongoing_items_dict[node.mHashCode] = text_list
+            
+        for node in self.notification_items_list:
+            text_list = self.getTextList(node)
+            self.notification_items_dict[node.mHashCode] = text_list
+    
+    def getLocationByText(self, text):
+        hash_code = ""
+        for key in self.notification_items_dict.keys():
+            if text in self.notification_items_dict[key]:
+                hash_code = key
+                break
+        
+        if 0!=len(hash_code):
+            for node in self.notification_items_list:
+                if hash_code == node.mHashCode:
+                    return self.getRealLocation(node.mLocation)
+        else:
+            for key in self.ongoing_items_dict.keys():
+                if text in self.ongoing_items_dict[key]:
+                    hash_code = key
+                    break
+            
+            if 0!=len(hash_code):
+                for node in self.ongoing_items_list:
+                    if hash_code == node.mHashCode:
+                        return self.getRealLocation(node.mLocation)
+                    
+        return None
+    
+    def getLocationByKeyWord(self, keyword):
+        hash_code = ""
+        for key in self.notification_items_dict.keys():
+            for text in self.notification_items_dict[key]:
+                if keyword in text:
+                    hash_code = key
+                    break
+            if 0!=len(hash_code):
+                break
+        
+        if 0!=len(hash_code):
+            for node in self.notification_items_list:
+                if hash_code == node.mHashCode:
+                    return self.getRealLocation(node.mLocation)
+        else:
+            for key in self.ongoing_items_dict.keys():
+                for text in self.ongoing_items_dict[key]:
+                    hash_code = key
+                    break
+                if 0!=len(hash_code):
+                    break
+                
+            if 0!=len(hash_code):
+                for node in self.ongoing_items_list:
+                    if hash_code == node.mHashCode:
+                        return self.getRealLocation(node.mLocation)
+                    
+        return None
+                    
                             
                 
     

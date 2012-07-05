@@ -72,7 +72,7 @@ if __name__=="__main__":
     
     script_file_name="TestScripts/testMonkeyRunnerImpl.py"
     script_file_name="TestScripts/testNotification.py"
-    #script_file_name="TestScripts/testHome.py"
-    #script_file_name="TestScripts/testMenu.py"
+    script_file_name="TestScripts/testHome.py"
+    script_file_name="TestScripts/testMenu.py"
     main(script_file_name)
     

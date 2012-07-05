@@ -62,6 +62,40 @@ class AutomatedTestingInterface():
     def close(self):
         __del__()
     
+    
+#------------------------------------------------------------------------------ 
+#===============================================================================
+# this is for TMMS
+#===============================================================================
+    def searchForViewClassName(self, class_name):
+        pass
+    
+    def searchForText(self, text):
+        pass
+    
+    def searchForViewID(self, id):
+        pass
+    
+    def getCurrentViewClassName(self):
+        pass
+    
+    def existViewByClassName(self, class_name):
+        pass
+    
+    def existViewByText(self, text):
+        pass
+    
+    def isVisibleById(self, id):
+        pass
+    
+    def isClickableById(self, id):
+        pass
+    
+    
+#------------------------------------------------------------------------------ 
+
+
+
     def assertCurrentActivity(self, expectedClassName):
         try:
             curActivityClassName = self.easy_device.getFocusedWindowClassName()

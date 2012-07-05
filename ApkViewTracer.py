@@ -24,10 +24,9 @@ class ApkViewTracer():
         
     def prepare(self):
         tree_nodes_list = build()
-        viewFile_generator = GenerateViewFile()
-        view_point_list = viewFile_generator.generateViewPointList(tree_nodes_list)
-        #viewFile_generator.generateActionList(view_point_list)
-        viewFile_generator.generateViewFile(view_point_list, "click.vf")
+        view_generator = GenerateViewPointList()
+        view_point_list = view_generator.generateViewPointList(tree_nodes_list)
+        view_generator.generateActionList(view_point_list)
 
     def run(self, script_file):       
         curOS=platform.system()
@@ -68,7 +67,7 @@ if __name__=="__main__":
     from DeviceCommand.DeviceCommand import DeviceCommand
     from ViewParser.ParseElement import ParseElement
     from ViewParser.BuildTree import build, ViewTree
-    from ViewParser.GenerateViewFile import GenerateViewFile
+    from ViewParser.GenerateViewPointList import GenerateViewPointList
     
     script_file_name="TestScripts/testMonkeyRunnerImpl.py"
     script_file_name="TestScripts/testNotification.py"

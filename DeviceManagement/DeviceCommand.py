@@ -4,9 +4,12 @@
 ## kun for Apk View Tracing
 ## DeviceCommand.py
 
-from DeviceConnection import getInfosByTelnet
+from DeviceManagement import DeviceManagement
 
 class DeviceCommand():
+    '''
+    Device Command
+    '''
     
     list_view_cmd = "LIST"
     dump_view_cmd = "DUMP"
@@ -22,6 +25,7 @@ class DeviceCommand():
     
     def __init__(self):
         self.class_name = "DeviceCommand"
+        self.device_manager = DeviceManagement()
     
     #===========================================================================
     # # ViewServer Command
@@ -29,15 +33,15 @@ class DeviceCommand():
     
     # get ViewServer server version
     def getServerInfo(self):
-        return getInfosByTelnet(DeviceCommand.server_cmd)
+        return self.device_manager.getInfosByTelnet(DeviceCommand.server_cmd)
     
     # get ViewServer protocol version
     def getProtocolInfo(self):
-        return getInfosByTelnet(DeviceCommand.protocol_cmd)
+        return self.device_manager.getInfosByTelnet(DeviceCommand.protocol_cmd)
     
     # get View Info of Current Focused Window     
     def getFocusViewInfo(self):
-        return getInfosByTelnet(DeviceCommand.get_focus_cmd)
+        return self.device_manager.getInfosByTelnet(DeviceCommand.get_focus_cmd)
     
     def getFocusViewHashCode(self):
         info = self.getFocusViewInfo()
@@ -46,32 +50,35 @@ class DeviceCommand():
         return hash_code        
     
     def getViewListInfo(self):
-        return getInfosByTelnet(DeviceCommand.list_view_cmd)
+        return self.device_manager.getInfosByTelnet(DeviceCommand.list_view_cmd)
     
+    # current view is focused view
     def getCurrentViewInfo(self):
         dump_command = DeviceCommand.dump_view_cmd + " -1"
-        return getInfosByTelnet(dump_command)
+        return self.device_manager.getInfosByTelnet(dump_command)
 
-    def dumpInfosByID(self, strID="-1"):
-        dump_command = DeviceCommand.dump_view_cmd + " " + str(strID)
+    def dumpViewInfosByHashCode(self, hash_code="-1"):
+        dump_command = DeviceCommand.dump_view_cmd + " " + str(hash_code)
         try:
-            return getInfosByTelnet(dump_command)
+            return self.device_manager.getInfosByTelnet(dump_command)
         except Exception, e:
             print "[%s]: Failed to Dump this view. The ID might be invalid! [%s]" %(self.class_name, str(e))
             return None
     
     # this method might have problem
     def getAutoListInfo(self):
-        return getInfosByTelnet(DeviceCommand.autolist_cmd)
-    
+        return self.device_manager.getInfosByTelnet(DeviceCommand.autolist_cmd)
+
+
+#------------------------------------------------------------------------------ 
     #===========================================================================
-    # # ViewDebug Command
+    # # ViewDebug Command; they are retained for testing 
     #===========================================================================
     
-    def captureInfoByID(self, strID):
-        capture_command = DeviceCommand.capture_cmd + " " + str(strID)
+    def captureInfoByHashCode(self, hash_code):
+        capture_command = DeviceCommand.capture_cmd + " " + str(hash_code)
         try:
-            return getInfosByTelnet(capture_command)
+            return self.device_manager.getInfosByTelnet(capture_command)
         except Exception,e:
             print "[ERROR]:" + "Failed to Capture this view. The ID might be invalid!"
             print e
@@ -80,7 +87,7 @@ class DeviceCommand():
     def invalidateInfoByID(self, strID):
         invalidate_command = DeviceCommand.invalidate_cmd + " " + str(strID)
         try:
-            return getInfosByTelnet(invalidate_command)
+            return self.device_manager.getInfosByTelnet(invalidate_command)
         except Exception,e:
             print "[ERROR]:" + "Failed to Invalidate this view. The ID might be invalid!"
             print e
@@ -89,11 +96,12 @@ class DeviceCommand():
     def profileInfoByID(self, strID):
         profile_command = DeviceCommand.profile_cmd + " " + str(strID)
         try:
-            return getInfosByTelnet(profile_command)
+            return self.device_manager.getInfosByTelnet(profile_command)
         except Exception,e:
             print "[ERROR]:" + "Failed to Profile this view. The ID might be invalid!"
             print e
             return None
+#------------------------------------------------------------------------------ 
 
 if __name__ == "__main__":
     deviceCmd = DeviceCommand()

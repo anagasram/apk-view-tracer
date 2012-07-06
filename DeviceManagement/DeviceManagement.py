@@ -9,6 +9,14 @@ import telnetlib
 from GetConfigInfo import ConfigGetter
 import os
 
+class Device():
+    '''
+    Device
+    '''
+    
+    def __init__(self, device_port=5554, device_ip="127.0.0.1", view_server_port=4939):
+        pass
+
 class DeviceManagement():
     '''
     Device Management

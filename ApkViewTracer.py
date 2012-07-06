@@ -6,7 +6,6 @@
 
 import platform,sys,os
 from InitEnv import InitEnvironment
-from InitDevice import init_service
 import logging
 import Logger
 

@@ -38,9 +38,6 @@ class ApkViewTracer():
             raise Exception
 
 def main(script_file_name):
-    if False == init_service():
-        print "[Error]Failed to init service!"
-        raise Exception
     
     deviceCmd = DeviceCommand()
     
@@ -63,10 +60,10 @@ def main(script_file_name):
 if __name__=="__main__":
     init_env = InitEnvironment()
     init_env.run()
-    from DeviceCommand.DeviceCommand import DeviceCommand
-    from ViewParser.ParseElement import ParseElement
-    from ViewParser.BuildTree import build, ViewTree
-    from ViewParser.GenerateViewPointList import GenerateViewPointList
+    from DeviceManagement.DeviceCommand import DeviceCommand
+    from ViewManagement.ParseElement import ParseElement
+    from ViewManagement.BuildTree import build, ViewTree
+    from ViewManagement.GenerateViewPointList import GenerateViewPointList
     
     script_file_name="TestScripts/testMonkeyRunnerImpl.py"
     script_file_name="TestScripts/testNotification.py"

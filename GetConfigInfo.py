@@ -27,12 +27,6 @@ class ConfigGetter():
     def getConfigInfo(self, section, option):
         return self.config.get(section, option)
     
-    def getServerHost(self):
-        return self.config.get("AndroidViewServer", "host")
-
-    def getServerPort(self):
-        return self.config.getint("AndroidViewServer", "port")
-    
     def getServerTimeOut(self):
         return self.config.getint("AndroidViewServer", "time_out")
 

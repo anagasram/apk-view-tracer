@@ -4,7 +4,7 @@
 ## kun for Apk View Tracing
 ## DeviceCommand.py
 
-from DeviceManagement import DeviceManagement
+from DeviceManagement import Device
 
 class DeviceCommand():
     '''
@@ -23,9 +23,13 @@ class DeviceCommand():
     invalidate_cmd = "INVALIDATE"
     profile_cmd = "PROFILE"
     
-    def __init__(self):
+    def __init__(self, logger):
         self.class_name = "DeviceCommand"
-        self.device_manager = DeviceManagement()
+        self.m_logger = logger
+        self.device_manager = Device(self.m_logger)
+        
+        if not self.device_manager.init_device():
+            return False
     
     #===========================================================================
     # # ViewServer Command

@@ -29,4 +29,10 @@ class ViewElement():
     def operate(self):
         pass
     
+    def click(self):
+        pass
+    
+    def touch(self):
+        pass
+    
     

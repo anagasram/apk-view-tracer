@@ -6,7 +6,6 @@
 
 import socket
 import telnetlib
-from GetConfigInfo import ConfigGetter
 import os
 
 class Device():
@@ -14,21 +13,17 @@ class Device():
     Device
     '''
     
-    def __init__(self, device_port=5554, device_ip="127.0.0.1", view_server_port=4939):
-        pass
-
-class DeviceManagement():
-    '''
-    Device Management
-    '''
-    
-    def __init__(self, logger):
-        self.config = ConfigGetter()
+    def __init__(self, logger, device_port=5554, device_ip="127.0.0.1", view_server_port=4939):
         self.m_logger = logger
-        
+        self.device_port = device_port
+        self.device_ip = device_ip
+        self.view_server_port = view_server_port
+    
+    def __del__(self):
+        print "destroy this device"    
     
     def init_device(self):
-        port = self.config.getServerPort()
+        port = self.view_server_port
         ## check
         check_cmd = "adb shell getprop ro.secure"
         out=os.popen(check_cmd) ## return "0\r\n" or "1\r\n"
@@ -81,9 +76,9 @@ class DeviceManagement():
     # # method 1 : send command by socket
     # # can not find the end flag?????
     #===============================================================================
-    def getInfosBySocket(self, cmd):   
-        host = self.config.getServerHost()
-        port = self.config.getServerPort()
+    def getInfosBySocket(self, command):   
+        host = self.device_ip
+        port = self.view_server_port
         ## connect the service with a socket
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
         try:
@@ -91,7 +86,7 @@ class DeviceManagement():
         except Exception,e:
             print e   
     
-        s.send(cmd+'\n')
+        s.send(command+'\n')
         print "sucess to send command"
         buf_size = 65565
         data=""
@@ -111,8 +106,8 @@ class DeviceManagement():
     # # method 2 : send command by telnet
     #===============================================================================
     def getInfosByTelnet(self, command):
-        host = self.config.getServerHost()
-        port = self.config.getServerPort()
+        host = self.device_ip
+        port = self.view_server_port
         #time_out = config.getServerTimeOut()
         #tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
         tn = telnetlib.Telnet(host=host, port=port) # this telnetlib is from jython.jar lib

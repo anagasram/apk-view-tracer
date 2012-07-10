@@ -24,8 +24,7 @@ python_sys_path_list = ['C:\\Python27\\Lib\\idlelib', 'C:\\Python27\\lib\\site-p
                         'C:\\Python27\\lib\\site-packages\\Pythonwin']
     
 from SystemComponent.Menu import Menu
-from ViewParser.BuildTree import build
-from ViewParser.GenerateViewFile import GenerateViewFile
+from ViewManagement.ViewTree import build
 
 def testMenu():
     tree_nodes_list = build()

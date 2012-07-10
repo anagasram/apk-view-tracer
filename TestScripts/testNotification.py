@@ -13,13 +13,12 @@ if current_path not in sys.path:
     sys.path.append(current_path)
 if parent_path not in sys.path:
     sys.path.append(parent_path)
-from ViewOperator.MonkeyRunnerImpl import MonkeyRunnerImpl
+from ViewController.MonkeyRunnerImpl import MonkeyRunnerImpl
 import time
 
 
 from SystemComponent.Notification import Notification
-from ViewParser.BuildTree import build
-from ViewParser.GenerateViewFile import GenerateViewFile
+from ViewManagement.ViewTree import build
 
 def testNotification():
     tree_nodes_list = build()

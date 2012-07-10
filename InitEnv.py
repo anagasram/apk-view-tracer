@@ -4,65 +4,56 @@
 ## kun for Apk View Tracing
 ## InitEnv.py
 
-import os, sys
-from Utility import getRuleDir,getConfDir,getToolsDir,getPlatformToolsDir
+import os
+from Utility import getToolsDir,getPlatformToolsDir
 
 class InitEnvironment():
-    def __init__(self):
+    def __init__(self, logger):
+        self.m_logger = logger
         self.current_dir = os.getcwd()
-        self.device_module_dir = os.path.join(self.current_dir, "DeviceCommand")
     
     ## check dir
     def checkDir(self):
-        dir_list = os.listdir(os.getcwd())
-        if "conf" not in dir_list:
-            print "It needs 'conf' dir here! "
-            return False            
-        if "rule" not in dir_list:
-            print "It needs 'rule' dir here! "
-            return False        
+        dir_list = os.listdir(os.getcwd())       
         if "tools" not in dir_list:
-            print "It needs android sdk tools dir here! "
+            msg = "It needs android sdk tools dir here! "
+            print msg
+            self.m_logger.error(msg)
             return False        
         if "platform-tools" not in dir_list:
-            print "It needs android sdk platform-tools dir here! "
+            msg = "It needs android sdk platform-tools dir here! "
+            print msg
+            self.m_logger.error(msg)
             return False
 
         return True
 
     ## check file
     def checkFile(self):
-        rule_file_list = os.listdir(getRuleDir())
-        if (None==rule_file_list) or (0==len(rule_file_list)):
-            print "There is no rule files in rule dir! "
-            return False
-        conf_files_list = os.listdir(getConfDir())
-        if (None==conf_files_list) or (0==len(conf_files_list)):
-            print "There is no conf files in conf dir! "
-            return False
         android_tool_file_list = os.listdir(getToolsDir())
         if (None==android_tool_file_list) or (0==len(android_tool_file_list)):
-            print "There is no files in android sdk tools dir! "
+            msg = "There is no files in android sdk tools dir! "
+            print msg
+            self.m_logger.error(msg)
             return False
+        
         android_platform_tools_file_list = os.listdir(getPlatformToolsDir())
         if (None==android_platform_tools_file_list) or (0==len(android_platform_tools_file_list)):
-            print "There is no files in android sdk platform-tools dir! "
+            msg = "There is no files in android sdk platform-tools dir! "
+            print msg
+            self.m_logger.error(msg)
             return False               
         return True
         
     def run(self):
         if self.checkDir() and self.checkFile():
-            print "Sucess to init enviroment! "
+            msg = "Sucess to init enviroment! "
+            print msg
+            self.m_logger.info(msg)
         else:
-            return False
-        
-#        if self.current_dir not in sys.path:
-#            sys.path.append(self.current_dir)
-#        if self.device_module_dir not in sys.path:
-#            sys.path.append(self.device_module_dir)
-        
+            return False        
         return True
     
 if __name__=="__main__":
     InitEnv = InitEnvironment()
-    InitEnv.init_env()
+    InitEnv.run()

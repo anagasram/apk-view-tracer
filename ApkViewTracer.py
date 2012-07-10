@@ -21,6 +21,10 @@ class ApkViewTracer():
         self.script_file = self.curDir + script_file_name
         self.m_logger = Logger.InitLog("apk-view-tracer.log", logging.getLogger("apk-view-tracer.thread"))
         
+        # init environment
+        init_env = InitEnvironment(self.m_logger)
+        init_env.run()
+        
     def prepare(self):
         tree_nodes_list = build()
         view_generator = GenerateViewPointList()
@@ -58,10 +62,7 @@ def main(script_file_name):
     apk_view_tracer.run(script_file)
 
 if __name__=="__main__":
-    init_env = InitEnvironment()
-    init_env.run()
     from DeviceManagement.DeviceCommand import DeviceCommand
-    from ViewManagement.ParseElement import ParseElement
     from ViewManagement.ViewTree import build, ViewTree
     from ViewManagement.GenerateViewPointList import GenerateViewPointList
     

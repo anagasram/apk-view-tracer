@@ -24,7 +24,7 @@ python_sys_path_list = ['C:\\Python27\\Lib\\idlelib', 'C:\\Python27\\lib\\site-p
                         'C:\\Python27\\lib\\site-packages\\Pythonwin']
     
 from SystemComponent.Home import Home
-from ViewParser.BuildTree import build
+from ViewManagement.ViewTree import build
 
 def testHome():
     tree_nodes_list = build()

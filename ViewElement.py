@@ -11,11 +11,11 @@ class ViewElement():
     '''
     
     # init attributes
-    def __init__(self):
-        self.mClassName = ""
-        self.mText = ""
-        self.mIsClickable = ""
-        self.mIsVisible = ""
+    def __init__(self, element):
+        self.mClassName = element.mClassName
+        self.mText = element.mText
+        self.mIsClickable = False
+        self.mIsVisible = False
     
     # set attribute
     def setter(self):

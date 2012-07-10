@@ -2,13 +2,13 @@
 ## -*- coding: utf-8 -*-
 
 ## kun for Apk View Tracking
-## BuildTree.py
+## ViewTree.py
 
 import copy
 from TreeType import CRect,CTreeNode,CPoint
-from DeviceCommand.DeviceConnection import getInfosByTelnet
+from DeviceManagement.Device import Device
 from ParseElement import ParseElement
-from GetViewState import GetViewState
+from ViewState import ViewState
 
 class ViewTree():
     '''
@@ -16,8 +16,7 @@ class ViewTree():
     '''
     
     def __init__(self):
-        pass
-    
+        pass    
     
     def getStructure(self, dump_data):
         list_data = dump_data.split("\n")
@@ -189,7 +188,7 @@ class ViewTree():
         node.mId = element_parser.getID()
         node.mText = element_parser.getText()
         node.mRect = element_parser.getRectArea()
-        active_state = GetViewState(node)
+        active_state = ViewState(node)
         node.mActive = active_state.getActiveState()
         node.mAbsoluteRect = self.getAbsoluteRect(node)
         node.mLocation = self.getViewCenterPoint(node)
@@ -197,7 +196,8 @@ class ViewTree():
     
     
 def build():
-    data = getInfosByTelnet("DUMP -1")
+    device = Device()
+    data = device.getInfosByTelnet("DUMP -1")
     vt = ViewTree()
     elements_list, blanks_list = vt.getStructure(data)    
     

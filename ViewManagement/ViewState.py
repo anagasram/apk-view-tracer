@@ -2,13 +2,13 @@
 ## -*- coding: utf-8 -*-
 
 ## kun for Apk View Tracing
-## GetViewState.py
+## ViewState.py
 
 import copy
 from ParseElement import ParseElement
 
 
-class GetViewState():
+class ViewState():
     def __init__(self, node):
         self.node = node
         self.element_data = node.mElement

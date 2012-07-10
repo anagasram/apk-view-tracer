@@ -62,7 +62,7 @@ if __name__=="__main__":
     init_env.run()
     from DeviceManagement.DeviceCommand import DeviceCommand
     from ViewManagement.ParseElement import ParseElement
-    from ViewManagement.BuildTree import build, ViewTree
+    from ViewManagement.ViewTree import build, ViewTree
     from ViewManagement.GenerateViewPointList import GenerateViewPointList
     
     script_file_name="TestScripts/testMonkeyRunnerImpl.py"

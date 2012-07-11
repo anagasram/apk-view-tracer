@@ -35,4 +35,6 @@ class ViewElement():
     def touch(self):
         pass
     
+    def longClick(self):
+        pass
     

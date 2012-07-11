@@ -17,7 +17,6 @@ class ViewTree():
     
     def __init__(self, logger):
         self.m_logger = logger
-        self.device = Device(logger)
     
     def getStructure(self, dump_data):
         list_data = dump_data.split("\n")
@@ -196,9 +195,7 @@ class ViewTree():
 
     
     
-    def build(self):
-        self.device.init_device()
-        data = self.device.getInfosByTelnet("DUMP -1")
+    def build(self, data):
         elements_list, blanks_list = self.getStructure(data)    
         
         tree_nodes_list = self.buildTree(elements_list, blanks_list)

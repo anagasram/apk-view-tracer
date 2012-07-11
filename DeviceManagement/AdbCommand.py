@@ -2,25 +2,28 @@
 ## -*- coding: utf-8 -*-
 
 ## kun for Apk View Tracing
-## CommandConsole.py
+## AdbCommand.py
 
 import os
 
-class CommandConsole():
+class AdbCommand():
     '''
-    Command Console: it use adb command
+    Adb Command : it use adb command
     '''
     __ClassName = "CommandConsole"
     
-    def __init__(self):
-        self.emulator_port = 5554
+    def __init__(self, logger, emu_port=5554):
+        self.emulator_port = emu_port
+        self.m_logger = logger
         
     def executeCommand(self, cmd):
         try:
             os.system(cmd)
             return True
         except Exception, e:
-            print "[%s] Failed execute cmd [%s]: [%s]" %(self.class_name, cmd, str(e))
+            msg = "[%s] Failed execute cmd [%s]: [%s]" %(self.class_name, cmd, str(e))
+            print msg
+            self.m_logger.error(msg)
             return False
         
     def installPkg(self, device_name, package_name):

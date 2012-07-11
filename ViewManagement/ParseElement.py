@@ -4,7 +4,7 @@
 ## kun for Apk View Tracking
 ## ParseElement.py
 
-from DeviceCommand.DeviceConnection import getInfosByTelnet
+from DeviceManagement.Device import Device
 from TreeType import CRect
 from Utility import str2int
 
@@ -321,6 +321,7 @@ class ParseElement():
 
 
 if __name__=="__main__":
-    data = getInfosByTelnet("DUMP -1")
+    device = Device()
+    data = device.getInfosByTelnet("DUMP -1")
     element_parser = ParseElement()
     element_parser.getStructure(data)

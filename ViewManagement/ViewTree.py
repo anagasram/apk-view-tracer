@@ -15,8 +15,9 @@ class ViewTree():
     View Tree
     '''
     
-    def __init__(self):
-        pass    
+    def __init__(self, logger):
+        self.m_logger = logger
+        self.device = Device(logger)
     
     def getStructure(self, dump_data):
         list_data = dump_data.split("\n")
@@ -195,30 +196,29 @@ class ViewTree():
 
     
     
-def build():
-    device = Device()
-    data = device.getInfosByTelnet("DUMP -1")
-    vt = ViewTree()
-    elements_list, blanks_list = vt.getStructure(data)    
+    def build(self):
+        self.device.init_device()
+        data = self.device.getInfosByTelnet("DUMP -1")
+        elements_list, blanks_list = self.getStructure(data)    
+        
+        tree_nodes_list = self.buildTree(elements_list, blanks_list)
     
-    tree_nodes_list = vt.buildTree(elements_list, blanks_list)
+        for node in tree_nodes_list:
+            ## set node value from root node to child node
+            self.setNodeValue(node)
+            node.mChildNodes = self.getChildNodesList(tree_nodes_list, node)
+            print "*************************************************************************"  
+            print "mClassName: %s" %node.mClassName
+            print "mTreeDepth: %s" %node.mTreeDepth
+            print "mId: %s " %node.mId
+            print "mText: %s" %node.mText
+            print "mActive: %s" %node.mActive
+            print "mRect.(mTop, mBottom, mLeft, mRight): %s %s %s %s" %(node.mRect.mTop, node.mRect.mBottom, node.mRect.mLeft, node.mRect.mRight)
+            print "mAbsoluteRect: %s %s %s %s" %(node.mAbsoluteRect.mTop, node.mAbsoluteRect.mBottom, node.mAbsoluteRect.mLeft, node.mAbsoluteRect.mRight)
+            print "*************************************************************************"
 
-    for node in tree_nodes_list:
-        ## set node value from root node to child node
-        vt.setNodeValue(node)
-        node.mChildNodes = vt.getChildNodesList(tree_nodes_list, node)
-        print "*************************************************************************"  
-        print "mClassName: %s" %node.mClassName
-        print "mTreeDepth: %s" %node.mTreeDepth
-        print "mId: %s " %node.mId
-        print "mText: %s" %node.mText
-        print "mActive: %s" %node.mActive
-        print "mRect.(mTop, mBottom, mLeft, mRight): %s %s %s %s" %(node.mRect.mTop, node.mRect.mBottom, node.mRect.mLeft, node.mRect.mRight)
-        print "mAbsoluteRect: %s %s %s %s" %(node.mAbsoluteRect.mTop, node.mAbsoluteRect.mBottom, node.mAbsoluteRect.mLeft, node.mAbsoluteRect.mRight)
-        print "*************************************************************************"
-
-    return tree_nodes_list
+        return tree_nodes_list
 
 if __name__=="__main__":
-    build()
+    vt = ViewTree()
 

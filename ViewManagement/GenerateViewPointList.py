@@ -4,7 +4,7 @@
 ## kun for apk view tracing
 ## GenerateViewPointList.py
 
-from BuildTree import build
+from ViewTree import ViewTree
 
 class GenerateViewPointList():
     ## class variables
@@ -43,7 +43,8 @@ class GenerateViewPointList():
     
 
 def main():
-    tree_nodes_list = build()
+    vt = ViewTree()
+    tree_nodes_list = vt.build()
     view_generator = GenerateViewPointList()
     view_point_list = view_generator.generateViewPointList(tree_nodes_list)
     view_generator.generateActionList(view_point_list)

@@ -192,6 +192,7 @@ class ViewTree():
         node.mActive = active_state.getActiveState()
         node.mAbsoluteRect = self.getAbsoluteRect(node)
         node.mLocation = self.getViewCenterPoint(node)
+        node.mVisible = element_parser.getVisible()
 
     
     

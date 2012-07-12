@@ -23,7 +23,6 @@ encoding//ViewManagement/ViewState.py=utf-8
 encoding//ViewManagement/ViewTree.py=utf-8
 encoding/ApkViewTracer.py=utf-8
 encoding/AutomatedTestingInterface.py=utf-8
-encoding/GetConfigInfo.py=utf-8
 encoding/GlobalVariable.py=utf-8
 encoding/InitEnv.py=utf-8
 encoding/Logger.py=utf-8

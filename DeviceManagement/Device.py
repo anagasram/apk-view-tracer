@@ -100,6 +100,9 @@ class Device():
     def close(self):
         if self.isServiceRunning():
             self.stopService()
+            
+    def getDumpData(self, command="DUMP -1"):
+        return self.getInfosByTelnet(command)
 
     #===============================================================================
     # # method 1 : send command by socket

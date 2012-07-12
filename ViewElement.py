@@ -5,6 +5,8 @@
 # @author: kun
 #===============================================================================
 
+from ViewController.Controller import Controller
+
 class ViewElement():
     '''
     View Element
@@ -12,23 +14,21 @@ class ViewElement():
     
     # init attributes
     def __init__(self, element):
+        self.m_controller = Controller()
+        
         self.mClassName = element.mClassName
         self.mText = element.mText
-        self.mIsClickable = False
-        self.mIsVisible = False
-    
-    # set attribute
-    def setter(self):
-        pass
+        #self.mIsClickable = False
+        self.mIsVisible = element.mVisible
     
     # get attribute
     def getter(self):
         pass
-        
-    # operate view element
-    def operate(self):
-        pass
     
+    def getVisible(self):
+        return self.mIsVisible
+        
+    # view's behaviors    
     def click(self):
         pass
     

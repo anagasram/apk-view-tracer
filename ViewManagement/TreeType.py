@@ -31,3 +31,4 @@ class CTreeNode(object):
     mDepth = 0
     mTreeDepth = 0 ## its depth in this view tree
     mActive = False ## currently, I get this value from (DRAWN, Visiable, Clickable)
+    mVisible = False

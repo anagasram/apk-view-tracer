@@ -14,7 +14,7 @@ if current_path not in sys.path:
 if parent_path not in sys.path:
     sys.path.append(parent_path)
     
-from ViewParser.TreeType import CPoint
+from ViewManagement.TreeType import CPoint
 
 class Notification():
     '''

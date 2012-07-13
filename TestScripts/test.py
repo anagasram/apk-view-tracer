@@ -5,7 +5,7 @@
 ## test.py
 
 import telnetlib
-from ParseView import ParseView
+from ViewManagement.ParseView import ParseView
 from InitDevice import init_service
 from GetConfigInfo import GetViewServerInfo
 

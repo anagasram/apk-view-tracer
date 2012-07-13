@@ -7,21 +7,25 @@
 import socket
 import telnetlib
 import os
+from AdbCommand import AdbCommand
 
 class Device():
     '''
     Device
     '''
     
-    def __init__(self, logger, device_port=5554, device_ip="127.0.0.1", view_server_port=4939):
+    def __init__(self, logger, device_port=5554, device_name="emulator-5554", device_ip="127.0.0.1", view_server_port=4939):
         self.m_logger = logger
+        self.device_name = device_name
         self.device_port = device_port
         self.device_ip = device_ip
         self.view_server_port = view_server_port
         
+        self.adb_console = AdbCommand()
+        
     def hasService(self):
         ## check whether this device has IWindowServer service
-        check_cmd = "adb shell getprop ro.secure"
+        check_cmd = "adb -s %s shell getprop ro.secure" %self.device_name
         out=os.popen(check_cmd) ## return "0\r\n" or "1\r\n"
         res = out.read()
         out.close()
@@ -43,21 +47,21 @@ class Device():
         
     def stopService(self):
         ## stop window service first
-        stopWinService_cmd = "adb shell service call window 2 i32 %s" %self.view_server_port
+        stopWinService_cmd = "adb -s %s shell service call window 2 i32 %s" %(self.device_name, self.view_server_port)
         out = os.popen(stopWinService_cmd)
         print out.read()
         out.close()
     
     def startService(self):
         ## start window service then
-        startWinService_cmd = "adb shell service call window 1 i32 %s" %self.view_server_port
+        startWinService_cmd = "adb -s %s shell service call window 1 i32 %s" %(self.device_name, self.view_server_port)
         out = os.popen(startWinService_cmd)
         print out.read()
         out.close()
     
-    def init_device(self):        
+    def initDevice(self):        
         ## set port forwarding
-        setPortForwarding_cmd = "adb forward tcp:%s tcp:%s" %(self.view_server_port, self.view_server_port)
+        setPortForwarding_cmd = "adb -s %s forward tcp:%s tcp:%s" %(self.device_name, self.view_server_port, self.view_server_port)
         out = os.popen(setPortForwarding_cmd)
         out.close()    
         return True
@@ -66,7 +70,7 @@ class Device():
         viewServer_running_flag = "Result: Parcel(00000000 00000001   '........')"
         viewServer_not_running_flag = "Result: Parcel(00000000 00000000   '........')"
         
-        check_command = "adb shell service call window 3 i32 %s" %self.view_server_port
+        check_command = "adb -s %s shell service call window 3 i32 %s" %(self.device_name, self.view_server_port)
         
         try:
             out = os.popen(check_command)
@@ -91,7 +95,7 @@ class Device():
             if not self.isServiceRunning():
                 self.startService()
                 
-            self.init_device()
+            self.initDevice()
             return True
         except Exception, e:
             self.m_logger.error("Faild to open device: [%s]" %str(e))
@@ -106,7 +110,7 @@ class Device():
 
     #===============================================================================
     # # method 1 : send command by socket
-    # # can not find the end flag?????
+    # # can not find the end flag  ******
     #===============================================================================
     def getInfosBySocket(self, command="DUMP -1"):   
         host = self.device_ip

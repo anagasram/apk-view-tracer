@@ -11,7 +11,7 @@ if current_path not in sys.path:
     sys.path.append(current_path)
 if parent_path not in sys.path:
     sys.path.append(parent_path)
-from ViewOperator.MonkeyRunnerImpl import MonkeyRunnerImpl
+from ViewController.MonkeyRunnerImpl import MonkeyRunnerImpl
 import time
 
 def touchEventByViewPointList(view_point_list,monkey_runner_impl):

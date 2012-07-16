@@ -2,24 +2,18 @@
 ## -*- coding: utf-8 -*-
 
 ## kun for Apk View Tracing
-## AutomatedTestingInterface.py
+## SoloInterface.py
 
 import os, time, sys
+from DeviceManagement.Device import Device
+from ViewManagement.ViewTree import ViewTree
+from ViewController.Controller import Controller
 
-from InitDevice import init_service
-from DeviceCommand import DeviceCommand
-from MonkeyRunnerImpl import MonkeyRunnerImpl
-from HierarchyViewerImpl import HierarchyViewer
-from EasyDeviceImpl import EasyDevice
-from IChimpDeviceImpl import IChimpDevice
-
-class AutomatedTestingInterface():
+class SoloInterface():
     '''
-    Interface for Automated Testing
+    Solo Interface for Automated Testing
     '''
-    
-    __ClassName = "AutomatedTestingInterface"
-        
+            
     ## class variables
     OPENED = None
     CLOSED = None
@@ -37,30 +31,22 @@ class AutomatedTestingInterface():
                                 "View": "android.view.View"}
           
     def __init__(self):
-        self.class_name = "AutomatedTestingInterface"
-        # init device 
-        if False == init_service():
-            print "[%s] Failed to init service of Android View Server!" %(self.class_name)
-            raise Exception
+        self.class_name = "SoloInterface"
+                
+        # object of Device
+        self.device = Device()
         
-        # object of DeviceCommand
-        self.device_cmd = DeviceCommand()
-        
-        # object of Monkey Device 
-        self.monkey_runner = MonkeyRunnerImpl()
-        self.easy_device = EasyDevice()
+        # object of View Controller 
+        self.view_controller = Controller()
         
         # View Monitor Object which can control Views
         self.ViewMonitor = None        
         
-    def __del__(self):
-        # release socket connect with Monkey Server
-        del self.monkey_runner           
-        # release socket connect with Android View Server
-        del self.device_cmd
-    
     def close(self):
-        __del__()
+        # release socket connect with Monkey Server
+        del self.view_controller           
+        # release socket connect with Android View Server
+        del self.device
     
     
 #------------------------------------------------------------------------------ 
@@ -93,9 +79,6 @@ class AutomatedTestingInterface():
     
     
 #------------------------------------------------------------------------------ 
-
-
-
     def assertCurrentActivity(self, expectedClassName):
         try:
             curActivityClassName = self.easy_device.getFocusedWindowClassName()

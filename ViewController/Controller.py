@@ -5,15 +5,24 @@
 # @author: kun
 #===============================================================================
 
-import os
+from MonkeyRunnerImpl import MonkeyRunnerImpl
+from IChimpDeviceImpl import IChimpDevice
+from HierarchyViewerImpl import HierarchyViewer
+from EasyDeviceImpl import EasyDevice
 
 class Controller():
     '''
     Controller
     '''
     
-    def __init__(self):
-        pass
+    def __init__(self, logger, device_name):
+        self.m_logger = logger
+        self.device_name = device_name
+        
+        self.monkeyrunner_device = MonkeyRunnerImpl(self.m_logger, self.device_name)
+        self.chimp_device = IChimpDevice(self.m_logger, self.monkeyrunner_device)
+        self.hierarchy_viewer = HierarchyViewer(self.m_logger, self.monkeyrunner_device)
+        self.easy_device = EasyDevice(self.m_logger, self.monkeyrunner_device)
     
     def clickByID(self, view_id):
         pass
@@ -22,26 +31,19 @@ class Controller():
         pass
     
     def clickByIndex(self, index):
-        pass
-    
-    
-    
-class PhysicalButtons():
-    '''
-    Physical Buttons
-    '''
-    
-    def __init__(self):
-        pass
-    
+        pass   
+
+#------------------------------------------------------------------------------ 
+#    Physical Buttons
+#------------------------------------------------------------------------------     
     def longClickHome(self):
         pass
     
     def goBack(self):
-        pass
+        self.monkeyrunner_device.clickBackButton()
     
     def callMenu(self):
-        pass
+        self.monkeyrunner_device.clickMenuButton()
     
     def down(self):
         pass

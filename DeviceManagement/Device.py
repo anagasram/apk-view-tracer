@@ -4,10 +4,9 @@
 ## kun for Apk View Tracing
 ## Device.py
 
-import socket
-import telnetlib
 import os
 from AdbCommand import AdbCommand
+from ViewServerCommand import ViewServerCommand
 
 class Device():
     '''
@@ -22,6 +21,7 @@ class Device():
         self.view_server_port = view_server_port
         
         self.adb_console = AdbCommand(self.m_logger, self.device_name, self.device_port)
+        self.view_console = ViewServerCommand(self.m_logger, self.device_ip, self.view_server_port)
         
     def hasService(self):
         ## check whether this device has IWindowServer service
@@ -105,52 +105,12 @@ class Device():
         if self.isServiceRunning():
             self.stopService()
             
+    def isClosed(self):
+        return (not self.isServiceRunning())
+    
+    
     def getDumpData(self, command="DUMP -1"):
         return self.getInfosByTelnet(command)
-
-    #===============================================================================
-    # # method 1 : send command by socket
-    # # can not find the end flag  ******
-    #===============================================================================
-    def getInfosBySocket(self, command="DUMP -1"):   
-        host = self.device_ip
-        port = self.view_server_port
-        ## connect the service with a socket
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
-        try:
-            s.connect((host,port))
-        except Exception,e:
-            print e   
-    
-        s.send(command+'\n')
-        print "sucess to send command"
-        buf_size = 65565
-        data=""
-        end_flag = "DONE"
-        while True:
-            res = s.recv(buf_size)
-            data+=res
-            if  0 <= res.find(end_flag, -5):
-                print "read the end flag: 'DONE' "
-                break            
-    
-        s.close()
-        return data
-
-
-    #===============================================================================
-    # # method 2 : send command by telnet
-    #===============================================================================
-    def getInfosByTelnet(self, command="DUMP -1"):
-        host = self.device_ip
-        port = self.view_server_port
-        #time_out = config.getServerTimeOut()
-        #tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
-        tn = telnetlib.Telnet(host=host, port=port) # this telnetlib is from jython.jar lib
-        tn.write(command + "\n")
-        data = tn.read_until("DONE")    
-        tn.close()
-        return data
     
     
     

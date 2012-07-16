@@ -6,7 +6,6 @@
 
 import copy
 from TreeType import CRect,CTreeNode,CPoint
-from DeviceManagement.Device import Device
 from ParseElement import ParseElement
 from ViewState import ViewState
 

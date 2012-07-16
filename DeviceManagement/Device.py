@@ -21,7 +21,7 @@ class Device():
         self.device_ip = device_ip
         self.view_server_port = view_server_port
         
-        self.adb_console = AdbCommand()
+        self.adb_console = AdbCommand(self.m_logger, self.device_name, self.device_port)
         
     def hasService(self):
         ## check whether this device has IWindowServer service

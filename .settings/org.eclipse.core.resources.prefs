@@ -12,6 +12,7 @@ encoding//TestScripts/testMonkeyRunnerImpl.py=utf-8
 encoding//TestScripts/testNotification.py=utf-8
 encoding//ViewController/Controller.py=utf-8
 encoding//ViewController/EasyDeviceImpl.py=utf-8
+encoding//ViewController/EventController.py=utf-8
 encoding//ViewController/HierarchyViewerImpl.py=utf-8
 encoding//ViewController/IChimpDeviceImpl.py=utf-8
 encoding//ViewController/MonkeyRunnerImpl.py=utf-8

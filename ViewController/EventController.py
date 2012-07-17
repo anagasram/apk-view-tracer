@@ -174,11 +174,15 @@ class EventController():
         time.sleep(2)
         self.keyUp(key_code)
         
+    def longClickByLocation(self, x, y):
+        self.touchDown(x, y)
+        time.sleep(2)
+        self.touchUp(x, y)
+        
     def drag(self, fromX, fromY, toX, toY):
         self.touchDown(fromX, fromY)
         self.touchMove(toX, toY)
         self.touchUp(toX, toY)
-
     
 
 if __name__=="__main__":

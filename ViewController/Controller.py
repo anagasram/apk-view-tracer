@@ -5,24 +5,28 @@
 # @author: kun
 #===============================================================================
 
-from MonkeyRunnerImpl import MonkeyRunnerImpl
-from IChimpDeviceImpl import IChimpDevice
-from HierarchyViewerImpl import HierarchyViewer
-from EasyDeviceImpl import EasyDevice
+from EventController import EventController 
 
 class Controller():
     '''
     Controller
     '''
     
-    def __init__(self, logger, device_name):
+    def __init__(self, logger, device_name, device_address="127.0.0.1", monkey_server_port=12345):
         self.m_logger = logger
         self.device_name = device_name
         
-        self.monkeyrunner_device = MonkeyRunnerImpl(self.m_logger, self.device_name)
-        self.chimp_device = IChimpDevice(self.m_logger, self.monkeyrunner_device)
-        self.hierarchy_viewer = HierarchyViewer(self.m_logger, self.monkeyrunner_device)
-        self.easy_device = EasyDevice(self.m_logger, self.monkeyrunner_device)
+        self.event_controller = EventController(self.m_logger, device_address, monkey_server_port)
+        
+    def open(self):
+        if self.event_controller.open():
+            return True
+        else:
+            return False
+    
+    def close(self):
+        self.event_controller.close()
+        
     
     def clickByID(self, view_id):
         pass
@@ -32,6 +36,9 @@ class Controller():
     
     def clickByIndex(self, index):
         pass   
+    
+    def callNotification(self):
+        self.event_controller.drag(100, 20, 100, 500)
 
 #------------------------------------------------------------------------------ 
 #    Physical Buttons

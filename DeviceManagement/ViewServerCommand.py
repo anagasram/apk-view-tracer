@@ -88,15 +88,32 @@ class ViewServerCommand():
     def getProtocolInfo(self):
         return self.getInfosByTelnet(ViewServerCommand.protocol_cmd)
     
-    # get View Info of Current Focused Window     
+    # get View Info of Current Focused Window
+    # 4080e650 com.android.calculator2/com.android.calculator2.Calculator  
     def getFocusViewInfo(self):
         return self.getInfosByTelnet(ViewServerCommand.get_focus_cmd)
     
     def getFocusViewHashCode(self):
         info = self.getFocusViewInfo()
-        currentView = info.split("\n")[0]
-        hash_code = currentView.split(" ")[0]
-        return hash_code        
+        focusView = info.split("\n")[0]
+        hash_code = focusView.split(" ")[0]
+        return hash_code
+    
+    def getFocusViewClassName(self):
+        info = self.getFocusViewInfo()
+        focusView = info.split("\n")[0]        
+        name = focusView.split(" ")[1]
+        
+        class_name = name.split(r"/")[1]
+        return class_name
+        
+    def getFocusViewPackageName(self):
+        info = self.getFocusViewInfo() 
+        focusView = info.split("\n")[0]
+        name = focusView.split(" ")[1]
+        
+        package_name = name.split(r"/")[0]
+        return package_name        
     
     def getViewListInfo(self):
         return self.getInfosByTelnet(ViewServerCommand.list_view_cmd)

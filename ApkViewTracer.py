@@ -5,7 +5,6 @@
 ## ApkViewTracer.py
 
 import platform,sys,os
-from InitEnv import InitEnvironment
 import logging
 import Logger
 
@@ -25,10 +24,6 @@ class ApkViewTracer():
         self.script_file = self.curDir + script_file_name
         self.m_logger = Logger.InitLog("apk-view-tracer.log", logging.getLogger("apk-view-tracer.thread"))
         
-        # init environment
-        init_env = InitEnvironment(self.m_logger)
-        init_env.run()
-
     def run(self, script_file):       
         curOS=platform.system()
         if "Windows" == curOS:

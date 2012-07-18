@@ -13,11 +13,11 @@ class Device():
     Device
     '''
     
-    def __init__(self, logger, device_port=5554, device_name="emulator-5554", device_ip="127.0.0.1", view_server_port=4939):
+    def __init__(self, logger, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1", view_server_port=4939):
         self.m_logger = logger
         self.device_name = device_name
         self.device_port = device_port
-        self.device_ip = device_ip
+        self.device_address = device_address
         self.view_server_port = view_server_port
         
         self.adb_console = AdbCommand(self.m_logger, self.device_name, self.device_port)
@@ -110,7 +110,7 @@ class Device():
     
     
     def getDumpData(self, command="DUMP -1"):
-        return self.getInfosByTelnet(command)
+        return self.view_console.getInfosByTelnet(command)
     
     
     

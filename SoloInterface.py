@@ -4,23 +4,19 @@
 ## kun for Apk View Tracing
 ## SoloInterface.py
 
-import os, time, sys
+import logging, time
+import Logger
 from DeviceManagement.Device import Device
 from ViewManagement.ViewTree import ViewTree
-from ViewController.Controller import Controller
+from ViewController.EventController import EventController
+from cookielib import reach
+from tarfile import LENGTH_LINK
 
 class SoloInterface():
     '''
     Solo Interface for Automated Testing
     '''
-            
-    ## class variables
-    OPENED = None
-    CLOSED = None
-    DELETE = None
-    UP = None
-    DOWN = None   
-    
+        
     Android_Class_Name_Dict = { "Button":  "android.widget.Button",
                                 "CheckBox": "android.widget.CheckBox",
                                 "EditText" : "android.widget.EditText",
@@ -30,287 +26,322 @@ class SoloInterface():
                                 "TextView": "android.widget.TextView",
                                 "View": "android.view.View"}
           
-    def __init__(self):
+    def __init__(self, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1"):
         self.class_name = "SoloInterface"
-                
+        self.m_logger = Logger.InitLog("solo-interface.log", logging.getLogger("solo-interface.thread"))
+        
+        self.device_name = device_name
+        self.device_port = device_port
+        self.device_address = device_address
+        
         # object of Device
-        self.device = Device()
+        self.device = Device(self.m_logger, self.device_name)        
+        # init device
+        self.device.open()
+        
+        # build View Tree
+        self.vt = ViewTree(self.m_logger)
         
         # object of View Controller 
-        self.view_controller = Controller()
+        self.event_controller = EventController(self.m_logger)
+        # init event controller
+        self.event_controller.open()
+    
+    def setUp(self):
+        data = self.device.getDumpData()
+        # key point        
+        self.tree_nodes_list = vt.build(data)
         
-        # View Monitor Object which can control Views
-        self.ViewMonitor = None        
         
+    def tearDown(self):
+        pass    
+
     def close(self):
         # release socket connect with Monkey Server
-        del self.view_controller           
+        self.event_controller.close()       
         # release socket connect with Android View Server
-        del self.device
-    
-    
+        self.device.close()
+        
 #------------------------------------------------------------------------------ 
-#===============================================================================
-# this is for TMMS
-#===============================================================================
     def searchForViewClassName(self, class_name):
-        pass
+        for node in self.tree_nodes_list:
+            if class_name == node.mClassName:
+                return node
+            
+        return None
     
     def searchForText(self, text):
-        pass
+        for node in self.tree_nodes_list:
+            if text == node.mText:
+                return node
+        
+        return True
     
     def searchForViewID(self, id):
-        pass
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                return node
+            
+        return None
     
     def getCurrentViewClassName(self):
-        pass
+        return self.device.view_console.getFocusViewClassName()
     
     def existViewByClassName(self, class_name):
-        pass
+        for node in self.tree_nodes_list:
+            if class_name == node.mClassName:
+                return True
+            
+        return False
     
     def existViewByText(self, text):
-        pass
+        for node in self.tree_nodes_list:
+            if text == node.mText:
+                return True
+            
+        return False
+    
+    def existViewById(self, id):
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                return True
+        
+        return False
     
     def isVisibleById(self, id):
-        pass
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                return node.mVisible
+            
+        return False
     
-    def isClickableById(self, id):
-        pass
     
-    
-#------------------------------------------------------------------------------ 
-    def assertCurrentActivity(self, expectedClassName):
-        try:
-            curActivityClassName = self.easy_device.getFocusedWindowClassName()
-            if curActivityClassName == expectedClassName:
-                return True
-            else:
-                return False
-        except Exception, e:
-            print "[%s] Failed to assert current activity [%s]" %(self.class_name, str(e))
-            return None
+    def clickViewById(self, id):
+        if 0==len(id):
+            return False
         
-    def assertCurrentActivityNewInstance(self, expectedClassName, oldHashCode):
-        try:
-            curActivityClassName = self.easy_device.getFocusedWindowClassName()
-            curActivityHashCode = self.device_cmd.getFocusViewHashCode()
-            if (curActivityClassName == expectedClassName) and (curActivityHashCode != oldHashCode):
-                return True
-            else:
-                return False
-        except Exception, e:
-            print "[%s] Failed to assert current activity new instance [%s]" %(self.class_name, str(e))
-            return None
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                return self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+            
+        return False
     
-    def clearEditTextById(self, EditTextId):
-        try:
-            self.easy_device.typeInViewById(EidtTextId, "")
-            return True
-        except Exception, e:
-            print "[%s] Failed to click edit text by id [%s]" %(self.class_name, str(e))
+    def clickViewByText(self, text):
+        if 0==len(text):
             return False
-    
-    def clickOnScreen(self, x, y):
-        try:
-            self.monkey_runner.touch(x, y, "DOWN_AND_UP")
-            return True
-        except Exception, e:
-            print "[%s] Failed to click on screen [%s]" %(self.class_name, str(e))
+        
+        for node in self.tree_nodes_list:
+            if text == node.mText:
+                return self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+            
+    def getTextById(self, id):
+        if 0==len(id):
             return False
+        
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                return node.mText
+            
+        return None
     
-    def clickInList(self, objList, iIndex):
-        pass
     
-    def clickLongInList(self, objList, iIndex):
-        pass
-    
-    def clickLongOnScreen(self, fX, fY):
-        pass
-    
-    def clickLongOnText(self, str_text): 
-        pass
-    
-    def clickOnToggleButton(self, str_name):
-        pass
-    
-    def clickOnViewById(self, view_id):
-        try:
-            self.easy_device.touchById(view_id)
-            return True
-        except Exception, e:
-            print "[%s] Failed to click on view by id [%s]" %(self.class_name, str(e))
+    def clearEditTextById(self, id):
+        if 0==len(id):
             return False
+        
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                length = len(node.mText)
+                while 0<length:
+                    self.event_controller.press("del")
+                    length-=1
+            
+        return False
     
-    def clickOnViewByLocation(self, x, y):
-        try:
-            self.monkey_runner.touch(x, y, "DOWN_AND_UP")
-            return True
-        except Exception, e:
-            print "[%s] Failed to click on view by location [%s]" %(self.class_name, str(e))
+    def setEditTextById(self, id, text):
+        if 0==len(id) or 0==len(text):
             return False
+        
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                length = len(node.mText)
+                while 0<length:
+                    self.event_controller.press("del")
+                    length-=1
+                                
+                return self.event_controller.type(text)
+            
+        return False
     
-    # could not implement now
-    # it's a problem
-    def drag(self, fromX, fromY, toX, toY, iSteps):
-        pass
-    
-    def enterText(self, str_msg, objText):
-        try:
-            self.monkey_runner.typeText(str_msg)
-            return True
-        except Exception, e:
-            print "[%s] Failed to enter text [%s]" %(self.class_name, str(e))
+    def appendEditTextById(self, id, text):
+        if 0==len(id) or 0==len(text):
             return False
+        
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                return self.event_controller.type(text)
+            
+#------------------------------------------------------------------------------ 
+# Physical Button Operations
+    def longPressHome(self):
+        return self.event_controller.longPressByKeyCode("home")
     
-    def getViewMonitor(self):
-        return self.ViewMonitor
-    
-    def getCurrentActivity(self):
-        pass
-
-    def getButton(self):
-        pass
-    
-    def getEditText(self):
-        pass
-    
-    def getImage(self):
-        pass
-    
-    def getImageButton(self):
-        pass
-    
-    def getViewClassName(self):
-        pass
-    
-    def getViews(self):
-        pass
-    
-    def getText(self):
-        pass
+    def callMenu(self):
+        return self.event_controller.press("menu")
     
     def goBack(self):
-        try:
-            self.monkey_runner.clickBackButton()
-            return True
-        except Exception, e:
-            print e
-            return False
+        return self.event_controller.press("back")
     
-    def goBackToView(self, view_name):
-        pass
+    def callDelete(self):
+        return self.event_controller.press("del")
     
-    def goBackToActivity(self, activity_name):
-        pass        
-        
-    def findButton(self, text, onlyVisible=True):
-        pass
+    def callLeft(self):
+        return self.event_controller.press("dpad_left")
     
-    def findEditText(self, text):
-        pass
+    def callRight(self):
+        return self.event_controller.press("dpad_right")
     
-    def findText(self, text, onlyVisible=True):
-        pass
+    def callTop(self):
+        return self.event_controller.press("dpad_top")
     
-    def findToggleButtonById(self):
-        pass        
+    def callDown(self):
+        return self.event_controller.press("dpad_down")
     
-    def isCheckBoxChecked(self, param):
-        if isinstance(param, int):
-            index = param
-        elif isinstance(param, str):
-            text = param
-        else:
-            pass
-        
-    def isRadioButtonChecked(self, param):
-        if isinstance(param, int):
-            index = param
-        elif isinstance(param, str):
-            text = param
-        else:
-            pass
-        
-    def isSpinnerTextSelected(self, param):
-        if isinstance(param, int):
-            index = param
-        elif isinstance(param, str):
-            text = param
-        else:
-            pass
-        
-    def isTextChecked(self, str_text):
-        pass
+    def callNotification(self):
+        return self.event_controller.drag(100, 20, 100, 500)    
     
-    def isToggleButtonChecked(self, param):
-        if isinstance(param, int):
-            index = param
-        elif isinstance(param, str):
-            text = param
-        else:
-            pass
-        
-    def pressMenuItem(self):
-        pass
+##------------------------------------------------------------------------------ 
+#    def assertCurrentActivity(self, expectedClassName):
+#        try:
+#            curActivityClassName = self.getCurrentViewClassName()
+#            if curActivityClassName == expectedClassName:
+#                return True
+#            else:
+#                return False
+#        except Exception, e:
+#            msg = "[%s] Failed to assert current activity [%s]" %(self.class_name, str(e))
+#            self.m_logger.error(msg)
+#            return None
+#        
+#    def assertCurrentActivityNewInstance(self, expectedClassName, oldHashCode):
+#        try:
+#            curActivityClassName = self.getCurrentViewClassName()
+#            curActivityHashCode = self.device.view_console.getFocusViewHashCode()
+#            if (curActivityClassName == expectedClassName) and (curActivityHashCode != oldHashCode):
+#                return True
+#            else:
+#                return False
+#        except Exception, e:
+#            msg = "[%s] Failed to assert current activity new instance [%s]" %(self.class_name, str(e))
+#            self.m_logger.error(msg)
+#            return None
+#    
+#    def clickInList(self, objList, iIndex):
+#        pass
+#    
+#    def clickLongInList(self, objList, iIndex):
+#        pass
+#    
+#    def longClickByText(self, str_text): 
+#        pass
+#    
+#    def clickOnToggleButton(self, str_name):
+#        pass
+#    
+#    def clickOnViewById(self, view_id):
+#        try:
+#            self.easy_device.touchById(view_id)
+#            return True
+#        except Exception, e:
+#            print "[%s] Failed to click on view by id [%s]" %(self.class_name, str(e))
+#            return False
+#    
+#    def clickOnViewByLocation(self, x, y):
+#        try:
+#            self.monkey_runner.touch(x, y, "DOWN_AND_UP")
+#            return True
+#        except Exception, e:
+#            print "[%s] Failed to click on view by location [%s]" %(self.class_name, str(e))
+#            return False
+#    
+#    def drag(self, fromX, fromY, toX, toY, iSteps):
+#        pass
+#    
+#    def enterText(self, str_msg, objText):
+#        try:
+#            self.monkey_runner.typeText(str_msg)
+#            return True
+#        except Exception, e:
+#            print "[%s] Failed to enter text [%s]" %(self.class_name, str(e))
+#            return False
+#    
+#
+#    
+#    def getCurrentActivity(self):
+#        pass
+#    
+#    def isCheckBoxChecked(self, param):
+#        if isinstance(param, int):
+#            index = param
+#        elif isinstance(param, str):
+#            text = param
+#        else:
+#            pass
+#        
+#    def isRadioButtonChecked(self, param):
+#        if isinstance(param, int):
+#            index = param
+#        elif isinstance(param, str):
+#            text = param
+#        else:
+#            pass
+#        
+#    def isSpinnerTextSelected(self, param):
+#        if isinstance(param, int):
+#            index = param
+#        elif isinstance(param, str):
+#            text = param
+#        else:
+#            pass
+#    
+#    def isToggleButtonChecked(self, param):
+#        if isinstance(param, int):
+#            index = param
+#        elif isinstance(param, str):
+#            text = param
+#        else:
+#            pass
+#        
+#    def pressMenuItem(self):
+#        pass
+#    
+#    def pressSpinnerItem(self):
+#        pass
+#    
+#    def scrollDown(self):
+#        pass
+#    
+#    def scrollDownList(self):
+#        pass
+#    
+#    def scrollToSide(self):
+#        pass
+#    
+#    def scrollUp(self):
+#        pass
+#    
+#    def scrollUpList(self):
+#        pass
     
-    def pressSpinnerItem(self):
-        pass
-    
-    def scrollDown(self):
-        pass
-    
-    def scrollDownList(self):
-        pass
-    
-    def scrollToSide(self):
-        pass
-    
-    def scrollUp(self):
-        pass
-    
-    def scrollUpList(self):
-        pass   
-    
-    def sleep(self, sec):
-        try:
-            self.monkey_runner.sleep(sec)
-            return True
-        except Exception, e:
-            print e
-            return False
-    
-    ## not implement yet    
-    def waitForText(self, str_text, time_out_sec):
-        if isinstance(str_text, str):
-            raise Exception
-        if isinstance(time_out_sec, int):
-            raise Exception
-        now_time = time.time()
-        end_time = now_time + time_out_sec
-        while ((?) and (now_time < end_time)):
-            now_time = time.time()
-        
-        if (now_time < end_time):
-            return True
-        else:
-            return False
-            
-        
-    def waitForView(self, view_class_name, time_out_sec):
-        if not isinstance(view_class_name, str):
-            raise Exception
-        if not isinstance(time_out_sec, int):
-            raise Exception
-        now_time = time.time()
-        end_time = now_time + time_out_sec
-        while ((self.easy_device.getFocusedWindowClassName() != view_class_name) and (now_time < end_time)):
-            now_time = time.time()
-            
-        if (now_time < end_time):
-            return True
-        else:
-            return False
-        
+           
 if __name__=="__main__":
     print "test OK"
             

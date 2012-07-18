@@ -20,22 +20,27 @@ import time
 
 
 #------------------------------------------------------------------------------ 
+# this thread will bind monkey server with port to listen
+#------------------------------------------------------------------------------ 
 class SocketBinder(threading.Thread):
     '''
     Socket Binder
     '''
     
-    def __init__(self, monkey_server_port):
+    def __init__(self, device_name, monkey_server_port):
         threading.Thread.__init__(self)
+        self.device_name = device_name
         self.port = monkey_server_port
         
     def run(self):
         # bind monkey server to port
         # then monkey server listen this port
-        bind_command = "adb shell monkey --port %s" %self.port
+        bind_command = "adb -s %s shell monkey --port %s" %(self.device_name, self.port)
         os.system(bind_command)
         
         
+#------------------------------------------------------------------------------
+# this class can send events to monkey server in device
 #------------------------------------------------------------------------------ 
 class EventController():
     '''
@@ -48,16 +53,19 @@ class EventController():
                      "power": "power",
                      "search": "search",
                      "enter": "enter",
+                     "del": "del",
                      "dpad_up": "dpad_up",
                      "dpad_down": "dpad_down",
                      "dpad_left": "dpad_left",
                      "dpad_right": "dpad_right",
                      "dpad_center": "dpad_center"}
     
-    def __init__(self, logger, device_address="127.0.0.1", monkey_server_port=12345):
+    def __init__(self, logger, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1", monkey_server_port=12345):
         self.class_name = "EventSender"
         self.m_logger = logger
         
+        self.device_name = device_name
+        self.device_port = device_port
         self.device_address = device_address
         self.monkey_server_port = monkey_server_port
         
@@ -73,11 +81,11 @@ class EventController():
                 return False
             
             # create forward port: port
-            forward_command = "adb forward tcp:%s tcp:%s" %(self.monkey_server_port, self.monkey_server_port)
+            forward_command = "adb -s %s forward tcp:%s tcp:%s" %(self.device_name, self.monkey_server_port, self.monkey_server_port)
             os.system(forward_command)
             
             # bind monkey server to port
-            binder_thread = SocketBinder(self.monkey_server_port)
+            binder_thread = SocketBinder(self.device_name, self.monkey_server_port)
             binder_thread.start()           
             time.sleep(2) # sleep 2 seconds
             
@@ -162,28 +170,67 @@ class EventController():
         self.sendEventByTelnet(command)
         # there has a problem
         if True:
+            return True  
+        else:
             self.press("enter")
             return True
-        else:
-            return
+        
+        return False
+        
+        
+    def getCurrentPackageName(self):
+        command = "getvar am.current.package"
+        
+    def getCurrentAction(self):
+        command = "getvar am.current.action"
+        
+    def getCurrentComponentClass(self):
+        command = "getvar am.current.comp.class"
+        
+    def getCurrentComponentPackage(self):
+        command = "getvar am.current.comp.package"
+        
  
 #------------------------------------------------------------------------------ 
 # complex commands with combination of basic commands 
-    def longClickByKeyCode(self, key_code):        
+    def longPressByKeyCode(self, key_code):        
         self.keyDown(key_code)
         time.sleep(2)
         self.keyUp(key_code)
         
-    def longClickByLocation(self, x, y):
+    def longPressByLocation(self, x, y):
         self.touchDown(x, y)
         time.sleep(2)
         self.touchUp(x, y)
-        
-    def drag(self, fromX, fromY, toX, toY):
-        self.touchDown(fromX, fromY)
-        self.touchMove(toX, toY)
-        self.touchUp(toX, toY)
     
+    
+    def drag_start(self, x, y):
+        self.touchDown(x, y)
+        self.touchMove(x, y)
+    
+    def drag_end(self, x, y):
+        self.touchMove(x, y)
+        self.touchUp(x, y)
+    
+    def drag_step(self, x, y):
+        self.touchMove(x, y)
+    
+    #duration    The duration of the drag gesture in seconds. The default is 1.0 seconds.
+    #steps    The number of steps to take when interpolating points. The default is 10.    
+    def drag(self, fromX, fromY, toX, toY, duration=1, steps=10):
+        iterationTime = duration/steps
+        
+        deltaX = (toX - fromX)/steps
+        deltaY = (toY - fromY)/steps
+
+        self.drag_start(fromX, fromY)
+        index=1
+        while steps>index:
+            self.drag_step(fromX+deltaX*index, fromY+deltaY*index)
+            index+=1
+            time.sleep(iterationTime)           
+            
+        self.drag_end(toX, toY)
 
 if __name__=="__main__":
     logger = Logger.InitLog("test.log", logging.getLogger("test.thread"))

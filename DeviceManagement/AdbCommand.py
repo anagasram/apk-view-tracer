@@ -35,6 +35,10 @@ class AdbCommand():
         removePkgCmd = "adb -s %s uninstall %s" %(self.device_name, package_name)
         return self.executeCommand(removePkgCmd)
     
+    def shell(self, command):
+        shell_command = "adb -s %s shell %s" %(self.device_name, command)
+        return self.executeCommand(shell_command)
+    
     ## for example:
     ## To start the Settings application: # am start -n com.android.settings/.Settings
     ##                                    # am start -n com.android.settings/com.android.settings.Settings
@@ -45,7 +49,7 @@ class AdbCommand():
     def startActivity(self, package_name, activity_name):
         # -W must be before -n
         # -W is "start" command option, and -n is <INTENT> option
-        startActivityCmd = "adb -s %s shell am start -W -n %s/.%s" %(self.device_name, package_name, activity_name)
+        startActivityCmd = "adb -s %s shell am start -W -n %s/%s" %(self.device_name, package_name, activity_name)
         return self.executeCommand(startActivityCmd)
     
     ## To start the phone dialer: # am start tel:210-385-0098

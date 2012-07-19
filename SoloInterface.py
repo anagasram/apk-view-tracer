@@ -9,8 +9,7 @@ import Logger
 from DeviceManagement.Device import Device
 from ViewManagement.ViewTree import ViewTree
 from ViewController.EventController import EventController
-from cookielib import reach
-from tarfile import LENGTH_LINK
+from SystemComponent import *, ProgressBar
 
 class SoloInterface():
     '''
@@ -24,7 +23,8 @@ class SoloInterface():
                                 "ImageVIew": "android.widget.ImageView",
                                 "RadioButton": "android.widget.RadioButton",
                                 "TextView": "android.widget.TextView",
-                                "View": "android.view.View"}
+                                "View": "android.view.View",
+                                "ProgressBar": "android.widget.ProgressBar"}
           
     def __init__(self, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1"):
         self.class_name = "SoloInterface"
@@ -50,7 +50,7 @@ class SoloInterface():
     def setUp(self):
         data = self.device.getDumpData()
         # key point        
-        self.tree_nodes_list = vt.build(data)
+        self.tree_nodes_list = self.vt.build(data)
         
         
     def tearDown(self):
@@ -62,6 +62,23 @@ class SoloInterface():
         # release socket connect with Android View Server
         self.device.close()
         
+        
+#------------------------------------------------------------------------------ 
+    '''adb shell command'''
+    def installPackage(self, package_name):
+        return self.device.adb_console.installPkg(package_name)
+    
+    def removePackage(self, package_name):
+        return self.device.adb_console.removePkg(package_name)
+    
+    def shell(self, command):
+        return self.device.adb_console.shell(command)
+    
+    def startActivity(self, package_name, activity_name):
+        self.device.adb_console.startActivity(package_name, activity_name)
+        time.sleep(3)
+        self.setUp()
+
 #------------------------------------------------------------------------------ 
     def searchForViewClassName(self, class_name):
         for node in self.tree_nodes_list:
@@ -126,7 +143,9 @@ class SoloInterface():
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
-                return self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                self.setUp()
+                return True
             
         return False
     
@@ -136,11 +155,15 @@ class SoloInterface():
         
         for node in self.tree_nodes_list:
             if text == node.mText:
-                return self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                self.setUp()
+                return True
+            
+        return False
             
     def getTextById(self, id):
         if 0==len(id):
-            return False
+            return None
         
         real_id = "id/"+id
         for node in self.tree_nodes_list:
@@ -161,6 +184,9 @@ class SoloInterface():
                 while 0<length:
                     self.event_controller.press("del")
                     length-=1
+                
+                self.setUp()
+                return True
             
         return False
     
@@ -176,7 +202,9 @@ class SoloInterface():
                     self.event_controller.press("del")
                     length-=1
                                 
-                return self.event_controller.type(text)
+                self.event_controller.type(text)
+                self.setUp()
+                return True
             
         return False
     
@@ -187,36 +215,112 @@ class SoloInterface():
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
-                return self.event_controller.type(text)
+                self.event_controller.type(text)
+                self.setUp()
+                return True
+        
+        return False
+    
+    '''
+    this method for Checkbox or RadioButton
+    '''
+    def isCheckedById(self, id):
+        if 0==len(id):
+            return False
+        
+        real_id = "id/"+id
+        pass
             
 #------------------------------------------------------------------------------ 
 # Physical Button Operations
     def longPressHome(self):
-        return self.event_controller.longPressByKeyCode("home")
+        self.event_controller.longPressByKeyCode("home")
+        self.setUp()
+        return True
     
     def callMenu(self):
-        return self.event_controller.press("menu")
+        self.event_controller.press("menu")
+        self.setUp()
+        return True
     
     def goBack(self):
-        return self.event_controller.press("back")
+        self.event_controller.press("back")
+        self.setUp()
+        return True
     
-    def callDelete(self):
-        return self.event_controller.press("del")
+    def callDelete(self, reDump=False):
+        self.event_controller.press("del")
+        if reDump:
+            self.setUp()
     
-    def callLeft(self):
-        return self.event_controller.press("dpad_left")
+    def callLeft(self, reDump=False):
+        self.event_controller.press("dpad_left")
+        if reDump:
+            self.setUp()
     
-    def callRight(self):
-        return self.event_controller.press("dpad_right")
+    def callRight(self, reDump=False):
+        self.event_controller.press("dpad_right")
+        if reDump:
+            self.setUp()
     
-    def callTop(self):
-        return self.event_controller.press("dpad_top")
+    def callUp(self, reDump=False):
+        self.event_controller.press("dpad_up")
+        if reDump:
+            self.setUp()
     
-    def callDown(self):
-        return self.event_controller.press("dpad_down")
-    
+    def callDown(self, reDump=False):
+        self.event_controller.press("dpad_down")
+        if reDump:
+            self.setUp()
+
+#------------------------------------------------------------------------------ 
+    '''
+    Operation with Notification
+    '''
     def callNotification(self):
-        return self.event_controller.drag(100, 20, 100, 500)    
+        self.event_controller.drag(100, 20, 100, 500)
+        self.setUp()
+        return True
+    
+    def clearAllNotifications(self, reDump=False):
+        notifies = Notification.Notification(self.tree_nodes_list)
+        location = notifies.getClearButtonLocation()
+        self.event_controller.tap(location.x, location.y)
+        if reDump:
+            self.setUp()        
+        return True
+    
+    def clickItemByText(self, text):
+        notifies = Notification.Notification(self.tree_nodes_list)
+        notifies.loadAllItems()
+        location = notifies.getLocationByText(text)
+        self.event_controller.tap(location.x, location.y)
+        self.setUp()
+        return True
+    
+    def clickItemByKeyWord(self, key_word):
+        notifies = Notification.Notification(self.tree_nodes_list)
+        notifies.loadAllItems()
+        location = notifies.getLocationByKeyWord(key_word)
+        self.event_controller.tap(location.x, location.y)
+        self.setUp()
+        return True
+
+#------------------------------------------------------------------------------ 
+    '''
+    Operation with ProgressBar
+    '''   
+    def getCurrentProgress(self):
+        progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
+        return progress_bar.getCurrentProgress()
+   
+    def getProgressById(self, id):
+        progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
+        return progress_bar.getProgressById(id)
+    
+    def getProgressByText(self, text):
+        progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
+        return progress_bar.getProgressByText(text)
     
 ##------------------------------------------------------------------------------ 
 #    def assertCurrentActivity(self, expectedClassName):

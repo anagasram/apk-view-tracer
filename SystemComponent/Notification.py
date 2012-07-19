@@ -71,17 +71,31 @@ class Notification():
                 return self.getRealLocation(node.mLocation)
         return None
     
+    def getClearButtonLocationByText(self, text="Clear"):
+        for node in self.tree_nodes_list:
+            if text == node.mText:
+                return self.getRealLocation(node.mLocation)
+        return None
+    
+    def getClearButtonLocationById(self, id="clear_all_button"):
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                return self.getRealLocation(node.mLocation)
+        return None
+    
     def getOngoingViewNodes(self):
         view_nodes_list = []
         start_flag = False
         for node in self.tree_nodes_list:
+            # begin at "ongoing"
             if (self.ongoing_class_name == node.mClassName) and (self.ongoing_id == node.mId) and (self.ongoing_text == node.mText):
                 start_flag = True
                 
             if (self.item_class_name == node.mClassName) and (self.item_id == node.mId) and start_flag:
                 view_nodes_list.append(node)
                 
-            
+            # exit when find "notification"
             if (self.notifications_class_name == node.mClassName) and (self.notifications_id == node.mId) and (self.notifications_text == node.mText):
                 break
         
@@ -118,6 +132,8 @@ class Notification():
                 
         return text_list
     
+#------------------------------------------------------------------------------ 
+# external interface
     def loadAllItems(self):
         self.ongoing_items_list = self.getOngoingViewNodes()
         self.notification_items_list = self.getNotificationViewNodes()

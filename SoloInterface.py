@@ -8,8 +8,9 @@ import logging, time
 import Logger
 from DeviceManagement.Device import Device
 from ViewManagement.ViewTree import ViewTree
+from ViewManagement import ParseElement
 from ViewController.EventController import EventController
-from SystemComponent import *, ProgressBar
+from SystemComponent import Notification, ProgressBar
 
 class SoloInterface():
     '''
@@ -78,6 +79,12 @@ class SoloInterface():
         self.device.adb_console.startActivity(package_name, activity_name)
         time.sleep(3)
         self.setUp()
+        
+    def pushFile(self, local_path, device_path):
+        return self.device.adb_console.pushFile(local_path, device_path)
+    
+    def pullFile(self, device_path, local_path):
+        return self.device.adb_console.pullFile(device_path, local_path)
 
 #------------------------------------------------------------------------------ 
     def searchForViewClassName(self, class_name):
@@ -222,19 +229,56 @@ class SoloInterface():
         return False
     
     '''
-    this method for Checkbox or RadioButton
+    this method for simple Checkbox or RadioButton
+    android.widget.RadioButton
+    android.widget.CheckBox
     '''
     def isCheckedById(self, id):
+        view_name_list = ["android.widget.RadioButton", "android.widget.CheckBox"]
         if 0==len(id):
             return False
         
         real_id = "id/"+id
-        pass
-            
+        for node in self.tree_nodes_list:
+            if self.isViewType(node.mClassName, view_name_list) and (real_id==node.mId):
+                element_parser = ParseElement.ParseElement(node.mElement)
+                element_parser.parseElmentData() 
+                return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+    
+    def isCheckedByText(self, text):
+        view_name_list = ["android.widget.RadioButton", "android.widget.CheckBox"]
+        if 0==len(text):
+            return False
+        
+        for node in self.tree_nodes_list:
+            if self.isViewType(node.mClassName, view_name_list) and (text==node.mText):
+                element_parser = ParseElement.ParseElement(node.mElement)
+                element_parser.parseElmentData() 
+                return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+
+#------------------------------------------------------------------------------ 
+# internal interface
+    '''
+    judge whether class name belongs to view_name_list
+    @param param: node.mClassName
+                 list of views name
+    @return: True or False
+    '''
+    def isViewType(self, class_name, view_name_list):
+        for name in view_name_list:
+            if name == class_name:
+                return True
+        return False
+    
 #------------------------------------------------------------------------------ 
 # Physical Button Operations
     def longPressHome(self):
         self.event_controller.longPressByKeyCode("home")
+        self.setUp()
+        return True
+    
+    def pressHome(self):
+        self.event_controller.press("home")
         self.setUp()
         return True
     
@@ -322,74 +366,52 @@ class SoloInterface():
         progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
         return progress_bar.getProgressByText(text)
     
-##------------------------------------------------------------------------------ 
-#    def assertCurrentActivity(self, expectedClassName):
-#        try:
-#            curActivityClassName = self.getCurrentViewClassName()
-#            if curActivityClassName == expectedClassName:
-#                return True
-#            else:
-#                return False
-#        except Exception, e:
-#            msg = "[%s] Failed to assert current activity [%s]" %(self.class_name, str(e))
-#            self.m_logger.error(msg)
-#            return None
-#        
-#    def assertCurrentActivityNewInstance(self, expectedClassName, oldHashCode):
-#        try:
-#            curActivityClassName = self.getCurrentViewClassName()
-#            curActivityHashCode = self.device.view_console.getFocusViewHashCode()
-#            if (curActivityClassName == expectedClassName) and (curActivityHashCode != oldHashCode):
-#                return True
-#            else:
-#                return False
-#        except Exception, e:
-#            msg = "[%s] Failed to assert current activity new instance [%s]" %(self.class_name, str(e))
-#            self.m_logger.error(msg)
-#            return None
-#    
+#------------------------------------------------------------------------------ 
+    def assertCurrentActivity(self, expectedClassName):
+        try:
+            curActivityClassName = self.getCurrentViewClassName()
+            if curActivityClassName == expectedClassName:
+                return True
+            else:
+                return False
+        except Exception, e:
+            msg = "[%s] Failed to assert current activity [%s]" %(self.class_name, str(e))
+            self.m_logger.error(msg)
+            return None
+        
+    def assertCurrentActivityNewInstance(self, expectedClassName, oldHashCode):
+        try:
+            curActivityClassName = self.getCurrentViewClassName()
+            curActivityHashCode = self.device.view_console.getFocusViewHashCode()
+            if (curActivityClassName == expectedClassName) and (curActivityHashCode != oldHashCode):
+                return True
+            else:
+                return False
+        except Exception, e:
+            msg = "[%s] Failed to assert current activity new instance [%s]" %(self.class_name, str(e))
+            self.m_logger.error(msg)
+            return None
+        
 #    def clickInList(self, objList, iIndex):
 #        pass
 #    
 #    def clickLongInList(self, objList, iIndex):
 #        pass
 #    
-#    def longClickByText(self, str_text): 
-#        pass
-#    
-#    def clickOnToggleButton(self, str_name):
-#        pass
-#    
-#    def clickOnViewById(self, view_id):
-#        try:
-#            self.easy_device.touchById(view_id)
-#            return True
-#        except Exception, e:
-#            print "[%s] Failed to click on view by id [%s]" %(self.class_name, str(e))
-#            return False
-#    
-#    def clickOnViewByLocation(self, x, y):
-#        try:
-#            self.monkey_runner.touch(x, y, "DOWN_AND_UP")
-#            return True
-#        except Exception, e:
-#            print "[%s] Failed to click on view by location [%s]" %(self.class_name, str(e))
-#            return False
+    def longPressByText(self, text): 
+        for node in self.tree_nodes_list:
+            if text == node.mText:
+                location = node.mLocation
+                self.event_controller.longPressByLocation(location.x, location.y)
+                
+                self.setUp()
+                return True
+        return False
+
+   
+
 #    
 #    def drag(self, fromX, fromY, toX, toY, iSteps):
-#        pass
-#    
-#    def enterText(self, str_msg, objText):
-#        try:
-#            self.monkey_runner.typeText(str_msg)
-#            return True
-#        except Exception, e:
-#            print "[%s] Failed to enter text [%s]" %(self.class_name, str(e))
-#            return False
-#    
-#
-#    
-#    def getCurrentActivity(self):
 #        pass
 #    
 #    def isCheckBoxChecked(self, param):

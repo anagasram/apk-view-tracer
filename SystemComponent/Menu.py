@@ -38,8 +38,4 @@ class Menu():
         for element in elements_list:
             if 0 <= element.mText.find(key_text):
                 return element.mLocation
-        return None
-    
-    def getRow(self):
-        pass
-    
+        return None    

@@ -33,7 +33,7 @@ class ProgressBar():
                 element_parser = ParseElement.ParseElement(node.mElement)
                 element_parser.parseElmentData()
                 if element_parser.getBoolean(element_parser.properties_dict["progress:isIndeterminate()"], True):
-                    return None
+                    continue
                 max_value = element_parser.getInt(element_parser.properties_dict["progress:getMax()"], 100)
                 current_value = element_parser.getInt(element_parser.properties_dict["progress:getProgress()"], 0)
                 second_value = element_parser.getInt(element_parser.properties_dict["progress:getSecondaryProgress()"], 0)
@@ -43,7 +43,8 @@ class ProgressBar():
                     return percent
                 
                 percent = float(second_value)/float(max_value) * 100
-                return percent
+                if percent>0 and percent<=100:
+                    return percent
                 
         return None            
                  
@@ -60,7 +61,7 @@ class ProgressBar():
                 element_parser = ParseElement.ParseElement(node.mElement)
                 element_parser.parseElmentData()
                 if element_parser.getBoolean(element_parser.properties_dict["progress:isIndeterminate()"], True):
-                    return None
+                    continue
                 max_value = element_parser.getInt(element_parser.properties_dict["progress:getMax()"], 100)
                 current_value = element_parser.getInt(element_parser.properties_dict["progress:getProgress()"], 0)
                 second_value = element_parser.getInt(element_parser.properties_dict["progress:getSecondaryProgress()"], 0)
@@ -70,7 +71,8 @@ class ProgressBar():
                     return percent
                 
                 percent = float(second_value)/float(max_value) * 100
-                return percent  
+                if percent>0 and percent<=100:
+                    return percent  
             
         return None
     
@@ -87,7 +89,7 @@ class ProgressBar():
                 element_parser = ParseElement.ParseElement(node.mElement)
                 element_parser.parseElmentData()
                 if element_parser.getBoolean(element_parser.properties_dict["progress:isIndeterminate()"], True):
-                    return None
+                    continue
                 max_value = element_parser.getInt(element_parser.properties_dict["progress:getMax()"], 100)
                 current_value = element_parser.getInt(element_parser.properties_dict["progress:getProgress()"], 0)
                 second_value = element_parser.getInt(element_parser.properties_dict["progress:getSecondaryProgress()"], 0)
@@ -97,7 +99,8 @@ class ProgressBar():
                     return percent
                 
                 percent = float(second_value)/float(max_value) * 100
-                return percent  
+                if percent>0 and percent<=100:
+                    return percent  
             
         return None
     

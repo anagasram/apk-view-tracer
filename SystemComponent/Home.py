@@ -41,7 +41,4 @@ class Home():
         
         return None
     
-    def getRow(self, row_num=0):
-        pass
-    
     

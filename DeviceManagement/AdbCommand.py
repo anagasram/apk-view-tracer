@@ -38,18 +38,77 @@ class AdbCommand():
     def shell(self, command):
         shell_command = "adb -s %s shell %s" %(self.device_name, command)
         return self.executeCommand(shell_command)
-    
+
+    #===========================================================================
+    #  start an Activity: am start [-D] [-W] <INTENT>
+    # -D: enable debugging
+    # -W: wait for launch to complete
+    # <INTENT> specifications include these flags:
+    # [-a <ACTION>] [-d <DATA_URI>] [-t <MIME_TYPE>]
+    # [-c <CATEGORY> [-c <CATEGORY>] ...]
+    # [-e|--es <EXTRA_KEY> <EXTRA_STRING_VALUE> ...]
+    # [--esn <EXTRA_KEY> ...]
+    # [--ez <EXTRA_KEY> <EXTRA_BOOLEAN_VALUE> ...]
+    # [-e|--ei <EXTRA_KEY> <EXTRA_INT_VALUE> ...]
+    # [-n <COMPONENT>] [-f <FLAGS>]
+    # [--grant-read-uri-permission] [--grant-write-uri-permission]
+    # [--debug-log-resolution]
+    # [--activity-brought-to-front] [--activity-clear-top]
+    # [--activity-clear-when-task-reset] [--activity-exclude-from-recents]
+    # [--activity-launched-from-history] [--activity-multiple-task]
+    # [--activity-no-animation] [--activity-no-history]
+    # [--activity-no-user-action] [--activity-previous-is-top]
+    # [--activity-reorder-to-front] [--activity-reset-task-if-needed]
+    # [--activity-single-top]
+    # [--receiver-registered-only] [--receiver-replace-pending]
+    # [<URI>]
+    #===========================================================================
+    def startActivity(self, uri, action, data, mimetype, categories_list, component, flags_list=None, extras_list=None):
+        startActivityCmd = "adb -s % shell am start -W " %self.device_name            
+        
+        if None!=action and 0!=len(action):
+            startActivityCmd += "-a %s " %action
+            if None!=data and 0!=len(data):
+                startActivityCmd += "-d %s " %data
+            if None!=mimetype and 0!=len(mimetype):
+                startActivityCmd += "-t %s " %mimetype
+        
+        if None!=categories_list and 0!=len(categories_list):
+            for category in categories_list:
+                if None!=category and 0!=len(category):
+                    startActivityCmd += "-c %s " %category
+                    
+        if None!=extras_list and 0!=len(extras_list):
+            for extra in extras_list:
+                if None!=extra and 0!=len(extra):
+                    startActivityCmd += "-e %s " %extra
+                
+        if None!=component and 0!=len(component):
+            startActivityCmd += "-n %s " %component
+            if None!=flags_list and 0!=len(flags_list):
+                for flag in flags_list:
+                    if None!=flag and 0!=len(flag):
+                        startActivityCmd += "-f %s " %flag
+                        
+        if None!=uri and 0!=len(uri):
+            startActivityCmd += uri
+        
+        return self.executeCommand(startActivityCmd)  
+
     ## for example:
     ## To start the Settings application: # am start -n com.android.settings/.Settings
     ##                                    # am start -n com.android.settings/com.android.settings.Settings
     ## To start the Browser: # am start -n com.android.browser/.BrowserActivity
     ##                       # am start -n com.android.browser/com.android.browser.BrowserActivity
     ## To start the Calculator # am start -n com.android.calculator2/.Calculator
-    ##                         # am start -n com.android.calculator2/com.android.calculator2.Calculator
-    def startActivity(self, package_name, activity_name):
+    ##                         # am start -n com.android.calculator2/com.android.calculator2.Calculator    
+    def startActivity2(self, package_name, activity_name, url=None):
         # -W must be before -n
         # -W is "start" command option, and -n is <INTENT> option
-        startActivityCmd = "adb -s %s shell am start -W -n %s/%s" %(self.device_name, package_name, activity_name)
+        if None==url:
+            startActivityCmd = "adb -s %s shell am start -W -n %s/%s" %(self.device_name, package_name, activity_name)
+        else:
+            startActivityCmd = "adb -s %s shell am start -W -n %s/%s %s" %(self.device_name, package_name, activity_name, url)
         return self.executeCommand(startActivityCmd)
     
     ## To start the phone dialer: # am start tel:210-385-0098

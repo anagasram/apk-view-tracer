@@ -19,16 +19,19 @@ class AdbCommand():
         
     def executeCommand(self, cmd):
         try:
-            os.system(cmd)
-            return True
+            out = os.popen(cmd)
+            res = out.read()
+            out.close()
+            return res
         except Exception, e:
             msg = "[%s] Failed execute cmd [%s]: [%s]" %(self.class_name, cmd, str(e))
-            print msg
             self.m_logger.error(msg)
-            return False
+            return ""
         
     def installPkg(self, package_name):
-        installPkgCmd = "adb -s %s install %s" %(self.device_name, package_name)
+        # 安装 package的时候就不需要判断之前有没有安装package 
+        # 参数 -r 
+        installPkgCmd = "adb -s %s install -r %s" %(self.device_name, package_name) 
         return self.executeCommand(installPkgCmd)
     
     def removePkg(self, package_name):

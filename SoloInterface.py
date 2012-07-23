@@ -25,7 +25,8 @@ class SoloInterface():
                                 "RadioButton": "android.widget.RadioButton",
                                 "TextView": "android.widget.TextView",
                                 "View": "android.view.View",
-                                "ProgressBar": "android.widget.ProgressBar"}
+                                "ProgressBar": "android.widget.ProgressBar",
+                                "ScrollView": "android.widget.ScrollView"}
           
     def __init__(self, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1"):
         self.class_name = "SoloInterface"
@@ -55,7 +56,8 @@ class SoloInterface():
         
         
     def tearDown(self):
-        pass    
+        # 
+        self.close()    
 
     def close(self):
         # release socket connect with Monkey Server
@@ -90,24 +92,28 @@ class SoloInterface():
     def searchForViewClassName(self, class_name):
         for node in self.tree_nodes_list:
             if class_name == node.mClassName:
-                return node
+                return True
             
-        return None
+        return False
     
-    def searchForText(self, text):
-        for node in self.tree_nodes_list:
-            if text == node.mText:
-                return node
-        
-        return True
+    def searchForText(self, text, partial_matching=False):
+        if partial_matching:
+            for node in self.tree_nodes_list:
+                if node.mText.find(text)>=0:
+                    return True
+        else:            
+            for node in self.tree_nodes_list:
+                if text == node.mText:
+                    return True        
+        return False
     
     def searchForViewID(self, id):
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
-                return node
+                return True
             
-        return None
+        return False
     
     def getCurrentViewClassName(self):
         return self.device.view_console.getFocusViewClassName()
@@ -119,11 +125,15 @@ class SoloInterface():
             
         return False
     
-    def existViewByText(self, text):
-        for node in self.tree_nodes_list:
-            if text == node.mText:
-                return True
-            
+    def existViewByText(self, text, partial_matching=False):
+        if partial_matching:
+            for node in self.tree_nodes_list:
+                if node.mText.find(text)>=0:
+                    return True
+        else:
+            for node in self.tree_nodes_list:
+                if text == node.mText:
+                    return True
         return False
     
     def existViewById(self, id):
@@ -156,15 +166,22 @@ class SoloInterface():
             
         return False
     
-    def clickViewByText(self, text):
+    def clickViewByText(self, text, partial_matching=False):
         if 0==len(text):
             return False
         
-        for node in self.tree_nodes_list:
-            if text == node.mText:
-                self.event_controller.tap(node.mLocation.x, node.mLocation.y)
-                self.setUp()
-                return True
+        if partial_matching:
+            for node in self.tree_nodes_list:
+                if node.mText.find(text):
+                    self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                    self.setUp()
+                    return True
+        else:
+            for node in self.tree_nodes_list:
+                if text == node.mText:
+                    self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                    self.setUp()
+                    return True
             
         return False
             
@@ -244,17 +261,27 @@ class SoloInterface():
                 element_parser = ParseElement.ParseElement(node.mElement)
                 element_parser.parseElmentData() 
                 return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+        
+        return False
     
-    def isCheckedByText(self, text):
+    def isCheckedByText(self, text, partial_matching=False):
         view_name_list = ["android.widget.RadioButton", "android.widget.CheckBox"]
         if 0==len(text):
             return False
         
-        for node in self.tree_nodes_list:
-            if self.isViewType(node.mClassName, view_name_list) and (text==node.mText):
-                element_parser = ParseElement.ParseElement(node.mElement)
-                element_parser.parseElmentData() 
-                return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+        if partial_matching:
+            for node in self.tree_nodes_list:
+                if self.isViewType(node.mClassName, view_name_list) and (node.mText.find(text)>=0):
+                    element_parser = ParseElement.ParseElement(node.mElement)
+                    element_parser.parseElmentData()
+                    return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+        else:
+            for node in self.tree_nodes_list:
+                if self.isViewType(node.mClassName, view_name_list) and (text==node.mText):
+                    element_parser = ParseElement.ParseElement(node.mElement)
+                    element_parser.parseElmentData() 
+                    return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+        return False
 
 #------------------------------------------------------------------------------ 
 # internal interface
@@ -334,21 +361,21 @@ class SoloInterface():
             self.setUp()        
         return True
     
-    def clickItemByText(self, text):
+    def clickItemByText(self, text, partial_matching=False):
+        if 0==len(text):
+            return False
+        
         notifies = Notification.Notification(self.tree_nodes_list)
         notifies.loadAllItems()
-        location = notifies.getLocationByText(text)
+        
+        if partial_matching:            
+            location = notifies.getLocationByKeyWord(text)
+        else:
+            location = notifies.getLocationByText(text)
+            
         self.event_controller.tap(location.x, location.y)
         self.setUp()
-        return True
-    
-    def clickItemByKeyWord(self, key_word):
-        notifies = Notification.Notification(self.tree_nodes_list)
-        notifies.loadAllItems()
-        location = notifies.getLocationByKeyWord(key_word)
-        self.event_controller.tap(location.x, location.y)
-        self.setUp()
-        return True
+        return True       
 
 #------------------------------------------------------------------------------ 
     '''
@@ -362,9 +389,12 @@ class SoloInterface():
         progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
         return progress_bar.getProgressById(id)
     
-    def getProgressByText(self, text):
+    def getProgressByText(self, text, partial_matching=False):
         progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
-        return progress_bar.getProgressByText(text)
+        if partial_matching:
+            return progress_bar.getProgressByKeyWord(text)
+        else:
+            return progress_bar.getProgressByText(text)
     
 #------------------------------------------------------------------------------ 
     def assertCurrentActivity(self, expectedClassName):
@@ -398,16 +428,25 @@ class SoloInterface():
 #    def clickLongInList(self, objList, iIndex):
 #        pass
 #    
-    def longPressByText(self, text): 
-        for node in self.tree_nodes_list:
-            if text == node.mText:
-                location = node.mLocation
-                self.event_controller.longPressByLocation(location.x, location.y)
-                
-                self.setUp()
-                return True
+    def longPressByText(self, text, partial_matching=False):
+        if 0==len(text):
+            return False
+        
+        if partial_matching: 
+            for node in self.tree_nodes_list:
+                if node.mText.find(text)>=0:
+                    location = node.mLocation
+                    self.event_controller.longPressByLocation(location.x, location.y)        
+                    self.setUp()
+                    return True
+        else:
+            for node in self.tree_nodes_list:
+                if text == node.mText:
+                    location = node.mLocation
+                    self.event_controller.longPressByLocation(location.x, location.y)        
+                    self.setUp()
+                    return True            
         return False
-
    
 
 #    
@@ -437,20 +476,6 @@ class SoloInterface():
 #            text = param
 #        else:
 #            pass
-#    
-#    def isToggleButtonChecked(self, param):
-#        if isinstance(param, int):
-#            index = param
-#        elif isinstance(param, str):
-#            text = param
-#        else:
-#            pass
-#        
-#    def pressMenuItem(self):
-#        pass
-#    
-#    def pressSpinnerItem(self):
-#        pass
 #    
 #    def scrollDown(self):
 #        pass

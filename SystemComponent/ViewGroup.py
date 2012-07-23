@@ -30,4 +30,4 @@ class ViewGroup():
     def __init__(self):
         self.class_name = "ViewGroup"
         self.viewgroup_item_dict = {"android.widget.RadioGroup": "android.widget.RadioButton",
-                                    "android.": "android"} 
+                                    "android.widget.ScrollView": "android"} 

@@ -10,7 +10,7 @@ from DeviceManagement.Device import Device
 from ViewManagement.ViewTree import ViewTree
 from ViewManagement import ParseElement
 from ViewController.EventController import EventController
-from SystemComponent import Notification, ProgressBar
+from SystemComponent import Notification, ProgressBar, GroupView
 
 class SoloInterface():
     '''
@@ -361,7 +361,7 @@ class SoloInterface():
             self.setUp()        
         return True
     
-    def clickItemByText(self, text, partial_matching=False):
+    def clickNotificationItemByText(self, text, partial_matching=False):
         if 0==len(text):
             return False
         
@@ -421,13 +421,7 @@ class SoloInterface():
             msg = "[%s] Failed to assert current activity new instance [%s]" %(self.class_name, str(e))
             self.m_logger.error(msg)
             return None
-        
-#    def clickInList(self, objList, iIndex):
-#        pass
-#    
-#    def clickLongInList(self, objList, iIndex):
-#        pass
-#    
+   
     def longPressByText(self, text, partial_matching=False):
         if 0==len(text):
             return False
@@ -447,36 +441,62 @@ class SoloInterface():
                     self.setUp()
                     return True            
         return False
-   
 
-#    
-#    def drag(self, fromX, fromY, toX, toY, iSteps):
-#        pass
-#    
-#    def isCheckBoxChecked(self, param):
-#        if isinstance(param, int):
-#            index = param
-#        elif isinstance(param, str):
-#            text = param
-#        else:
-#            pass
-#        
-#    def isRadioButtonChecked(self, param):
-#        if isinstance(param, int):
-#            index = param
-#        elif isinstance(param, str):
-#            text = param
-#        else:
-#            pass
-#        
-#    def isSpinnerTextSelected(self, param):
-#        if isinstance(param, int):
-#            index = param
-#        elif isinstance(param, str):
-#            text = param
-#        else:
-#            pass
-#    
+#------------------------------------------------------------------------------ 
+# Operation with View Group such as ListView, ScrollView, GridView, etc.
+
+    def getItemsNumber(self, groupview_id, groupview_classname=None):
+        if None==groupview_id or 0==len(groupview_id):
+            return None
+        
+        for node in self.tree_nodes_list:
+            if groupview_id==node.mId:
+                if None!=groupview_classname and 0!=len(groupview_classname):
+                    if groupview_classname==node.mClassName:
+                        return len(node.mChildNodes)
+                else:
+                    return len(node.mChildNodes)
+            
+        return None
+            
+
+    def clickItemByIndex(self, groupview_id, index=0):
+        if None==groupview_id or 0==len(groupview_id):
+            return False
+        
+        if None==index or 0==len(index):
+            return False
+        
+        for node in self.tree_nodes_list:
+            if groupview_id==node.mId:
+                groupview = GroupView.GroupView(node)
+                groupview.loadAllItems()
+                break
+            
+        return groupview.clickItemByIndex(index)
+    
+    def clickItemByText(self, groupview_id, text, partial_matching=False):
+        if 0==len(groupview_id) or 0==len(text):
+            return False
+                
+        if partial_matching:
+            pass
+        else:
+            pass
+        
+        return False
+    
+    def isItemCheckedByIndex(self, groupview_id, index=0):
+        pass
+    
+    def isItemCheckedByText(self, groupview_id, text, partial_matching=False):
+        pass
+    
+#------------------------------------------------------------------------------ 
+'''
+Scroll Operation
+'''
+#------------------------------------------------------------------------------ 
 #    def scrollDown(self):
 #        pass
 #    

@@ -177,7 +177,7 @@ class Notification():
         hash_code = ""
         for key in self.notification_items_dict.keys():
             for text in self.notification_items_dict[key]:
-                if keyword in text:
+                if keyword in text:  # or "text.find(keyword)>=0"
                     hash_code = key
                     break
             if 0!=len(hash_code):

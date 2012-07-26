@@ -6,6 +6,7 @@
 #===============================================================================
 
 import os,sys
+from test.test_xml_etree import getchildren
 current_path = os.getcwd()
 parent_path = os.path.abspath(os.path.join(os.getcwd(), os.path.pardir))
 if current_path not in sys.path:
@@ -15,6 +16,8 @@ if parent_path not in sys.path:
     
 from ViewManagement.TreeType import CPoint
 from ViewManagement.TreeType import CTreeNode
+from ViewManagement.ParseElement import ParseElement
+
 
 class Item():
     '''
@@ -30,32 +33,70 @@ class Item():
         self.click_location_list = []   
         self.isChecked = False
         
-        self.properties_dict = {}
+        self.properties_dict = {"mText":[],
+                                "mLocation": [],
+                                "isChecked": False}
         
     def loadProperties(self):
         # has no child
         if None==self.node.mChildNodes or 0==len(self.node.mChildNodes):
-            self.text_list.append(self.node.mText)
-            self.click_location_list.append(self.node.mLocation)
-            # isChecked 
+#            self.text_list.append(self.node.mText)
+#            self.click_location_list.append(self.node.mLocation)            
+            self.properties_dict["mText"] = [self.node.mText]
+            if self.node.mActive:
+                self.properties_dict["mLocation"] = [self.node.mLocation]
+                                    
+            element_parser = ParseElement(self.node.mElement)
+            element_parser.parseElmentData() 
+            res = element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+            self.properties_dict["isChecked"] = res
             return True
         
         # has child
-        for child in self.node.mChildNodes:
-            pass
-            
+        self.getChildProperties(self.node, self.properties_dict)
+        return True
+        
     
+    def isLeafNode(self, node):
+        if None==node:
+            return True  ## ???
+        
+        if None==node.mChildNodes or 0==len(node.mChildNodes):
+            return True
+        else:
+            return False   
+        
+    def getChildProperties(self, node, properties_dict):
+        if None==node:
+            return properties_dict
+        
+        if None==node.mChildNodes or 0==len(node.mChildNodes):
+            return properties_dict
+        
+        for child in node.mChildNodes:
+            if self.isLeafNode(child):
+                properties_dict["mText"].append(child.mText)
+                if child.mActive:
+                    properties_dict["mLocation"].append(child.mLocation)
+                    
+                element_parser = ParseElement(child.mElement)
+                element_parser.parseElmentData() 
+                res = element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+                properties_dict["isChecked"] = (res or properties_dict["isChecked"])
+                
+            else:
+                self.getChildProperties(child, properties_dict)
     
 #------------------------------------------------------------------------------ 
 #        
 #------------------------------------------------------------------------------ 
 class GroupView():
     '''
-    GroupView, include ListView, GripView, RadioGroup, etc.
+    GroupView, include ListView, GridView, RadioGroup, etc.
     '''
     
     def __init__(self, node):
-        self.class_name = "ViewGroup"
+        self.class_name = "GroupView"
         self.node = node   
         self.items_list = []
         

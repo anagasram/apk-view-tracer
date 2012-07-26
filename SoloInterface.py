@@ -96,7 +96,7 @@ class SoloInterface():
             
         return False
     
-    def searchForText(self, text, partial_matching=False):
+    def searchForText(self, text, partial_matching=True):
         if partial_matching:
             for node in self.tree_nodes_list:
                 if node.mText.find(text)>=0:
@@ -125,7 +125,7 @@ class SoloInterface():
             
         return False
     
-    def existViewByText(self, text, partial_matching=False):
+    def existViewByText(self, text, partial_matching=True):
         if partial_matching:
             for node in self.tree_nodes_list:
                 if node.mText.find(text)>=0:
@@ -166,7 +166,7 @@ class SoloInterface():
             
         return False
     
-    def clickViewByText(self, text, partial_matching=False):
+    def clickViewByText(self, text, partial_matching=True):
         if 0==len(text):
             return False
         
@@ -264,7 +264,7 @@ class SoloInterface():
         
         return False
     
-    def isCheckedByText(self, text, partial_matching=False):
+    def isCheckedByText(self, text, partial_matching=True):
         view_name_list = ["android.widget.RadioButton", "android.widget.CheckBox"]
         if 0==len(text):
             return False
@@ -361,7 +361,7 @@ class SoloInterface():
             self.setUp()        
         return True
     
-    def clickNotificationItemByText(self, text, partial_matching=False):
+    def clickNotificationItemByText(self, text, partial_matching=True):
         if 0==len(text):
             return False
         
@@ -389,7 +389,7 @@ class SoloInterface():
         progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
         return progress_bar.getProgressById(id)
     
-    def getProgressByText(self, text, partial_matching=False):
+    def getProgressByText(self, text, partial_matching=True):
         progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
         if partial_matching:
             return progress_bar.getProgressByKeyWord(text)
@@ -422,7 +422,7 @@ class SoloInterface():
             self.m_logger.error(msg)
             return None
    
-    def longPressByText(self, text, partial_matching=False):
+    def longPressByText(self, text, partial_matching=True):
         if 0==len(text):
             return False
         
@@ -471,27 +471,90 @@ class SoloInterface():
             if groupview_id==node.mId:
                 groupview = GroupView.GroupView(node)
                 groupview.loadAllItems()
+                item = groupview.items_list[index]
                 break
-            
-        return groupview.clickItemByIndex(index)
-    
-    def clickItemByText(self, groupview_id, text, partial_matching=False):
-        if 0==len(groupview_id) or 0==len(text):
-            return False
-                
-        if partial_matching:
-            pass
-        else:
-            pass
         
+        for location in item.properties_dict["mLocation"]:
+            if self.event_controller.tap(location.x, location.y):
+                self.setUp()
+                return True
+            
+        return False
+    
+    def clickItemByText(self, groupview_id, text, partial_matching=True):
+        if None==groupview_id or 0==len(groupview_id):
+            return False
+        
+        if None==text or 0==len(text):
+            return False
+        
+        for node in self.tree_nodes_list:
+            if groupview_id==node.mId:
+                groupview = GroupView.GroupView(node)
+                groupview.loadAllItems()
+                break
+                
+        if not partial_matching:
+            for item in groupview.items_list:
+                if text in item.properties_dict["mText"]:
+                    # click this item
+                    for location in item.properties_dict["mLocation"]:
+                        if self.event_controller.tap(location.x, location.y):
+                            self.setUp()
+                            return True
+        else:
+            for item in groupview.items_list:                
+                for msg in item.properties_dict["mText"]:
+                    if msg.find(text)>=0:
+                        # click this item
+                        for location in item.properties_dict["mLocation"]:
+                            if self.event_controller.tap(location.x, location.y):
+                                self.setUp()
+                                return True      
+                              
         return False
     
     def isItemCheckedByIndex(self, groupview_id, index=0):
-        pass
+        if None==groupview_id or 0==len(groupview_id):
+            return False
+        
+        if None==index or 0==len(index):
+            return False
+        
+        for node in self.tree_nodes_list:
+            if groupview_id==node.mId:
+                groupview = GroupView.GroupView(node)
+                groupview.loadAllItems()
+                item = groupview.items_list[index]
+                break
+            
+        return item.properties["isChecked"]
     
-    def isItemCheckedByText(self, groupview_id, text, partial_matching=False):
-        pass
-    
+    def isItemCheckedByText(self, groupview_id, text, partial_matching=True):
+        if None==groupview_id or 0==len(groupview_id):
+            return False
+        
+        if None==text or 0==len(text):
+            return False
+        
+        for node in self.tree_nodes_list:
+            if groupview_id==node.mId:
+                groupview = GroupView.GroupView(node)
+                groupview.loadAllItems()
+                break
+            
+        if not partial_matching:
+            for item in groupview.items_list:
+                if text in item.properties_dict["mText"]:
+                    return item.properties_dict["isChecked"]
+        else:
+            for item in groupview.items_list:
+                for msg in item.properties_dict["mText"]:
+                    if msg.find(text)>=0:
+                        return item.properties_dict["isChecked"]
+                                        
+        return False            
+            
 #------------------------------------------------------------------------------ 
 '''
 Scroll Operation

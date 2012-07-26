@@ -67,7 +67,7 @@ class AdbCommand():
     # [<URI>]
     #===========================================================================
     def startActivity(self, uri, action, data, mimetype, categories_list, component, flags_list=None, extras_list=None):
-        startActivityCmd = "adb -s % shell am start -W " %self.device_name            
+        startActivityCmd = "adb -s %s shell am start -W " %self.device_name            
         
         if None!=action and 0!=len(action):
             startActivityCmd += "-a %s " %action

@@ -77,7 +77,7 @@ class SoloInterface():
     def shell(self, command):
         return self.device.adb_console.shell(command)
     
-    def startActivity(self, uri, action, data, mimetype, categories_list, component, flags_list=None, extras_list=None):
+    def startActivity(self, uri=None, action=None, data=None, mimetype=None, categories_list=None, component=None, flags_list=None, extras_list=None):
         self.device.adb_console.startActivity(uri, action, data, mimetype, categories_list, component, flags_list, extras_list)            
         time.sleep(1)
         self.setUp()

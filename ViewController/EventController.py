@@ -72,10 +72,8 @@ class EventController():
     
     def initService(self):
         try:
-            out = os.popen("adb devices")
-            res = out.read()
-            out.close()
-            if 0>res.find("List of devices attached"):
+            res = os.system("adb devices")
+            if 0!=res:
                 msg = "[%s] There might not has devices running." %self.class_name
                 self.m_logger.error(msg)
                 return False

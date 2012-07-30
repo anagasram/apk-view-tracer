@@ -201,6 +201,9 @@ class SoloInterface():
         if 0==len(id):
             return False
         
+        # make the cursor can focus at this edit text
+        self.clickViewById(id)
+        
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
@@ -217,6 +220,9 @@ class SoloInterface():
     def setEditTextById(self, id, text):
         if 0==len(id) or 0==len(text):
             return False
+        
+        # make the cursor can focus at this edit text
+        self.clickViewById(id)
         
         real_id = "id/"+id
         for node in self.tree_nodes_list:
@@ -235,6 +241,9 @@ class SoloInterface():
     def appendEditTextById(self, id, text):
         if 0==len(id) or 0==len(text):
             return False
+        
+        # make the cursor can focus at this edit text
+        self.clickViewById(id)
         
         real_id = "id/"+id
         for node in self.tree_nodes_list:
@@ -577,8 +586,11 @@ Scroll Operation
     
            
 if __name__=="__main__":
-    print "test OK"
-            
+    solo = SoloInterface()
+    solo.setUp()
+    solo.setEditTextById("account", "jackaduma@126.com")
+    solo.setEditTextById("password", "19870228")
+    solo.tearDown()
         
         
     

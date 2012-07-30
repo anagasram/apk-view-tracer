@@ -153,7 +153,7 @@ class SoloInterface():
         return False
     
     
-    def clickViewById(self, id):
+    def clickViewById(self, id, ReDump=True):
         if 0==len(id):
             return False
         
@@ -161,7 +161,8 @@ class SoloInterface():
         for node in self.tree_nodes_list:
             if real_id == node.mId:
                 self.event_controller.tap(node.mLocation.x, node.mLocation.y)
-                self.setUp()
+                if ReDump:
+                    self.setUp()
                 return True
             
         return False
@@ -202,7 +203,8 @@ class SoloInterface():
             return False
         
         # make the cursor can focus at this edit text
-        self.clickViewById(id)
+        self.clickViewById(id, False)
+        self.goBack(False)
         
         real_id = "id/"+id
         for node in self.tree_nodes_list:
@@ -222,7 +224,8 @@ class SoloInterface():
             return False
         
         # make the cursor can focus at this edit text
-        self.clickViewById(id)
+        self.clickViewById(id, False)
+        self.goBack(False)
         
         real_id = "id/"+id
         for node in self.tree_nodes_list:
@@ -243,7 +246,8 @@ class SoloInterface():
             return False
         
         # make the cursor can focus at this edit text
-        self.clickViewById(id)
+        self.clickViewById(id, False)
+        self.goBack(False)
         
         real_id = "id/"+id
         for node in self.tree_nodes_list:
@@ -323,9 +327,10 @@ class SoloInterface():
         self.setUp()
         return True
     
-    def goBack(self):
+    def goBack(self, ReDump=True):
         self.event_controller.press("back")
-        self.setUp()
+        if ReDump:
+            self.setUp()
         return True
     
     def callDelete(self, reDump=False):
@@ -590,6 +595,8 @@ if __name__=="__main__":
     solo.setUp()
     solo.setEditTextById("account", "jackaduma@126.com")
     solo.setEditTextById("password", "19870228")
+    solo.clickViewById("cb_eula")
+    solo.clickViewById("sign_in")
     solo.tearDown()
         
         

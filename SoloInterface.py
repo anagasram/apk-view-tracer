@@ -540,8 +540,9 @@ class SoloInterface():
         if None==index or 0==len(index):
             return False
         
+        real_id = "id/" + groupview_id
         for node in self.tree_nodes_list:
-            if groupview_id==node.mId:
+            if real_id==node.mId:
                 groupview = GroupView.GroupView(node)
                 groupview.loadAllItems()
                 item = groupview.items_list[index]
@@ -556,8 +557,10 @@ class SoloInterface():
         if None==text or 0==len(text):
             return False
         
+        groupview = None
+        real_id = "id/" + groupview_id
         for node in self.tree_nodes_list:
-            if groupview_id==node.mId:
+            if real_id==node.mId:
                 groupview = GroupView.GroupView(node)
                 groupview.loadAllItems()
                 break

@@ -468,8 +468,9 @@ class SoloInterface():
         if None==groupview_id or 0==len(groupview_id):
             return None
         
+        real_id = "id/" + groupview_id
         for node in self.tree_nodes_list:
-            if groupview_id==node.mId:
+            if real_id==node.mId:
                 if None!=groupview_classname and 0!=len(groupview_classname):
                     if groupview_classname==node.mClassName:
                         return len(node.mChildNodes)
@@ -486,8 +487,9 @@ class SoloInterface():
         if None==index or 0==len(index):
             return False
         
+        real_id = "id/" + groupview_id
         for node in self.tree_nodes_list:
-            if groupview_id==node.mId:
+            if real_id==node.mId:
                 groupview = GroupView.GroupView(node)
                 groupview.loadAllItems()
                 item = groupview.items_list[index]
@@ -507,8 +509,10 @@ class SoloInterface():
         if None==text or 0==len(text):
             return False
         
+        groupview = None
+        real_id = "id/" + groupview_id
         for node in self.tree_nodes_list:
-            if groupview_id==node.mId:
+            if real_id==node.mId:
                 groupview = GroupView.GroupView(node)
                 groupview.loadAllItems()
                 break
@@ -601,16 +605,18 @@ Scroll Operation
 if __name__=="__main__":
     solo = SoloInterface()
     solo.setUp()
-    
-    solo.clickViewById("btn_signin")
+
+#------------------------------------------------------------------------------ 
+#    solo.clickViewById("btn_signin")
 #    for node in solo.tree_nodes_list:
 #        print node.mId
 #        print node.mText
 #        print "----------------"
-    solo.setEditTextById("account", "jackaduma@126.com")
-    solo.setEditTextById("password", "19870228")
-    solo.clickViewById("cb_eula")
-    solo.clickViewById("sign_in")
+#    solo.setEditTextById("account", "jackaduma@126.com")
+#    solo.setEditTextById("password", "19870228")
+#    solo.clickViewById("cb_eula")
+#    solo.clickViewById("sign_in")
+#------------------------------------------------------------------------------ 
     
 #    solo.event_controller.touchDown(300, 600)
 #    solo.event_controller.touchMove(300, 600)
@@ -623,8 +629,11 @@ if __name__=="__main__":
 #    solo.setUp()
 #    
 #    solo.clickViewByText("Scan Now", True)
+#------------------------------------------------------------------------------ 
+
+    solo.clickViewByText("Mobile Security")
     
-    solo.tearDown()
+    solo.close()
         
         
     

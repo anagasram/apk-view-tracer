@@ -76,8 +76,7 @@ class Item():
         for child in node.mChildNodes:
             if self.isLeafNode(child):
                 properties_dict["mText"].append(child.mText)
-                if child.mActive:
-                    properties_dict["mLocation"].append(child.mLocation)
+                properties_dict["mLocation"].append(child.mLocation) # this might be TBD
                     
                 element_parser = ParseElement(child.mElement)
                 element_parser.parseElmentData() 

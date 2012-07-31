@@ -73,7 +73,7 @@ class Notification():
     
     def getClearButtonLocationByText(self, text="Clear"):
         for node in self.tree_nodes_list:
-            if text == node.mText:
+            if (node.mText != None) and (text == node.mText):
                 return self.getRealLocation(node.mLocation)
         return None
     

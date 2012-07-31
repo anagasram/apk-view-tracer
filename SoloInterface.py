@@ -103,11 +103,11 @@ class SoloInterface():
     def searchForText(self, text, partial_matching=True):
         if partial_matching:
             for node in self.tree_nodes_list:
-                if node.mText.find(text)>=0:
+                if (node.mText != None) and (node.mText.find(text)>=0):
                     return True
         else:            
             for node in self.tree_nodes_list:
-                if text == node.mText:
+                if (node.mText != None) and (text == node.mText):
                     return True        
         return False
     
@@ -132,11 +132,11 @@ class SoloInterface():
     def existViewByText(self, text, partial_matching=True):
         if partial_matching:
             for node in self.tree_nodes_list:
-                if node.mText.find(text)>=0:
+                if (node.mText != None) and (node.mText.find(text)>=0):
                     return True
         else:
             for node in self.tree_nodes_list:
-                if text == node.mText:
+                if (node.mText != None) and (text == node.mText):
                     return True
         return False
     
@@ -178,13 +178,13 @@ class SoloInterface():
         
         if partial_matching:
             for node in self.tree_nodes_list:
-                if node.mText.find(text):
+                if (node.mText != None) and (node.mText.find(text)>=0):
                     self.event_controller.tap(node.mLocation.x, node.mLocation.y)
                     self.setUp()
                     return True
         else:
             for node in self.tree_nodes_list:
-                if text == node.mText:
+                if (node.mText != None) and (text == node.mText):
                     self.event_controller.tap(node.mLocation.x, node.mLocation.y)
                     self.setUp()
                     return True
@@ -289,13 +289,13 @@ class SoloInterface():
         
         if partial_matching:
             for node in self.tree_nodes_list:
-                if self.isViewType(node.mClassName, view_name_list) and (node.mText.find(text)>=0):
+                if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (node.mText.find(text)>=0):
                     element_parser = ParseElement.ParseElement(node.mElement)
                     element_parser.parseElmentData()
                     return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
         else:
             for node in self.tree_nodes_list:
-                if self.isViewType(node.mClassName, view_name_list) and (text==node.mText):
+                if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (text==node.mText):
                     element_parser = ParseElement.ParseElement(node.mElement)
                     element_parser.parseElmentData() 
                     return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
@@ -447,14 +447,14 @@ class SoloInterface():
         
         if partial_matching: 
             for node in self.tree_nodes_list:
-                if node.mText.find(text)>=0:
+                if (node.mText != None) and (node.mText.find(text)>=0):
                     location = node.mLocation
                     self.event_controller.longPressByLocation(location.x, location.y)        
                     self.setUp()
                     return True
         else:
             for node in self.tree_nodes_list:
-                if text == node.mText:
+                if (node.mText != None) and (text == node.mText):
                     location = node.mLocation
                     self.event_controller.longPressByLocation(location.x, location.y)        
                     self.setUp()
@@ -524,7 +524,7 @@ class SoloInterface():
         else:
             for item in groupview.items_list:                
                 for msg in item.properties_dict["mText"]:
-                    if msg.find(text)>=0:
+                    if (None!=msg) and (msg.find(text)>=0):
                         # click this item
                         for location in item.properties_dict["mLocation"]:
                             if self.event_controller.tap(location.x, location.y):
@@ -572,7 +572,7 @@ class SoloInterface():
         else:
             for item in groupview.items_list:
                 for msg in item.properties_dict["mText"]:
-                    if msg.find(text)>=0:
+                    if (None!=msg) and (msg.find(text)>=0):
                         return item.properties_dict["isChecked"]
                                         
         return False            

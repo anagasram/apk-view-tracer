@@ -85,7 +85,7 @@ class ProgressBar():
             return None
 
         for node in self.tree_nodes_list:
-            if (node.mClassName==self.ProgressBar_ClassName) and (text==node.mText):
+            if (node.mClassName==self.ProgressBar_ClassName) and (node.mText != None) and (text==node.mText):
                 element_parser = ParseElement.ParseElement(node.mElement)
                 element_parser.parseElmentData()
                 if element_parser.getBoolean(element_parser.properties_dict["progress:isIndeterminate()"], True):
@@ -109,7 +109,7 @@ class ProgressBar():
             return None
 
         for node in self.tree_nodes_list:
-            if (node.mClassName==self.ProgressBar_ClassName) and (node.mText.find(key_word)>=0):
+            if (node.mClassName==self.ProgressBar_ClassName) and (node.mText != None) and (node.mText.find(key_word)>=0):
                 element_parser = ParseElement.ParseElement(node.mElement)
                 element_parser.parseElmentData()
                 if element_parser.getBoolean(element_parser.properties_dict["progress:isIndeterminate()"], True):

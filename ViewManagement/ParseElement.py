@@ -206,7 +206,7 @@ class ParseElement():
     def getVisible(self):
         if "getVisibility()" in self.properties_dict.keys():            
             res = self.properties_dict["getVisibility()"]
-            print res
+#            print res
             if "VISIBLE" == res:
                 return True
             elif "GONE" == res:

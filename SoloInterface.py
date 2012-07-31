@@ -44,6 +44,8 @@ class SoloInterface():
         # build View Tree
         self.vt = ViewTree(self.m_logger)
         
+        self.tree_nodes_list = None
+        
         # object of View Controller 
         self.event_controller = EventController(self.m_logger)
         # init event controller
@@ -51,13 +53,15 @@ class SoloInterface():
     
     def setUp(self):
         data = self.device.getDumpData()
-        # key point        
+        # key point
+        if None!=self.tree_nodes_list and 0!=len(self.tree_nodes_list):
+            del self.tree_nodes_list     
         self.tree_nodes_list = self.vt.build(data)
         
         
     def tearDown(self):
-        # 
-        self.close()    
+        # do nothing
+        pass
 
     def close(self):
         # release socket connect with Monkey Server
@@ -162,6 +166,7 @@ class SoloInterface():
             if real_id == node.mId:
                 self.event_controller.tap(node.mLocation.x, node.mLocation.y)
                 if ReDump:
+                    time.sleep(2)
                     self.setUp()
                 return True
             
@@ -593,10 +598,29 @@ Scroll Operation
 if __name__=="__main__":
     solo = SoloInterface()
     solo.setUp()
+    
+    solo.clickViewById("btn_signin")
+#    for node in solo.tree_nodes_list:
+#        print node.mId
+#        print node.mText
+#        print "----------------"
     solo.setEditTextById("account", "jackaduma@126.com")
     solo.setEditTextById("password", "19870228")
     solo.clickViewById("cb_eula")
     solo.clickViewById("sign_in")
+    
+#    solo.event_controller.touchDown(300, 600)
+#    solo.event_controller.touchMove(300, 600)
+#    solo.event_controller.touchMove(300, 400)
+#    solo.event_controller.touchMove(300, 200)
+#    solo.event_controller.touchUp(300, 200)   
+    
+#    solo.event_controller.drag(300, 600, 300, 200)
+#    
+#    solo.setUp()
+#    
+#    solo.clickViewByText("Scan Now", True)
+    
     solo.tearDown()
         
         

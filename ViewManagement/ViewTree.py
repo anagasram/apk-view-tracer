@@ -170,8 +170,8 @@ class ViewTree():
             if (node.mDepth == tree_node.mDepth) and start_flag and (node.mHashCode!=tree_node.mHashCode):
                 end_flag = True
         
-        print tree_node.mClassName
-        print len(child_nodes_list)
+#        print tree_node.mClassName
+#        print len(child_nodes_list)
         return child_nodes_list
     
     def setNodeValue(self, node):
@@ -204,15 +204,15 @@ class ViewTree():
             ## set node value from root node to child node
             self.setNodeValue(node)
             node.mChildNodes = self.getChildNodesList(tree_nodes_list, node)
-            print "*************************************************************************"  
-            print "mClassName: %s" %node.mClassName
-            print "mTreeDepth: %s" %node.mTreeDepth
-            print "mId: %s " %node.mId
-            print "mText: %s" %node.mText
-            print "mActive: %s" %node.mActive
-            print "mRect.(mTop, mBottom, mLeft, mRight): %s %s %s %s" %(node.mRect.mTop, node.mRect.mBottom, node.mRect.mLeft, node.mRect.mRight)
-            print "mAbsoluteRect: %s %s %s %s" %(node.mAbsoluteRect.mTop, node.mAbsoluteRect.mBottom, node.mAbsoluteRect.mLeft, node.mAbsoluteRect.mRight)
-            print "*************************************************************************"
+            self.m_logger.info("*************************************************************************")  
+            self.m_logger.info("mClassName: %s" %node.mClassName)
+            self.m_logger.info("mTreeDepth: %s" %node.mTreeDepth)
+            self.m_logger.info("mId: %s " %node.mId)
+            self.m_logger.info("mText: %s" %node.mText)
+            self.m_logger.info("mActive: %s" %node.mActive)
+            self.m_logger.info("mRect.(mTop, mBottom, mLeft, mRight): %s %s %s %s" %(node.mRect.mTop, node.mRect.mBottom, node.mRect.mLeft, node.mRect.mRight))
+            self.m_logger.info("mAbsoluteRect: %s %s %s %s" %(node.mAbsoluteRect.mTop, node.mAbsoluteRect.mBottom, node.mAbsoluteRect.mLeft, node.mAbsoluteRect.mRight))
+            self.m_logger.info("*************************************************************************")
 
         return tree_nodes_list
 

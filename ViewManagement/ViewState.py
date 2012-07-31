@@ -51,7 +51,7 @@ class ViewState():
         parent_element_parser = ParseElement(parent_node.mElement)
         parent_element_parser.parseElmentData()
         parent_ClassName = parent_element_parser.getClassName()
-        print parent_ClassName
+#        print parent_ClassName
         if parent_ClassName in self.ViewGroup_ClassName_list:
             return parent_element_parser.getClickable()
         else:
@@ -63,16 +63,16 @@ class ViewState():
     def getActiveState(self):
         try:
             if self.element_parser.getWillNotDraw():
-                print "Will Not Draw!"
+                msg = "Will Not Draw!"
                 return False
             if not self.getVisibleState():
-                print "Not Visible!"
+                msg = "Not Visible!"
                 return False
             if not self.getClickableState():
-                print "Not Clickable!"
+                msg = "Not Clickable!"
                 return False
             if not self.element_parser.getDRAWN():
-                print "Not Drawn!"
+                msg = "Not Drawn!"
                 return False
             else:
                 return True

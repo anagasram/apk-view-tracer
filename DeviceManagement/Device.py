@@ -39,7 +39,7 @@ class Device():
             self.m_logger.error(msg)
             return False
         elif '0' == res[0]:
-            self.m_logger.info("Device has IWindowService!")
+            msg = "Device has IWindowService!"
             return True
         else:
             self.m_logger.error("Failed to check whether device has IWindowService: other errors")

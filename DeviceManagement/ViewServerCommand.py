@@ -74,6 +74,8 @@ class ViewServerCommand():
         tn.write(command + "\n")
         data = tn.read_until("DONE")    
         tn.close()
+        if None==data or 0==len(data):
+            print "Fail to dump data!"
         return data
     
     #===========================================================================

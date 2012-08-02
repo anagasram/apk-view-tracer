@@ -48,7 +48,7 @@ class Item():
                                     
             element_parser = ParseElement(self.node.mElement)
             element_parser.parseElmentData() 
-            res = element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+            res = element_parser.getBoolean("isChecked()", False)
             self.properties_dict["isChecked"] = res
             return True
         
@@ -82,7 +82,7 @@ class Item():
                 element_parser.parseElmentData() 
                 res = None
                 if "isChecked()" in element_parser.properties_dict.keys():
-                    res = element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+                    res = element_parser.getBoolean("isChecked()", False)
                     properties_dict["isChecked"] = (res or properties_dict["isChecked"])
                 
             else:

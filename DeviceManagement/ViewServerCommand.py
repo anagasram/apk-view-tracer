@@ -103,8 +103,12 @@ class ViewServerCommand():
     
     def getFocusViewClassName(self):
         info = self.getFocusViewInfo()
-        focusView = info.split("\n")[0]        
-        name = focusView.split(" ")[1]
+        focusView = info.split("\n")[0]
+        l = focusView.split(" ")
+        if None==l or 2>len(l):
+            return None
+          
+        name = l[1]
         
         class_name = name.split(r"/")[1]
         return class_name

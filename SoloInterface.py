@@ -70,8 +70,8 @@ class SoloInterface():
         self.device.close()
         
         
-#------------------------------------------------------------------------------ 
-    '''adb shell command'''
+#'''adb shell command'''------------------------------------------------------------------------------ 
+
     def installPackage(self, package_name):
         return self.device.adb_console.installPkg(package_name)
     
@@ -301,8 +301,7 @@ class SoloInterface():
                     return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
         return False
 
-#------------------------------------------------------------------------------ 
-# internal interface
+#internal interface------------------------------------------------------------------------------ 
     '''
     judge whether class name belongs to view_name_list
     @param param: node.mClassName
@@ -315,8 +314,8 @@ class SoloInterface():
                 return True
         return False
     
-#------------------------------------------------------------------------------ 
-# Physical Button Operations
+#Physical Button Operations------------------------------------------------------------------------------ 
+
     def longPressHome(self):
         self.event_controller.longPressByKeyCode("home")
         self.setUp()
@@ -363,10 +362,7 @@ class SoloInterface():
         if reDump:
             self.setUp()
 
-#------------------------------------------------------------------------------ 
-    '''
-    Operation with Notification
-    '''
+#Operation with Notification------------------------------------------------------------------------------ 
     def callNotification(self):
         self.event_controller.drag(100, 20, 100, 500)
         self.setUp()
@@ -396,10 +392,7 @@ class SoloInterface():
         self.setUp()
         return True       
 
-#------------------------------------------------------------------------------ 
-    '''
-    Operation with ProgressBar
-    '''   
+#Operation with ProgressBar------------------------------------------------------------------------------  
     def getCurrentProgress(self):
         progress_bar = ProgressBar.ProgressBar(self.tree_nodes_list)
         return progress_bar.getCurrentProgress()
@@ -461,8 +454,8 @@ class SoloInterface():
                     return True            
         return False
 
-#------------------------------------------------------------------------------ 
-# Operation with View Group such as ListView, ScrollView, GridView, etc.
+#Operation with View Group such as ListView, ScrollView, GridView, etc.------------------------------------------------------------------------------ 
+
 
     def getItemsNumber(self, groupview_id, groupview_classname=None):
         if None==groupview_id or 0==len(groupview_id):
@@ -580,12 +573,8 @@ class SoloInterface():
                         return item.properties_dict["isChecked"]
                                         
         return False            
-            
-#------------------------------------------------------------------------------ 
-'''
-Scroll Operation
-'''
-#------------------------------------------------------------------------------ 
+
+#Scroll Operation------------------------------------------------------------------------------ 
 #    def scrollDown(self):
 #        pass
 #    
@@ -601,6 +590,7 @@ Scroll Operation
 #    def scrollUpList(self):
 #        pass
     
+
            
 if __name__=="__main__":
     solo = SoloInterface()

@@ -114,9 +114,34 @@ class EventController():
             msg = "[%s] Failed to send event `%s`: [%s] " %(self.class_name, command, str(e))
             self.m_logger.error(msg)
             return False
+        
+    def getPropertiesByTelnet(self, command):
+        try:
+            tn = telnetlib.Telnet(host=self.device_address, port=self.monkey_server_port)
+            tn.write("getvar %s\n" %command)
+            time.sleep(1)
+            res = tn.read_until("\n")
+            tn.close()
+            return res
+        except Exception, e:
+            msg = ""
+            self.m_logger.error(msg)
+            return None        
 
     def close(self):
         self.quit()
+
+#===============================================================================
+# get Properties
+#===============================================================================
+    # example: 'OK:480\n'
+    def getDisplayWidth(self):
+        res = self.getPropertiesByTelnet("display.width")
+        return int(res.rstrip("\n").lstrip("OK:"))
+    
+    def getDisplayHeight(self):
+        res = self.getPropertiesByTelnet("display.height")
+        return int(res.rstrip("\n").lstrip("OK:"))
 
 #------------------------------------------------------------------------------ 
 # basic event

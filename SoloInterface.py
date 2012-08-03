@@ -50,6 +50,9 @@ class SoloInterface():
         self.event_controller = EventController(self.m_logger)
         # init event controller
         self.event_controller.open()
+        
+        self.device_display_width = int(self.event_controller.getDisplayWidth())
+        self.device_display_height = int(self.event_controller.getDisplayHeight())
     
     def setUp(self):
         data = self.device.getDumpData()
@@ -278,7 +281,7 @@ class SoloInterface():
             if self.isViewType(node.mClassName, view_name_list) and (real_id==node.mId):
                 element_parser = ParseElement.ParseElement(node.mElement)
                 element_parser.parseElmentData() 
-                return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+                return element_parser.getBoolean("isChecked()", False)
         
         return False
     
@@ -292,13 +295,13 @@ class SoloInterface():
                 if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (node.mText.find(text)>=0):
                     element_parser = ParseElement.ParseElement(node.mElement)
                     element_parser.parseElmentData()
-                    return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+                    return element_parser.getBoolean("isChecked()", False)
         else:
             for node in self.tree_nodes_list:
                 if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (text==node.mText):
                     element_parser = ParseElement.ParseElement(node.mElement)
                     element_parser.parseElmentData() 
-                    return element_parser.getBoolean(element_parser.properties_dict["isChecked()"], False)
+                    return element_parser.getBoolean("isChecked()", False)
         return False
 
 #internal interface------------------------------------------------------------------------------ 
@@ -599,6 +602,57 @@ class SoloInterface():
                         
         self.event_controller.press("enter")
         return True
+    
+#Menu Item Operation------------------------------------------------------------------------------
+    def clickMenuItemById(self, id):
+        if 0==len(id):
+            return False
+        
+        real_id = "id/"+id
+        view_height = self.tree_nodes_list[0].mAbsoluteRect.mBottom - self.tree_nodes_list[0].mAbsoluteRect.mTop
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                realX = node.mLocation.x                
+                realY = (self.device_display_height - view_height) + node.mLocation.y
+                self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
+                self.event_controller.tap(realX, realY)
+
+                time.sleep(1)
+                self.setUp()
+                return True
+            
+        return False
+    
+    def clickMenuItemByText(self, text, partial_matching=True): 
+        if 0==len(text):
+            return False
+        
+        if partial_matching:
+            view_height = self.tree_nodes_list[0].mAbsoluteRect.mBottom - self.tree_nodes_list[0].mAbsoluteRect.mTop
+            for node in self.tree_nodes_list:
+                if (node.mText != None) and (node.mText.find(text)>=0):
+                    realX = node.mLocation.x
+                    realY = (self.device_display_height - view_height) + node.mLocation.y
+                    self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
+                    self.event_controller.tap(realX, realY)
+                    
+                    time.sleep(1)
+                    self.setUp()
+                    return True
+        else:
+            view_height = self.tree_nodes_list[0].mAbsoluteRect.mBottom - self.tree_nodes_list[0].mAbsoluteRect.mTop
+            for node in self.tree_nodes_list:
+                if (node.mText != None) and (text == node.mText):
+                    realX = node.mLocation.x
+                    realY = (self.device_display_height - view_height) + node.mLocation.y
+                    self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
+                    self.event_controller.tap(realX, realY)
+                    
+                    time.sleep(1)
+                    self.setUp()
+                    return True
+            
+        return False
 
 #Scroll Operation------------------------------------------------------------------------------ 
 #    def scrollDown(self):
@@ -660,7 +714,10 @@ if __name__=="__main__":
 #    
 #    solo.event_controller.press("enter")
 #------------------------------------------------------------------------------ 
-    solo.clickItemInVerticalPopupByIndex(2)
+#    solo.clickItemInVerticalPopupByIndex(2)
+
+#------------------------------------------------------------------------------ 
+    solo.clickMenuItemByText("More")
     
     solo.close()
     print"end"    

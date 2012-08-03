@@ -95,9 +95,6 @@ class EventController():
     
     def open(self):
         if self.initService():
-            #time_out = config.getServerTimeOut()
-            #tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
-            self.tn = telnetlib.Telnet(host=self.device_address, port=self.monkey_server_port) # this telnetlib is from jython.jar lib
             return True
         else:
             msg = "[%s] Failed to open Event Controller" %self.class_name
@@ -105,8 +102,13 @@ class EventController():
             return False
         
     def sendEventByTelnet(self, command):
-        try:   
-            self.tn.write(command + "\n")
+        try:
+            #time_out = config.getServerTimeOut()
+            #tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
+            tn = telnetlib.Telnet(host=self.device_address, port=self.monkey_server_port) # this telnetlib is from jython.jar lib   
+            tn.write(command + "\n")
+            time.sleep(1)
+            tn.close()
             return True
         except Exception, e:
             msg = "[%s] Failed to send event `%s`: [%s] " %(self.class_name, command, str(e))
@@ -115,7 +117,6 @@ class EventController():
 
     def close(self):
         self.quit()
-        self.tn.close()
 
 #------------------------------------------------------------------------------ 
 # basic event

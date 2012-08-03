@@ -574,6 +574,32 @@ class SoloInterface():
                                         
         return False            
 
+#Popup View Operations------------------------------------------------------------------------------        
+    def clickItemInVerticalPopupByIndex(self, index=0):
+        if (not isinstance(index, int)) or (index < 0):
+            return False
+        
+        num = index
+        while (num>=0):
+            self.event_controller.press("dpad_down")
+            num -= 1
+        
+        self.event_controller.press("enter")
+        return True
+        
+    
+    def clickItemInHorizontalPopupByIndex(self, index=0):
+        if (not isinstance(index, int)) or (index < 0):
+            return False
+        
+        num = index
+        while (num>=0):
+            self.event_controller.press("dpad_right")
+            num -= 1
+                        
+        self.event_controller.press("enter")
+        return True
+
 #Scroll Operation------------------------------------------------------------------------------ 
 #    def scrollDown(self):
 #        pass
@@ -602,8 +628,8 @@ if __name__=="__main__":
 #        print node.mId
 #        print node.mText
 #        print "----------------"
-#    solo.setEditTextById("account", "jackaduma@126.com")
-#    solo.setEditTextById("password", "19870228")
+#    solo.setEditTextById("account", "mk@126.com")
+#    solo.setEditTextById("password", "11111111")
 #    solo.clickViewById("cb_eula")
 #    solo.clickViewById("sign_in")
 #------------------------------------------------------------------------------ 
@@ -621,9 +647,23 @@ if __name__=="__main__":
 #    solo.clickViewByText("Scan Now", True)
 #------------------------------------------------------------------------------ 
 
-    solo.clickViewByText("Mobile Security")
+#    solo.clickViewByText("Mobile Security")
+
+#------------------------------------------------------------------------------
+#    solo.event_controller.press("dpad_down")
+#    
+#    time.sleep(2)
+#    solo.event_controller.press("dpad_down")
+#
+#    time.sleep(2)
+#    solo.event_controller.press("dpad_down")
+#    
+#    solo.event_controller.press("enter")
+#------------------------------------------------------------------------------ 
+    solo.clickItemInVerticalPopupByIndex(2)
     
     solo.close()
+    print"end"    
         
         
     

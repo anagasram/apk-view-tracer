@@ -6,6 +6,7 @@ encoding//SystemComponent/GroupView.py=utf-8
 encoding//SystemComponent/Home.py=utf-8
 encoding//SystemComponent/Menu.py=utf-8
 encoding//SystemComponent/Notification.py=utf-8
+encoding//SystemComponent/PopupView.py=utf-8
 encoding//SystemComponent/ProgressBar.py=utf-8
 encoding//TestScripts/getDumpData.py=utf-8
 encoding//TestScripts/test.py=utf-8

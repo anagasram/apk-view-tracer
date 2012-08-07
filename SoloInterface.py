@@ -10,7 +10,7 @@ from DeviceManagement.Device import Device
 from ViewManagement.ViewTree import ViewTree
 from ViewManagement import ParseElement
 from ViewController.EventController import EventController
-from SystemComponent import Notification, ProgressBar, GroupView
+from SystemComponent import Notification, ProgressBar, GroupView, PopupView
 
 class SoloInterface():
     '''
@@ -29,6 +29,9 @@ class SoloInterface():
                                 "ScrollView": "android.widget.ScrollView"}
           
     def __init__(self, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1"):
+        '''
+        Constructor
+        '''
         self.class_name = "SoloInterface"
         self.m_logger = Logger.InitLog("solo-interface.log", logging.getLogger("solo-interface.thread"))
         
@@ -53,14 +56,16 @@ class SoloInterface():
         
         self.device_display_width = int(self.event_controller.getDisplayWidth())
         self.device_display_height = int(self.event_controller.getDisplayHeight())
+        # to 480*800 display
+        # Notification (y: 0-37  / x: 8-471 )
+        self.notification_height = 37
     
     def setUp(self):
         data = self.device.getDumpData()
         # key point
         if None!=self.tree_nodes_list and 0!=len(self.tree_nodes_list):
             del self.tree_nodes_list     
-        self.tree_nodes_list = self.vt.build(data)
-        
+        self.tree_nodes_list = self.vt.build(data)        
         
     def tearDown(self):
         # do nothing
@@ -445,21 +450,21 @@ class SoloInterface():
             for node in self.tree_nodes_list:
                 if (node.mText != None) and (node.mText.find(text)>=0):
                     location = node.mLocation
-                    self.event_controller.longPressByLocation(location.x, location.y)        
+                    self.event_controller.longPressByLocation(location.x, location.y) 
+                    time.sleep(1)       
                     self.setUp()
                     return True
         else:
             for node in self.tree_nodes_list:
                 if (node.mText != None) and (text == node.mText):
                     location = node.mLocation
-                    self.event_controller.longPressByLocation(location.x, location.y)        
+                    self.event_controller.longPressByLocation(location.x, location.y)   
+                    time.sleep(1)     
                     self.setUp()
                     return True            
         return False
 
 #Operation with View Group such as ListView, ScrollView, GridView, etc.------------------------------------------------------------------------------ 
-
-
     def getItemsNumber(self, groupview_id, groupview_classname=None):
         if None==groupview_id or 0==len(groupview_id):
             return None
@@ -577,31 +582,78 @@ class SoloInterface():
                                         
         return False            
 
-#Popup View Operations------------------------------------------------------------------------------        
-    def clickItemInVerticalPopupByIndex(self, index=0):
-        if (not isinstance(index, int)) or (index < 0):
+#Popup View Operations------------------------------------------------------------------------------ 
+    def typeInPopupByIndex(self, text, index=0):
+        if None == text or 0 == len(text):
+            return False
+             
+        if None==index:
             return False
         
-        num = index
-        while (num>=0):
-            self.event_controller.press("dpad_down")
-            num -= 1
+        print self.tree_nodes_list[14].mElement
+        print self.tree_nodes_list[16].mElement
+        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup.loadProperties()
+        if popup.typeTextByIndex(text, index):
+            time.sleep(1)
+            self.setUp()
+            return True
         
-        self.event_controller.press("enter")
-        return True
+        return False
+           
+    def clickInPopupById(self, id):
+        if None == id or 0==len(id):
+            return False
         
+        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup.loadProperties()
+        if popup.clickViewById(id):
+            time.sleep(1)
+            self.setUp()
+            return True
+        else:
+            return False
     
-    def clickItemInHorizontalPopupByIndex(self, index=0):
-        if (not isinstance(index, int)) or (index < 0):
+    def clickInPopupByText(self, text, partial_matching=True):
+        if None == text or 0 == len(text):
             return False
         
-        num = index
-        while (num>=0):
-            self.event_controller.press("dpad_right")
-            num -= 1
-                        
-        self.event_controller.press("enter")
-        return True
+        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup.loadProperties()
+        if popup.clickViewByText(text, partial_matching):
+            time.sleep(1)
+            self.setUp()
+            return True
+        else:
+            return False
+        
+    def selectInVerticalPopupByText(self, text, partial_matching=True):
+        if None == text or 0 == len(text):
+            return False
+        
+        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup.loadProperties()
+        
+        if popup.focusViewByText(text, partial_matching, first_direction="dpad_down"):
+            if self.event_controller.press("enter"):
+                time.sleep(1)
+                self.setUp()
+                return True 
+
+    def selectInHorizontalPopupByText(self, text, partial_matching=True):
+        if None == text or 0 == len(text):
+            return False
+        
+        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup.loadProperties()
+        
+        if popup.focusViewByText(text, partial_matching, first_direction="dpad_right"):
+            if self.event_controller.press("enter"):
+                time.sleep(1)
+                self.setUp()
+                return True 
+        
+
     
 #Menu Item Operation------------------------------------------------------------------------------
     def clickMenuItemById(self, id):
@@ -669,8 +721,6 @@ class SoloInterface():
 #    
 #    def scrollUpList(self):
 #        pass
-    
-
            
 if __name__=="__main__":
     solo = SoloInterface()
@@ -717,7 +767,17 @@ if __name__=="__main__":
 #    solo.clickItemInVerticalPopupByIndex(2)
 
 #------------------------------------------------------------------------------ 
-    solo.clickMenuItemByText("More")
+#    solo.clickMenuItemByText("More")
+#------------------------------------------------------------------------------ 
+
+    solo.callMenu()
+    solo.clickMenuItemByText("Add")
+    solo.typeInPopupByIndex("renren", 0)
+    solo.typeInPopupByIndex("http://www.renren.com", 1)
+    solo.clickInPopupByText("Save", False)
+    
+    solo.longPressByText("renren", False)
+    solo.clickInPopupByText("Delete", False)
     
     solo.close()
     print"end"    

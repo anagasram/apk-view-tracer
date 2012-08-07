@@ -6,18 +6,14 @@
 #===============================================================================
 
 import os,sys
-from test.test_xml_etree import getchildren
 current_path = os.getcwd()
 parent_path = os.path.abspath(os.path.join(os.getcwd(), os.path.pardir))
 if current_path not in sys.path:
     sys.path.append(current_path)
 if parent_path not in sys.path:
     sys.path.append(parent_path)
-    
-from ViewManagement.TreeType import CPoint
-from ViewManagement.TreeType import CTreeNode
-from ViewManagement.ParseElement import ParseElement
 
+from ViewManagement.ParseElement import ParseElement
 
 class Item():
     '''

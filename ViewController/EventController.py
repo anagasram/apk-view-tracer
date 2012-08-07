@@ -135,13 +135,27 @@ class EventController():
 # get Properties
 #===============================================================================
     # example: 'OK:480\n'
-    def getDisplayWidth(self):
-        res = self.getPropertiesByTelnet("display.width")
-        return int(res.rstrip("\n").lstrip("OK:"))
+    def getDisplayWidth(self, retry_time = 3):
+        while retry_time>0:
+            res = self.getPropertiesByTelnet("display.width")
+            if None == res or 0 == len(res):
+                time.sleep(1)
+                retry_time -= 1
+                continue
+            else:      
+                return int(res.rstrip("\n").lstrip("OK:"))
+        return None
     
-    def getDisplayHeight(self):
-        res = self.getPropertiesByTelnet("display.height")
-        return int(res.rstrip("\n").lstrip("OK:"))
+    def getDisplayHeight(self, retry_time = 3):
+        while retry_time>0:
+            res = self.getPropertiesByTelnet("display.height")
+            if None == res or 0 == len(res):
+                time.sleep(1)
+                retry_time -= 1
+                continue
+            else:
+                return int(res.rstrip("\n").lstrip("OK:"))
+        return None
 
 #------------------------------------------------------------------------------ 
 # basic event

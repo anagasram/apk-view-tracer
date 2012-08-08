@@ -31,8 +31,7 @@ class GenerateViewPointList():
         for node in tree_nodes_list:
             if node.mActive:
                 view_point_list.append(self.getViewCenterPoint(node))
-                
-        print view_point_list
+
         return view_point_list
 
     ## return list in memory

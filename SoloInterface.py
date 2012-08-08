@@ -89,6 +89,9 @@ class SoloInterface():
     def shell(self, command):
         return self.device.adb_console.shell(command)
     
+    def shellForResult(self, command):
+        return self.device.adb_console.shell(command, True)
+    
     def startActivity(self, uri=None, action=None, data=None, mimetype=None, categories_list=None, component=None, flags_list=None, extras_list=None):
         self.device.adb_console.startActivity(uri, action, data, mimetype, categories_list, component, flags_list, extras_list)            
         time.sleep(1)
@@ -100,7 +103,7 @@ class SoloInterface():
     def pullFile(self, device_path, local_path):
         return self.device.adb_console.pullFile(device_path, local_path)
 
-#------------------------------------------------------------------------------ 
+#Basic Operation------------------------------------------------------------------------------ 
     def searchForViewClassName(self, class_name):
         for node in self.tree_nodes_list:
             if class_name == node.mClassName:
@@ -111,20 +114,27 @@ class SoloInterface():
     def searchForText(self, text, partial_matching=True):
         if partial_matching:
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (node.mText.find(text)>=0):
-                    return True
+                try:
+                    if (node.mText != None) and (node.mText.find(text)>=0):
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to find sub string: [%s] " %e)
+                    continue
         else:            
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (text == node.mText):
-                    return True        
+                try:
+                    if (node.mText != None) and (text == node.mText):
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to match string: [%s] " %e)
+                    continue        
         return False
     
     def searchForViewID(self, id):
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
-                return True
-            
+                return True            
         return False
     
     def getCurrentViewClassName(self):
@@ -133,35 +143,40 @@ class SoloInterface():
     def existViewByClassName(self, class_name):
         for node in self.tree_nodes_list:
             if class_name == node.mClassName:
-                return True
-            
+                return True            
         return False
     
     def existViewByText(self, text, partial_matching=True):
         if partial_matching:
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (node.mText.find(text)>=0):
-                    return True
+                try:
+                    if (node.mText != None) and (node.mText.find(text)>=0):
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to find sub string: [%s] " %e)
+                    continue
         else:
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (text == node.mText):
-                    return True
+                try:
+                    if (node.mText != None) and (text == node.mText):
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to match string: [%s] " %e)
+                    continue
         return False
     
     def existViewById(self, id):
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
-                return True
-        
+                return True        
         return False
     
     def isVisibleById(self, id):
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
-                return node.mVisible
-            
+                return node.mVisible            
         return False
     
     
@@ -186,16 +201,24 @@ class SoloInterface():
         
         if partial_matching:
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (node.mText.find(text)>=0):
-                    self.event_controller.tap(node.mLocation.x, node.mLocation.y)
-                    self.setUp()
-                    return True
+                try:
+                    if (node.mText != None) and (node.mText.find(text)>=0):
+                        self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                        self.setUp()
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to find sub string: [%s] " %e)
+                    continue
         else:
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (text == node.mText):
-                    self.event_controller.tap(node.mLocation.x, node.mLocation.y)
-                    self.setUp()
-                    return True
+                try:
+                    if (node.mText != None) and (text == node.mText):
+                        self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                        self.setUp()
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to match string: [%s] " %e)
+                    continue
             
         return False
             
@@ -297,16 +320,24 @@ class SoloInterface():
         
         if partial_matching:
             for node in self.tree_nodes_list:
-                if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (node.mText.find(text)>=0):
-                    element_parser = ParseElement.ParseElement(node.mElement)
-                    element_parser.parseElmentData()
-                    return element_parser.getBoolean("isChecked()", False)
+                try:
+                    if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (node.mText.find(text)>=0):
+                        element_parser = ParseElement.ParseElement(node.mElement)
+                        element_parser.parseElmentData()
+                        return element_parser.getBoolean("isChecked()", False)
+                except Exception, e:
+                    self.m_logger.error("Current text fail to find sub string: [%s] " %e)
+                    continue
         else:
             for node in self.tree_nodes_list:
-                if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (text==node.mText):
-                    element_parser = ParseElement.ParseElement(node.mElement)
-                    element_parser.parseElmentData() 
-                    return element_parser.getBoolean("isChecked()", False)
+                try:
+                    if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (text==node.mText):
+                        element_parser = ParseElement.ParseElement(node.mElement)
+                        element_parser.parseElmentData() 
+                        return element_parser.getBoolean("isChecked()", False)
+                except Exception, e:
+                    self.m_logger.error("Current text fail to match string: [%s] " %e)
+                    continue
         return False
 
 #internal interface------------------------------------------------------------------------------ 
@@ -448,20 +479,28 @@ class SoloInterface():
         
         if partial_matching: 
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (node.mText.find(text)>=0):
-                    location = node.mLocation
-                    self.event_controller.longPressByLocation(location.x, location.y) 
-                    time.sleep(1)       
-                    self.setUp()
-                    return True
+                try:
+                    if (node.mText != None) and (node.mText.find(text)>=0):
+                        location = node.mLocation
+                        self.event_controller.longPressByLocation(location.x, location.y) 
+                        time.sleep(1)       
+                        self.setUp()
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to find sub string: [%s] " %e)
+                    continue
         else:
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (text == node.mText):
-                    location = node.mLocation
-                    self.event_controller.longPressByLocation(location.x, location.y)   
-                    time.sleep(1)     
-                    self.setUp()
-                    return True            
+                try:
+                    if (node.mText != None) and (text == node.mText):
+                        location = node.mLocation
+                        self.event_controller.longPressByLocation(location.x, location.y)   
+                        time.sleep(1)     
+                        self.setUp()
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to match string: [%s] " %e)
+                    continue       
         return False
 
 #Operation with View Group such as ListView, ScrollView, GridView, etc.------------------------------------------------------------------------------ 
@@ -529,12 +568,16 @@ class SoloInterface():
         else:
             for item in groupview.items_list:                
                 for msg in item.properties_dict["mText"]:
-                    if (None!=msg) and (msg.find(text)>=0):
-                        # click this item
-                        for location in item.properties_dict["mLocation"]:
-                            if self.event_controller.tap(location.x, location.y):
-                                self.setUp()
-                                return True      
+                    try:
+                        if (None!=msg) and (msg.find(text)>=0):
+                            # click this item
+                            for location in item.properties_dict["mLocation"]:
+                                if self.event_controller.tap(location.x, location.y):
+                                    self.setUp()
+                                    return True
+                    except Exception, e:
+                        self.m_logger.error("Current text fail to match string: [%s] " %e)
+                        continue  
                               
         return False
     
@@ -577,8 +620,12 @@ class SoloInterface():
         else:
             for item in groupview.items_list:
                 for msg in item.properties_dict["mText"]:
-                    if (None!=msg) and (msg.find(text)>=0):
-                        return item.properties_dict["isChecked"]
+                    try:
+                        if (None!=msg) and (msg.find(text)>=0):
+                            return item.properties_dict["isChecked"]
+                    except Exception, e:
+                        self.m_logger.error("Current text fail to match string: [%s] " %e)
+                        continue
                                         
         return False            
 
@@ -590,9 +637,7 @@ class SoloInterface():
         if None==index:
             return False
         
-        print self.tree_nodes_list[14].mElement
-        print self.tree_nodes_list[16].mElement
-        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup = PopupView.PopupView(self.tree_nodes_list, self.event_controller, self.device_display_width, self.device_display_height)
         popup.loadProperties()
         if popup.typeTextByIndex(text, index):
             time.sleep(1)
@@ -605,7 +650,7 @@ class SoloInterface():
         if None == id or 0==len(id):
             return False
         
-        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup = PopupView.PopupView(self.tree_nodes_list, self.event_controller, self.device_display_width, self.device_display_height)
         popup.loadProperties()
         if popup.clickViewById(id):
             time.sleep(1)
@@ -618,7 +663,7 @@ class SoloInterface():
         if None == text or 0 == len(text):
             return False
         
-        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup = PopupView.PopupView(self.tree_nodes_list, self.event_controller, self.device_display_width, self.device_display_height)
         popup.loadProperties()
         if popup.clickViewByText(text, partial_matching):
             time.sleep(1)
@@ -631,7 +676,7 @@ class SoloInterface():
         if None == text or 0 == len(text):
             return False
         
-        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup = PopupView.PopupView(self.tree_nodes_list, self.event_controller, self.device_display_width, self.device_display_height)
         popup.loadProperties()
         
         if popup.focusViewByText(text, partial_matching, first_direction="dpad_down"):
@@ -644,7 +689,7 @@ class SoloInterface():
         if None == text or 0 == len(text):
             return False
         
-        popup = PopupView.PopupView(solo.tree_nodes_list, solo.event_controller, solo.device_display_width, solo.device_display_height)
+        popup = PopupView.PopupView(self.tree_nodes_list, self.event_controller, self.device_display_width, self.device_display_height)
         popup.loadProperties()
         
         if popup.focusViewByText(text, partial_matching, first_direction="dpad_right"):
@@ -682,15 +727,19 @@ class SoloInterface():
         if partial_matching:
             view_height = self.tree_nodes_list[0].mAbsoluteRect.mBottom - self.tree_nodes_list[0].mAbsoluteRect.mTop
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (node.mText.find(text)>=0):
-                    realX = node.mLocation.x
-                    realY = (self.device_display_height - view_height) + node.mLocation.y
-                    self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
-                    self.event_controller.tap(realX, realY)
-                    
-                    time.sleep(1)
-                    self.setUp()
-                    return True
+                try:
+                    if (node.mText != None) and (node.mText.find(text)>=0):
+                        realX = node.mLocation.x
+                        realY = (self.device_display_height - view_height) + node.mLocation.y
+                        self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
+                        self.event_controller.tap(realX, realY)
+                        
+                        time.sleep(1)
+                        self.setUp()
+                        return True
+                except Exception, e:
+                    self.m_logger.error("Current text fail to match string: [%s] " %e)
+                    continue
         else:
             view_height = self.tree_nodes_list[0].mAbsoluteRect.mBottom - self.tree_nodes_list[0].mAbsoluteRect.mTop
             for node in self.tree_nodes_list:
@@ -780,7 +829,7 @@ if __name__=="__main__":
     solo.clickInPopupByText("Delete", False)
     
     solo.close()
-    print"end"    
+    print"success to end"    
         
         
     

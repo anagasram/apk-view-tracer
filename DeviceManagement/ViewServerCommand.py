@@ -44,10 +44,10 @@ class ViewServerCommand():
         try:
             s.connect((host,port))
         except Exception,e:
-            print e   
+            self.m_logger.error(str(e))   
     
         s.send(command+'\n')
-        print "sucess to send command"
+        self.m_logger.info("sucess to send command: [%s] " %command)
         buf_size = 65565
         data=""
         end_flag = "DONE"
@@ -55,7 +55,7 @@ class ViewServerCommand():
             res = s.recv(buf_size)
             data+=res
             if  0 <= res.find(end_flag, -5):
-                print "read the end flag: 'DONE' "
+                self.m_logger.info("read the end flag: 'DONE' ")
                 break            
     
         s.close()
@@ -75,7 +75,7 @@ class ViewServerCommand():
         data = tn.read_until("DONE")    
         tn.close()
         if None==data or 0==len(data):
-            print "Fail to dump data!"
+            self.m_logger.error("Fail to dump data!")
         return data
     
     #===========================================================================
@@ -135,7 +135,6 @@ class ViewServerCommand():
             return self.getInfosByTelnet(dump_command)
         except Exception, e:
             msg = "[%s]: Failed to Dump this view. The ID might be invalid! [%s]" %(self.class_name, str(e))
-            print msg
             self.m_logger.error(msg)
             return None
     
@@ -155,7 +154,6 @@ class ViewServerCommand():
             return self.getInfosByTelnet(capture_command)
         except Exception,e:
             msg = "[ERROR]:" + "Failed to Capture this view. The ID might be invalid! [%s]" %str(e)
-            print msg
             self.m_logger.error(msg)
             return None
         
@@ -165,7 +163,6 @@ class ViewServerCommand():
             return self.getInfosByTelnet(invalidate_command)
         except Exception,e:
             msg = "[ERROR]:" + "Failed to Invalidate this view. The ID might be invalid! [%s]" %str(e)
-            print msg
             self.m_logger.error(msg)
             return None
         
@@ -175,7 +172,6 @@ class ViewServerCommand():
             return self.getInfosByTelnet(profile_command)
         except Exception,e:
             msg = "[ERROR]:" + "Failed to Profile this view. The ID might be invalid! [%s]" %str(e)
-            print msg
             self.m_logger.error(msg)
             return None
 #------------------------------------------------------------------------------ 

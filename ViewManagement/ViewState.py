@@ -7,7 +7,6 @@
 import copy
 from ParseElement import ParseElement
 
-
 class ViewState():
     def __init__(self, node):
         self.node = node
@@ -51,7 +50,6 @@ class ViewState():
         parent_element_parser = ParseElement(parent_node.mElement)
         parent_element_parser.parseElmentData()
         parent_ClassName = parent_element_parser.getClassName()
-#        print parent_ClassName
         if parent_ClassName in self.ViewGroup_ClassName_list:
             return parent_element_parser.getClickable()
         else:
@@ -77,6 +75,7 @@ class ViewState():
             else:
                 return True
         except Exception,e:
-            print "Failed to get Active State of Element! %s" %str(e)
+            msg = "Failed to get Active State of Element! %s" %str(e)
+            print msg
             return False
 

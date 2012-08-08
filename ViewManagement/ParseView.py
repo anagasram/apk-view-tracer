@@ -55,8 +55,7 @@ class ParseView():
             if not self.isSystemView(detail_info):
                 viewListHashCode_List.append(hashcode)
                 viewListHashCode_Dict[hashcode] = detail_info
-    
-        print viewListHashCode_List
+
         return viewListHashCode_List, viewListHashCode_Dict
     
     

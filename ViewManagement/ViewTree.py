@@ -19,11 +19,9 @@ class ViewTree():
     
     def getStructure(self, dump_data):
         list_data = dump_data.split("\n")
-        print "length of list: %s" %len(list_data)
     
         # pop the last element "DONE"
         list_data.remove("DONE")
-        print "length of list: %s" %len(list_data)
     
         elements_list=[]
         blanks_list=[]
@@ -122,27 +120,22 @@ class ViewTree():
         current_node = CTreeNode()
         current_node = copy.deepcopy(node)
         temp_rect=current_node.mRect
-    
-    ##    print "/////////////////begin trace ////////////////////////////////"
-    ##    print node.mRect.mTop, node.mRect.mBottom, node.mRect.mLeft, node.mRect.mRight
+
         while True:        
             parent_node = CTreeNode()        
             
             if None == current_node.mParentNode:
                 break
             else:
-    ##            print "before [Top] %s [Left] %s" %(str(temp_rect.mTop),str(temp_rect.mLeft))
                 parent_node = current_node.mParentNode
                 temp_rect.mLeft+=parent_node.mRect.mLeft
                 temp_rect.mTop+=parent_node.mRect.mTop            
                 current_node = parent_node
-    ##            print "after [Top] %s [Left] %s" %(str(temp_rect.mTop),str(temp_rect.mLeft))
     
         temp_rect.mRight=temp_rect.mLeft+(node.mRect.mRight-node.mRect.mLeft)
         temp_rect.mBottom=temp_rect.mTop+(node.mRect.mBottom-node.mRect.mTop)    
         absoluteRect=temp_rect
-    ##    print node.mRect.mTop, node.mRect.mBottom, node.mRect.mLeft, node.mRect.mRight
-    ##    print "///////////////// end trace  ///////////////////////////////"
+        
         return absoluteRect
     
     def getViewCenterPoint(self, node):
@@ -169,15 +162,14 @@ class ViewTree():
                 
             if (node.mDepth == tree_node.mDepth) and start_flag and (node.mHashCode!=tree_node.mHashCode):
                 end_flag = True
-        
-#        print tree_node.mClassName
-#        print len(child_nodes_list)
+
         return child_nodes_list
     
     def setNodeValue(self, node):
         element = node.mElement
         if None == element:
-            print "Failed to set Node Value because Error in Node!"
+            msg = "Failed to set Node Value because Error in Node!"
+            self.m_logger.error(msg)
             return False
         
         element_parser = ParseElement(node.mElement)

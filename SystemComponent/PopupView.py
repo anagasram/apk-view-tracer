@@ -109,7 +109,6 @@ class PopupView():
             self.currentFocusIndex = 0
         
         direction = self.next_direction_list[self.currentFocusIndex]
-        print direction
         self.event_controller.press(direction)
         self.currentFocusIndex += 1
             
@@ -120,7 +119,6 @@ class PopupView():
             self.currentFocusIndex = 0
             
         direction = self.pre_direction_list[self.currentFocusIndex]
-        print direction
         self.event_controller.press(direction)
         self.currentFocusIndex -= 1
                     

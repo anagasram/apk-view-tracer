@@ -73,8 +73,12 @@ class Notification():
     
     def getClearButtonLocationByText(self, text="Clear"):
         for node in self.tree_nodes_list:
-            if (node.mText != None) and (text == node.mText):
-                return self.getRealLocation(node.mLocation)
+            try:
+                if (node.mText != None) and (text == node.mText):
+                    return self.getRealLocation(node.mLocation)
+            except Exception, e:
+                self.m_logger.error("Current text fail to match string: [%s] " %e)
+                continue
         return None
     
     def getClearButtonLocationById(self, id="clear_all_button"):
@@ -152,9 +156,13 @@ class Notification():
     def getLocationByText(self, text):
         hash_code = ""
         for key in self.notification_items_dict.keys():
-            if text in self.notification_items_dict[key]:
-                hash_code = key
-                break
+            try:
+                if text in self.notification_items_dict[key]:
+                    hash_code = key
+                    break
+            except Exception, e:
+                self.m_logger.error("Current text fail to match string: [%s] " %e)
+                continue
         
         if 0!=len(hash_code):
             for node in self.notification_items_list:
@@ -162,9 +170,13 @@ class Notification():
                     return self.getRealLocation(node.mLocation)
         else:
             for key in self.ongoing_items_dict.keys():
-                if text in self.ongoing_items_dict[key]:
-                    hash_code = key
-                    break
+                try:
+                    if text in self.ongoing_items_dict[key]:
+                        hash_code = key
+                        break
+                except Exception, e:
+                    self.m_logger.error("Current text fail to match string: [%s] " %e)
+                    continue
             
             if 0!=len(hash_code):
                 for node in self.ongoing_items_list:
@@ -177,9 +189,14 @@ class Notification():
         hash_code = ""
         for key in self.notification_items_dict.keys():
             for text in self.notification_items_dict[key]:
-                if keyword in text:  # or "text.find(keyword)>=0"
-                    hash_code = key
-                    break
+                try:
+                    if keyword in text:  # or "text.find(keyword)>=0"
+                        hash_code = key
+                        break
+                except Exception, e:
+                    self.m_logger.error("Current text fail to match string: [%s] " %e)
+                    continue
+                
             if 0!=len(hash_code):
                 break
         

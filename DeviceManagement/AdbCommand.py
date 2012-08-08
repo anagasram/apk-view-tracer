@@ -17,16 +17,34 @@ class AdbCommand():
         self.device_name = device_name
         self.m_logger = logger
         
-    def executeCommand(self, cmd):
+    def executeCommand(self, cmd, bNeedResult):
         try:
-            out = os.popen(cmd)
-            res = out.read()
-            out.close()
-            return res
+            if bNeedResult:
+                out = os.popen(cmd)
+                res = out.read()
+                out.close()
+                return res
+            else:
+                return_code = os.system(cmd)
+                if 0 == return_code:
+                    return True
+                else:
+                    return False
         except Exception, e:
             msg = "[%s] Failed execute cmd [%s]: [%s]" %(self.class_name, cmd, str(e))
             self.m_logger.error(msg)
-            return ""
+            if bNeedResult:
+                return None
+            else:
+                return False
+        
+    def killServer(self):
+        killCommand = "adb -s %s kill-server" %self.device_name
+        return self.executeCommand(killCommand)
+    
+    def startServer(self):
+        startCommand = "adb -s %s start-server" %self.device_name
+        return self.executeCommand(startCommand)
         
     def installPkg(self, package_name):
         # 安装 package的时候就不需要判断之前有没有安装package 
@@ -38,9 +56,9 @@ class AdbCommand():
         removePkgCmd = "adb -s %s uninstall %s" %(self.device_name, package_name)
         return self.executeCommand(removePkgCmd)
     
-    def shell(self, command):
+    def shell(self, command, bNeedResult=False):
         shell_command = "adb -s %s shell %s" %(self.device_name, command)
-        return self.executeCommand(shell_command)
+        return self.executeCommand(shell_command, bNeedResult)
 
     #===========================================================================
     #  start an Activity: am start [-D] [-W] <INTENT>

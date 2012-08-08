@@ -21,9 +21,10 @@
 <a href="Logger.html">Logger</a><br>
 </td><td width="25%" valign=top><a href="SystemComponent.Notification.html">SystemComponent.Notification</a><br>
 <a href="ViewManagement.ParseElement.html">ViewManagement.ParseElement</a><br>
-</td><td width="25%" valign=top><a href="SystemComponent.ProgressBar.html">SystemComponent.ProgressBar</a><br>
-<a href="logging.html">logging</a><br>
-</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td><td width="25%" valign=top><a href="SystemComponent.PopupView.html">SystemComponent.PopupView</a><br>
+<a href="SystemComponent.ProgressBar.html">SystemComponent.ProgressBar</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
+<a href="time.html">time</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -44,7 +45,7 @@
 <td colspan=2><tt>Solo&nbsp;Interface&nbsp;for&nbsp;Automated&nbsp;Testing<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="SoloInterface-__init__"><strong>__init__</strong></a>(self, device_name<font color="#909090">='emulator-5554'</font>, device_port<font color="#909090">=5554</font>, device_address<font color="#909090">='127.0.0.1'</font>)</dt></dl>
+<dl><dt><a name="SoloInterface-__init__"><strong>__init__</strong></a>(self, device_name<font color="#909090">='emulator-5554'</font>, device_port<font color="#909090">=5554</font>, device_address<font color="#909090">='127.0.0.1'</font>)</dt><dd><tt>Constructor</tt></dd></dl>
 
 <dl><dt><a name="SoloInterface-appendEditTextById"><strong>appendEditTextById</strong></a>(self, id, text)</dt></dl>
 
@@ -70,13 +71,21 @@
 
 <dl><dt><a name="SoloInterface-clearEditTextById"><strong>clearEditTextById</strong></a>(self, id)</dt></dl>
 
+<dl><dt><a name="SoloInterface-clickInPopupById"><strong>clickInPopupById</strong></a>(self, id)</dt></dl>
+
+<dl><dt><a name="SoloInterface-clickInPopupByText"><strong>clickInPopupByText</strong></a>(self, text, partial_matching<font color="#909090">=True</font>)</dt></dl>
+
 <dl><dt><a name="SoloInterface-clickItemByIndex"><strong>clickItemByIndex</strong></a>(self, groupview_id, index<font color="#909090">=0</font>)</dt></dl>
 
 <dl><dt><a name="SoloInterface-clickItemByText"><strong>clickItemByText</strong></a>(self, groupview_id, text, partial_matching<font color="#909090">=True</font>)</dt></dl>
 
+<dl><dt><a name="SoloInterface-clickMenuItemById"><strong>clickMenuItemById</strong></a>(self, id)</dt></dl>
+
+<dl><dt><a name="SoloInterface-clickMenuItemByText"><strong>clickMenuItemByText</strong></a>(self, text, partial_matching<font color="#909090">=True</font>)</dt></dl>
+
 <dl><dt><a name="SoloInterface-clickNotificationItemByText"><strong>clickNotificationItemByText</strong></a>(self, text, partial_matching<font color="#909090">=True</font>)</dt></dl>
 
-<dl><dt><a name="SoloInterface-clickViewById"><strong>clickViewById</strong></a>(self, id)</dt></dl>
+<dl><dt><a name="SoloInterface-clickViewById"><strong>clickViewById</strong></a>(self, id, ReDump<font color="#909090">=True</font>)</dt></dl>
 
 <dl><dt><a name="SoloInterface-clickViewByText"><strong>clickViewByText</strong></a>(self, text, partial_matching<font color="#909090">=True</font>)</dt></dl>
 
@@ -100,7 +109,7 @@
 
 <dl><dt><a name="SoloInterface-getTextById"><strong>getTextById</strong></a>(self, id)</dt></dl>
 
-<dl><dt><a name="SoloInterface-goBack"><strong>goBack</strong></a>(self)</dt></dl>
+<dl><dt><a name="SoloInterface-goBack"><strong>goBack</strong></a>(self, ReDump<font color="#909090">=True</font>)</dt></dl>
 
 <dl><dt><a name="SoloInterface-installPackage"><strong>installPackage</strong></a>(self, package_name)</dt></dl>
 
@@ -134,15 +143,23 @@
 
 <dl><dt><a name="SoloInterface-searchForViewID"><strong>searchForViewID</strong></a>(self, id)</dt></dl>
 
+<dl><dt><a name="SoloInterface-selectInHorizontalPopupByText"><strong>selectInHorizontalPopupByText</strong></a>(self, text, partial_matching<font color="#909090">=True</font>)</dt></dl>
+
+<dl><dt><a name="SoloInterface-selectInVerticalPopupByText"><strong>selectInVerticalPopupByText</strong></a>(self, text, partial_matching<font color="#909090">=True</font>)</dt></dl>
+
 <dl><dt><a name="SoloInterface-setEditTextById"><strong>setEditTextById</strong></a>(self, id, text)</dt></dl>
 
 <dl><dt><a name="SoloInterface-setUp"><strong>setUp</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="SoloInterface-shell"><strong>shell</strong></a>(self, command)</dt></dl>
 
+<dl><dt><a name="SoloInterface-shellForResult"><strong>shellForResult</strong></a>(self, command)</dt></dl>
+
 <dl><dt><a name="SoloInterface-startActivity"><strong>startActivity</strong></a>(self, uri<font color="#909090">=None</font>, action<font color="#909090">=None</font>, data<font color="#909090">=None</font>, mimetype<font color="#909090">=None</font>, categories_list<font color="#909090">=None</font>, component<font color="#909090">=None</font>, flags_list<font color="#909090">=None</font>, extras_list<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="SoloInterface-tearDown"><strong>tearDown</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SoloInterface-typeInPopupByIndex"><strong>typeInPopupByIndex</strong></a>(self, text, index<font color="#909090">=0</font>)</dt></dl>
 
 <hr>
 Data and other attributes defined here:<br>

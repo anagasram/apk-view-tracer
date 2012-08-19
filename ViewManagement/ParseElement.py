@@ -49,7 +49,8 @@ class ParseElement():
             i = value_length_sep_index + 1 + value_length
             
             value = data[value_length_sep_index+1 : value_length_sep_index+1+value_length]
-            
+            if "mText" == key:
+                print value
             self.properties_dict[key] = value
             
             i += 1
@@ -275,6 +276,8 @@ class ParseElement():
     def getText(self):                
         if "mText" in self.properties_dict.keys():
             return self.properties_dict["mText"]
+        elif "text:mText" in self.properties_dict.keys():
+            return self.properties_dict["text:mText"]
         else:
             return None   
     

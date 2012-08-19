@@ -50,7 +50,7 @@ class SoloInterface():
         self.tree_nodes_list = None
         
         # object of View Controller 
-        self.event_controller = EventController(self.m_logger)
+        self.event_controller = EventController(self.m_logger, self.device_name)
         # init event controller
         self.event_controller.open()
         
@@ -524,7 +524,7 @@ class SoloInterface():
         if None==groupview_id or 0==len(groupview_id):
             return False
         
-        if None==index or 0==len(index):
+        if None==index or (not isinstance(index, int)):
             return False
         
         real_id = "id/" + groupview_id
@@ -772,7 +772,7 @@ class SoloInterface():
 #        pass
            
 if __name__=="__main__":
-    solo = SoloInterface()
+    solo = SoloInterface(device_name="016eb881")
     solo.setUp()
 
 #------------------------------------------------------------------------------ 
@@ -819,17 +819,25 @@ if __name__=="__main__":
 #    solo.clickMenuItemByText("More")
 #------------------------------------------------------------------------------ 
 
-    solo.callMenu()
-    solo.clickMenuItemByText("Add")
-    solo.typeInPopupByIndex("renren", 0)
-    solo.typeInPopupByIndex("http://www.renren.com", 1)
-    solo.clickInPopupByText("Save", False)
+#    solo.callMenu()
+#    solo.clickMenuItemByText("Add")
+#    solo.typeInPopupByIndex("renren", 0)
+#    solo.typeInPopupByIndex("http://www.renren.com", 1)
+#    solo.clickInPopupByText("Save", False)
+#    
+#    solo.longPressByText("renren", False)
+#    solo.clickInPopupByText("Delete", False)
+#------------------------------------------------------------------------------ 
     
-    solo.longPressByText("renren", False)
-    solo.clickInPopupByText("Delete", False)
+
+
+    solo.clickItemByIndex("phone_malware_list", 0)  #scan_result_installmal
+    solo.clickViewById("cancel_button")
+    solo.clickItemByText("phone_malware_list", "Threat", True)
+
     
     solo.close()
-    print"success to end"    
+    print"success to end"
         
         
     

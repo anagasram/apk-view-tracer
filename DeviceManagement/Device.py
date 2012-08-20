@@ -51,11 +51,11 @@ class Device():
             return False
         
         elif '1' == res[0]:
-            msg = "Your device might not have android IWindowManger service!"
-            self.m_logger.error(msg)
-            return False
+            msg = "Your real device might not have android IWindowManger service!"
+            self.m_logger.warn(msg)
+            return True
         elif '0' == res[0]:
-            msg = "Device has IWindowService!"
+            msg = "Emulator or rooted-device has IWindowService!"
             return True
         else:
             self.m_logger.error("Failed to check whether device has IWindowService: other errors")

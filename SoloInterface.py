@@ -11,6 +11,7 @@ from ViewManagement.ViewTree import ViewTree
 from ViewManagement import ParseElement
 from ViewController.EventController import EventController
 from SystemComponent import Notification, ProgressBar, GroupView, PopupView
+from telnetlib import DET
 
 class SoloInterface():
     '''
@@ -756,23 +757,37 @@ class SoloInterface():
         return False
 
 #Scroll Operation------------------------------------------------------------------------------ 
-#    def scrollDown(self):
-#        pass
-#    
-#    def scrollDownList(self):
-#        pass
-#    
-#    def scrollToSide(self):
-#        pass
-#    
-#    def scrollUp(self):
-#        pass
-#    
-#    def scrollUpList(self):
-#        pass
+    def scrollDownToBottom(self):
+        try:
+            last_node = self.tree_nodes_list[-1]
+            delta_height = last_node.mAbsoluteRect.mBottom - self.device_display_height
+            step_count = delta_height/100 + 1
+            self.event_controller.drag(self.device_display_width/2, self.device_display_height/8*6, 
+                                       self.device_display_width/2, self.device_display_height/8*5, steps=step_count+1)        
+            self.setUp()
+            return True
+        except Exception, e:
+            self.m_logger.error("Failed to scroll to bottom. [%s]" %str(e))
+            return False        
+    
+    def scrollUpToTop(self):
+        try:
+            first_node = self.tree_nodes_list[0]           
+            self.setUp()
+            return True
+        except Exception, e:
+            self.m_logger.error("Failed to scroll to top. [%s]" %str(e))
+            return False
+    
+    def scrollDown(self):
+        pass
+    
+    def scrollUp(self):
+        pass           
+           
            
 if __name__=="__main__":
-    solo = SoloInterface(device_name="016eb881")
+    solo = SoloInterface()  #device_name="016eb881"
     solo.setUp()
 
 #------------------------------------------------------------------------------ 
@@ -831,13 +846,16 @@ if __name__=="__main__":
     
 
 
-    solo.clickItemByIndex("phone_malware_list", 0)  #scan_result_installmal
-    solo.clickViewById("cancel_button")
-    solo.clickItemByText("phone_malware_list", "Threat", True)
+#    solo.clickItemByIndex("phone_malware_list", 0)  #scan_result_installmal
+#    solo.clickViewById("cancel_button")
+#    solo.clickItemByText("phone_malware_list", "Threat", True)
+#    solo.clickViewById("cancel_button")
 
-    
+#------------------------------------------------------------------------------ 
+
+    solo.scrollToBottom()
+        
     solo.close()
     print"success to end"
-        
-        
+    
     

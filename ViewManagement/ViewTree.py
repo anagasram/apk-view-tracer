@@ -128,12 +128,12 @@ class ViewTree():
                 break
             else:
                 parent_node = current_node.mParentNode
-                temp_rect.mLeft+=parent_node.mRect.mLeft
-                temp_rect.mTop+=parent_node.mRect.mTop            
+                temp_rect.mLeft += (parent_node.mRect.mLeft - parent_node.mScrollX)
+                temp_rect.mTop += (parent_node.mRect.mTop - parent_node.mScrollY)
                 current_node = parent_node
     
-        temp_rect.mRight=temp_rect.mLeft+(node.mRect.mRight-node.mRect.mLeft)
-        temp_rect.mBottom=temp_rect.mTop+(node.mRect.mBottom-node.mRect.mTop)    
+        temp_rect.mRight = temp_rect.mLeft + (node.mRect.mRight - node.mRect.mLeft)
+        temp_rect.mBottom = temp_rect.mTop + (node.mRect.mBottom - node.mRect.mTop)    
         absoluteRect=temp_rect
         
         return absoluteRect
@@ -178,12 +178,18 @@ class ViewTree():
         node.mHashCode = element_parser.getHashCode()
         node.mId = element_parser.getID()
         node.mText = element_parser.getText()
-        node.mRect = element_parser.getRectArea()
+        
         active_state = ViewState(node)
-        node.mActive = active_state.getActiveState()
+        node.mVisible = element_parser.getVisible()
+        node.mActive = active_state.getActiveState()        
+        
+        node.mRect = element_parser.getRectArea()
+        node.mScrollX = element_parser.scrollX
+        node.mScrollY = element_parser.scrollY
         node.mAbsoluteRect = self.getAbsoluteRect(node)
         node.mLocation = self.getViewCenterPoint(node)
-        node.mVisible = element_parser.getVisible()
+        
+        
 
     
     

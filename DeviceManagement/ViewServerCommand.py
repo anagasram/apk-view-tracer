@@ -68,11 +68,11 @@ class ViewServerCommand():
     def getInfosByTelnet(self, command="DUMP -1"):
         host = self.device_ip
         port = self.view_server_port
-        #time_out = config.getServerTimeOut()
-        #tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
-        tn = telnetlib.Telnet(host=host, port=port) # this telnetlib is from jython.jar lib
+        time_out = 30
+        tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
+#        tn = telnetlib.Telnet(host=host, port=port) # this telnetlib is from jython.jar lib
         tn.write(command + "\n")
-        data = tn.read_until("DONE")    
+        data = tn.read_until("DONE", timeout=60)    
         tn.close()
         if None==data or 0==len(data):
             self.m_logger.error("Fail to dump data!")

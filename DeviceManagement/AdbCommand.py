@@ -17,7 +17,7 @@ class AdbCommand():
         self.device_name = device_name
         self.m_logger = logger
         
-    def executeCommand(self, cmd, bNeedResult):
+    def executeCommand(self, cmd, bNeedResult=False):
         try:
             if bNeedResult:
                 out = os.popen(cmd)

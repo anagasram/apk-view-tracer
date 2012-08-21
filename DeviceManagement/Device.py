@@ -51,7 +51,7 @@ class Device():
             return False
         
         elif '1' == res[0]:
-            msg = "Your real device might not have android IWindowManger service!"
+            msg = "This is real device and it might not have android IWindowManger service!"
             self.m_logger.warn(msg)
             return True
         elif '0' == res[0]:
@@ -96,6 +96,7 @@ class Device():
         try:
             out = os.popen(check_command)
             res = out.read()
+            res = res.rstrip(os.linesep)
             out.close()
         except Exception, e:
             self.m_logger.error("Failed to check isRunning of IWindowServer service: [%s]" %str(e))

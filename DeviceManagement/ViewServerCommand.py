@@ -110,7 +110,7 @@ class ViewServerCommand():
           
         name = l[1]
         
-        class_name = name.split(r"/")[1]
+        class_name = name.split(r"/")[-1]
         return class_name
         
     def getFocusViewPackageName(self):

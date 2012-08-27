@@ -37,8 +37,10 @@ class Item():
         # has no child
         if None==self.node.mChildNodes or 0==len(self.node.mChildNodes):
 #            self.text_list.append(self.node.mText)
-#            self.click_location_list.append(self.node.mLocation)            
-            self.properties_dict["mText"] = [self.node.mText]
+#            self.click_location_list.append(self.node.mLocation)
+
+            if self.node.mVisible:         
+                self.properties_dict["mText"] = [self.node.mText]
             if self.node.mActive:
                 self.properties_dict["mLocation"] = [self.node.mLocation]
                                     
@@ -71,7 +73,8 @@ class Item():
         
         for child in node.mChildNodes:
             if self.isLeafNode(child):
-                properties_dict["mText"].append(child.mText)
+                if child.mVisible:
+                    properties_dict["mText"].append(child.mText)
                 if child.mActive:                    
                     properties_dict["mLocation"].append(child.mLocation) # this might be TBD
                     

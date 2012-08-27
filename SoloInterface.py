@@ -116,7 +116,7 @@ class SoloInterface():
         if partial_matching:
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (node.mText.find(text)>=0):
+                    if node.mVisible and (node.mText != None) and (node.mText.find(text)>=0):
                         return True
                 except Exception, e:
                     self.m_logger.error("Current text fail to find sub string: [%s] " %e)
@@ -124,7 +124,7 @@ class SoloInterface():
         else:            
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (text == node.mText):
+                    if node.mVisible and (node.mText != None) and (text == node.mText):
                         return True
                 except Exception, e:
                     self.m_logger.error("Current text fail to match string: [%s] " %e)
@@ -151,7 +151,7 @@ class SoloInterface():
         if partial_matching:
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (node.mText.find(text)>=0):
+                    if node.mVisible and (node.mText != None) and (node.mText.find(text)>=0):
                         return True
                 except Exception, e:
                     self.m_logger.error("Current text fail to find sub string: [%s] " %e)
@@ -159,7 +159,7 @@ class SoloInterface():
         else:
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (text == node.mText):
+                    if node.mVisible and (node.mText != None) and (text == node.mText):
                         return True
                 except Exception, e:
                     self.m_logger.error("Current text fail to match string: [%s] " %e)
@@ -203,7 +203,7 @@ class SoloInterface():
         if partial_matching:
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (node.mText.find(text)>=0):
+                    if node.mVisible and (node.mText != None) and (node.mText.find(text)>=0):
                         self.event_controller.tap(node.mLocation.x, node.mLocation.y)
                         self.setUp()
                         return True
@@ -213,7 +213,7 @@ class SoloInterface():
         else:
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (text == node.mText):
+                    if node.mVisible and (node.mText != None) and (text == node.mText):
                         self.event_controller.tap(node.mLocation.x, node.mLocation.y)
                         self.setUp()
                         return True
@@ -322,7 +322,7 @@ class SoloInterface():
         if partial_matching:
             for node in self.tree_nodes_list:
                 try:
-                    if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (node.mText.find(text)>=0):
+                    if node.mVisible and self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (node.mText.find(text)>=0):
                         element_parser = ParseElement.ParseElement(node.mElement)
                         element_parser.parseElmentData()
                         return element_parser.getBoolean("isChecked()", False)
@@ -332,7 +332,7 @@ class SoloInterface():
         else:
             for node in self.tree_nodes_list:
                 try:
-                    if self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (text==node.mText):
+                    if node.mVisible and self.isViewType(node.mClassName, view_name_list) and (node.mText != None) and (text==node.mText):
                         element_parser = ParseElement.ParseElement(node.mElement)
                         element_parser.parseElmentData() 
                         return element_parser.getBoolean("isChecked()", False)
@@ -481,7 +481,7 @@ class SoloInterface():
         if partial_matching: 
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (node.mText.find(text)>=0):
+                    if node.mVisible and (node.mText != None) and (node.mText.find(text)>=0):
                         location = node.mLocation
                         self.event_controller.longPressByLocation(location.x, location.y) 
                         time.sleep(1)       
@@ -493,7 +493,7 @@ class SoloInterface():
         else:
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (text == node.mText):
+                    if node.mVisible and (node.mText != None) and (text == node.mText):
                         location = node.mLocation
                         self.event_controller.longPressByLocation(location.x, location.y)   
                         time.sleep(1)     
@@ -512,11 +512,19 @@ class SoloInterface():
         real_id = "id/" + groupview_id
         for node in self.tree_nodes_list:
             if real_id==node.mId:
+                element_parser = ParseElement(node.mElement)
+                element_parser.parseElmentData()
                 if None!=groupview_classname and 0!=len(groupview_classname):
                     if groupview_classname==node.mClassName:
-                        return len(node.mChildNodes)
+                        if "list:mItemCount" in element_parser.properties_dict.keys():
+                            return int(element_parser.properties_dict["list:mItemCount"])
+                        else:
+                            return len(node.mChildNodes)
                 else:
-                    return len(node.mChildNodes)
+                    if "list:mItemCount" in element_parser.properties_dict.keys():
+                        return int(element_parser.properties_dict["list:mItemCount"])
+                    else:
+                        return len(node.mChildNodes)
             
         return None
             
@@ -729,7 +737,7 @@ class SoloInterface():
             view_height = self.tree_nodes_list[0].mAbsoluteRect.mBottom - self.tree_nodes_list[0].mAbsoluteRect.mTop
             for node in self.tree_nodes_list:
                 try:
-                    if (node.mText != None) and (node.mText.find(text)>=0):
+                    if node.mVisible and (node.mText != None) and (node.mText.find(text)>=0):
                         realX = node.mLocation.x
                         realY = (self.device_display_height - view_height) + node.mLocation.y
                         self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
@@ -744,7 +752,7 @@ class SoloInterface():
         else:
             view_height = self.tree_nodes_list[0].mAbsoluteRect.mBottom - self.tree_nodes_list[0].mAbsoluteRect.mTop
             for node in self.tree_nodes_list:
-                if (node.mText != None) and (text == node.mText):
+                if node.mVisible and (node.mText != None) and (text == node.mText):
                     realX = node.mLocation.x
                     realY = (self.device_display_height - view_height) + node.mLocation.y
                     self.m_logger.info("realX: %s   realY: %s" %(realX, realY))

@@ -512,7 +512,7 @@ class SoloInterface():
         real_id = "id/" + groupview_id
         for node in self.tree_nodes_list:
             if real_id==node.mId:
-                element_parser = ParseElement(node.mElement)
+                element_parser = ParseElement.ParseElement(node.mElement)
                 element_parser.parseElmentData()
                 if None!=groupview_classname and 0!=len(groupview_classname):
                     if groupview_classname==node.mClassName:

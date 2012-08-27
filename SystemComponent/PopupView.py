@@ -180,12 +180,12 @@ class PopupView():
         index = 0
         if partial_matching:
             for node in self.focusable_view_list:
-                if (None!=node.mText) and (node.mText.find(text)>=0):
+                if node.mVisible and (None!=node.mText) and (node.mText.find(text)>=0):
                     self.focusViewByIndex(index, first_direction)
                 index += 1
         else:
             for node in self.focusable_view_list:
-                if (None!=node.mText) and (text == node.mText):
+                if node.mVisible and (None!=node.mText) and (text == node.mText):
                     self.focusViewByIndex(index, first_direction)
                 index += 1
                 
@@ -257,13 +257,13 @@ class PopupView():
         
         if partial_matching:
             for node in self.focusable_view_list:
-                if (None != node.mText) and (node.mText.find(text)>=0):
+                if node.mVisible and (None != node.mText) and (node.mText.find(text)>=0):
                     real_location = self.getRealLocation(node.mLocation.x, node.mLocation.y)
                     self.event_controller.tap(int(real_location[0]), int(real_location[1]))
                     return True                    
         else:
             for node in self.focusable_view_list:
-                if (None != node.mText) and (text == node.mText):
+                if node.mVisible and (None != node.mText) and (text == node.mText):
                     real_location = self.getRealLocation(node.mLocation.x, node.mLocation.y)
                     self.event_controller.tap(int(real_location[0]), int(real_location[1]))
                     return True

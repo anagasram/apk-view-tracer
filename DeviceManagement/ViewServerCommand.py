@@ -5,6 +5,7 @@
 ## ViewServerCommand.py
 
 import socket
+import os
 import telnetlib
 
 class ViewServerCommand():
@@ -69,11 +70,24 @@ class ViewServerCommand():
         host = self.device_ip
         port = self.view_server_port
         time_out = 30
-        tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
-#        tn = telnetlib.Telnet(host=host, port=port) # this telnetlib is from jython.jar lib
-        tn.write(command + "\n")
-        data = tn.read_until("DONE", timeout=60)    
-        tn.close()
+
+        retry_time = 3;
+        while retry_time>0:
+            try:
+                tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
+#               tn = telnetlib.Telnet(host=host, port=port) # this telnetlib is from jython.jar lib
+                tn.write(command + "\n")
+                data = tn.read_until("DONE", timeout=40)
+                tn.close()
+                break
+            except Exception, e:
+                tn.close()
+                self.m_logger.error(e)
+                os.system("adb kill-server")
+                os.system("adb start-server")
+                os.system("adb forward tcp:%s tcp%s" %(self.view_server_port,self.view_server_port))
+                retry_time -= 1                            
+        
         if None==data or 0==len(data):
             self.m_logger.error("Fail to dump data!")
         return data

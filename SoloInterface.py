@@ -188,7 +188,8 @@ class SoloInterface():
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
-                self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                if not self.event_controller.tap(node.mLocation.x, node.mLocation.y):
+                    return False
                 if ReDump:
                     time.sleep(2)
                     self.setUp()
@@ -204,7 +205,8 @@ class SoloInterface():
             for node in self.tree_nodes_list:
                 try:
                     if node.mVisible and (node.mText != None) and (node.mText.find(text)>=0):
-                        self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                        if not self.event_controller.tap(node.mLocation.x, node.mLocation.y):
+                            return False
                         self.setUp()
                         return True
                 except Exception, e:
@@ -214,7 +216,8 @@ class SoloInterface():
             for node in self.tree_nodes_list:
                 try:
                     if node.mVisible and (node.mText != None) and (text == node.mText):
-                        self.event_controller.tap(node.mLocation.x, node.mLocation.y)
+                        if not self.event_controller.tap(node.mLocation.x, node.mLocation.y):
+                            return False
                         self.setUp()
                         return True
                 except Exception, e:
@@ -272,7 +275,8 @@ class SoloInterface():
                     self.event_controller.press("del")
                     length-=1
                                 
-                self.event_controller.type(text)
+                if not self.event_controller.type(text):
+                    return False
                 self.setUp()
                 return True
             
@@ -289,7 +293,8 @@ class SoloInterface():
         real_id = "id/"+id
         for node in self.tree_nodes_list:
             if real_id == node.mId:
-                self.event_controller.type(text)
+                if not self.event_controller.type(text):
+                    return False
                 self.setUp()
                 return True
         
@@ -357,61 +362,77 @@ class SoloInterface():
 #Physical Button Operations------------------------------------------------------------------------------ 
 
     def longPressHome(self):
-        self.event_controller.longPressByKeyCode("home")
+        if not self.event_controller.longPressByKeyCode("home"):
+            return False
         self.setUp()
         return True
     
     def pressHome(self):
-        self.event_controller.press("home")
+        if not self.event_controller.press("home"):
+            return False
         self.setUp()
         return True
     
     def callMenu(self):
-        self.event_controller.press("menu")
+        if not self.event_controller.press("menu"):
+            return False
         self.setUp()
         return True
     
     def goBack(self, ReDump=True):
-        self.event_controller.press("back")
+        if not self.event_controller.press("back"):
+            return False
         if ReDump:
             self.setUp()
         return True
     
     def callDelete(self, reDump=False):
-        self.event_controller.press("del")
+        if not self.event_controller.press("del"):
+            return False
         if reDump:
             self.setUp()
+        return True
     
     def callLeft(self, reDump=False):
-        self.event_controller.press("dpad_left")
+        if not self.event_controller.press("dpad_left"):
+            return False
         if reDump:
             self.setUp()
+        return True
     
     def callRight(self, reDump=False):
-        self.event_controller.press("dpad_right")
+        if not self.event_controller.press("dpad_right"):
+            return False
         if reDump:
             self.setUp()
+        return True
     
     def callUp(self, reDump=False):
-        self.event_controller.press("dpad_up")
+        if not self.event_controller.press("dpad_up"):
+            return False
         if reDump:
             self.setUp()
+        return True
     
     def callDown(self, reDump=False):
-        self.event_controller.press("dpad_down")
+        if not self.event_controller.press("dpad_down"):
+            return False
         if reDump:
             self.setUp()
+        return True
 
 #Operation with Notification------------------------------------------------------------------------------ 
     def callNotification(self):
-        self.event_controller.drag(100, 20, 100, 500)
+        if not self.event_controller.drag(100, 20, 100, 500):
+            return False
         self.setUp()
         return True
     
     def clearAllNotifications(self, reDump=False):
         notifies = Notification.Notification(self.tree_nodes_list)
         location = notifies.getClearButtonLocation()
-        self.event_controller.tap(location.x, location.y)
+        if not self.event_controller.tap(location.x, location.y):
+            return False
         if reDump:
             self.setUp()        
         return True
@@ -428,7 +449,8 @@ class SoloInterface():
         else:
             location = notifies.getLocationByText(text)
             
-        self.event_controller.tap(location.x, location.y)
+        if not self.event_controller.tap(location.x, location.y):
+            return False
         self.setUp()
         return True       
 
@@ -483,7 +505,8 @@ class SoloInterface():
                 try:
                     if node.mVisible and (node.mText != None) and (node.mText.find(text)>=0):
                         location = node.mLocation
-                        self.event_controller.longPressByLocation(location.x, location.y) 
+                        if not self.event_controller.longPressByLocation(location.x, location.y):
+                            return False 
                         time.sleep(1)       
                         self.setUp()
                         return True
@@ -495,7 +518,8 @@ class SoloInterface():
                 try:
                     if node.mVisible and (node.mText != None) and (text == node.mText):
                         location = node.mLocation
-                        self.event_controller.longPressByLocation(location.x, location.y)   
+                        if not self.event_controller.longPressByLocation(location.x, location.y):
+                            return False   
                         time.sleep(1)     
                         self.setUp()
                         return True
@@ -693,6 +717,8 @@ class SoloInterface():
                 time.sleep(1)
                 self.setUp()
                 return True 
+        
+        return False
 
     def selectInHorizontalPopupByText(self, text, partial_matching=True):
         if None == text or 0 == len(text):
@@ -705,7 +731,9 @@ class SoloInterface():
             if self.event_controller.press("enter"):
                 time.sleep(1)
                 self.setUp()
-                return True 
+                return True
+            
+        return False
         
 
     
@@ -721,7 +749,8 @@ class SoloInterface():
                 realX = node.mLocation.x                
                 realY = (self.device_display_height - view_height) + node.mLocation.y
                 self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
-                self.event_controller.tap(realX, realY)
+                if not self.event_controller.tap(realX, realY):
+                    return False
 
                 time.sleep(1)
                 self.setUp()
@@ -741,8 +770,8 @@ class SoloInterface():
                         realX = node.mLocation.x
                         realY = (self.device_display_height - view_height) + node.mLocation.y
                         self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
-                        self.event_controller.tap(realX, realY)
-                        
+                        if not self.event_controller.tap(realX, realY):
+                            return False                        
                         time.sleep(1)
                         self.setUp()
                         return True
@@ -756,8 +785,8 @@ class SoloInterface():
                     realX = node.mLocation.x
                     realY = (self.device_display_height - view_height) + node.mLocation.y
                     self.m_logger.info("realX: %s   realY: %s" %(realX, realY))
-                    self.event_controller.tap(realX, realY)
-                    
+                    if not self.event_controller.tap(realX, realY):
+                        return False                    
                     time.sleep(1)
                     self.setUp()
                     return True
@@ -770,8 +799,9 @@ class SoloInterface():
             last_node = self.tree_nodes_list[-1]
             delta_height = last_node.mAbsoluteRect.mBottom - self.device_display_height
             step_count = delta_height/100 + 1
-            self.event_controller.drag(self.device_display_width/2, self.device_display_height/8*6, 
-                                       self.device_display_width/2, self.device_display_height/8*5, steps=step_count+1)        
+            if not self.event_controller.drag(self.device_display_width/2, self.device_display_height/8*6, 
+                                       self.device_display_width/2, self.device_display_height/8*5, steps=step_count+1):
+                return False        
             self.setUp()
             return True
         except Exception, e:

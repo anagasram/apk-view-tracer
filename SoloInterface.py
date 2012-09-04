@@ -11,7 +11,6 @@ from ViewManagement.ViewTree import ViewTree
 from ViewManagement import ParseElement
 from ViewController.EventController import EventController
 from SystemComponent import Notification, ProgressBar, GroupView, PopupView
-from telnetlib import DET
 
 class SoloInterface():
     '''
@@ -29,7 +28,7 @@ class SoloInterface():
                                 "ProgressBar": "android.widget.ProgressBar",
                                 "ScrollView": "android.widget.ScrollView"}
           
-    def __init__(self, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1"):
+    def __init__(self, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1", view_server_port=4939, monkey_server_port=12345):
         '''
         Constructor
         '''
@@ -40,8 +39,11 @@ class SoloInterface():
         self.device_port = device_port
         self.device_address = device_address
         
+        self.view_server_port = view_server_port
+        self.monkey_server_port = monkey_server_port
+        
         # object of Device
-        self.device = Device(self.m_logger, self.device_name)        
+        self.device = Device(self.m_logger, self.device_name, self.device_port, self.device_address, self.view_server_port, self.monkey_server_port)        
         # init device
         self.device.open()
         
@@ -51,7 +53,7 @@ class SoloInterface():
         self.tree_nodes_list = None
         
         # object of View Controller 
-        self.event_controller = EventController(self.m_logger, self.device_name)
+        self.event_controller = EventController(self.m_logger, self.device_name, self.device_port, self.device_address, self.monkey_server_port)
         # init event controller
         self.event_controller.open()
         

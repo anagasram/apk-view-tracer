@@ -13,16 +13,17 @@ class Device():
     Device
     '''
     
-    def __init__(self, logger, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1", view_server_port=4939):
+    def __init__(self, logger, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1", view_server_port=4939, monkey_server_port=12345):
         self.m_logger = logger
         self.class_name = "Device"
         self.device_name = device_name
         self.device_port = device_port
         self.device_address = device_address
         self.view_server_port = view_server_port
+        self.monkey_server_port = monkey_server_port
         
         self.adb_console = AdbCommand(self.m_logger, self.device_name, self.device_port)
-        self.view_console = ViewServerCommand(self.m_logger, self.device_address, self.view_server_port)
+        self.view_console = ViewServerCommand(self.m_logger, self.device_address, self.view_server_port, self.device_name, self.monkey_server_port)
     
     # 3 state
     # device, offline, bootloader    
@@ -34,7 +35,9 @@ class Device():
         try:
             if (None == res) or (0 == len(res)) or ("device" != res.rstrip("\n")):
                 self.adb_console.killServer()
-                self.adb_console.startServer()                
+                self.adb_console.startServer()    
+                self.adb_console.forwardPort(self.view_server_port, self.view_server_port)
+                self.adb_console.forwardPort(self.monkey_server_port, self.monkey_server_port)            
             return True
         except Exception, e:
             msg = "[%s] Failed to check Device state: [%s]" %(self.class_name, str(e))

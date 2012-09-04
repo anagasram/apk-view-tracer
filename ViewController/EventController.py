@@ -115,7 +115,7 @@ class EventController():
             except Exception, e:
                 msg = "[%s] Failed to send event `%s`: [%s] " %(self.class_name, command, str(e))
                 self.m_logger.error(msg)
-                if tn.sock:
+                if isinstance(tn, telnetlib.Telnet) and tn.sock:
                     tn.close()
                     time.sleep(2)
                 retry_time -= 1

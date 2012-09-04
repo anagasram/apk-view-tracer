@@ -102,18 +102,25 @@ class EventController():
             return False
         
     def sendEventByTelnet(self, command):
-        try:
-            #time_out = config.getServerTimeOut()
-            #tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
-            tn = telnetlib.Telnet(host=self.device_address, port=self.monkey_server_port) # this telnetlib is from jython.jar lib   
-            tn.write(command + "\n")
-            time.sleep(1)
-            tn.close()
-            return True
-        except Exception, e:
-            msg = "[%s] Failed to send event `%s`: [%s] " %(self.class_name, command, str(e))
-            self.m_logger.error(msg)
-            return False
+        retry_time = 3
+        while retry_time>0:
+            try:
+                #time_out = config.getServerTimeOut()
+                #tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
+                tn = telnetlib.Telnet(host=self.device_address, port=self.monkey_server_port) # this telnetlib is from jython.jar lib   
+                tn.write(command + "\n")
+                time.sleep(1)
+                tn.close()
+                return True
+            except Exception, e:
+                msg = "[%s] Failed to send event `%s`: [%s] " %(self.class_name, command, str(e))
+                self.m_logger.error(msg)
+                if tn.sock:
+                    tn.close()
+                    time.sleep(2)
+                retry_time -= 1
+                
+        return False
         
     def getPropertiesByTelnet(self, command):
         try:

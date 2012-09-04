@@ -15,6 +15,7 @@ class Device():
     
     def __init__(self, logger, device_name="emulator-5554", device_port=5554, device_address="127.0.0.1", view_server_port=4939):
         self.m_logger = logger
+        self.class_name = "Device"
         self.device_name = device_name
         self.device_port = device_port
         self.device_address = device_address
@@ -36,7 +37,8 @@ class Device():
                 self.adb_console.startServer()                
             return True
         except Exception, e:
-            self.m_logger.error(e)
+            msg = "[%s] Failed to check Device state: [%s]" %(self.class_name, str(e))
+            self.m_logger.error(msg)
             return False
         
     def hasService(self):

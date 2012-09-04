@@ -45,7 +45,8 @@ class ViewServerCommand():
         try:
             s.connect((host,port))
         except Exception,e:
-            self.m_logger.error(str(e))   
+            msg = "[%s] Failed to get infos from View Server by socket [%s]" %(self.class_name, str(e))
+            self.m_logger.error(msg)   
     
         s.send(command+'\n')
         self.m_logger.info("sucess to send command: [%s] " %command)
@@ -81,12 +82,14 @@ class ViewServerCommand():
                 tn.close()
                 break
             except Exception, e:
-                tn.close()
-                self.m_logger.error(e)
+                msg = "[%s] Failed to get infos from View Server by Telnet: [%s]" %(self.class_name, str(e))                
+                self.m_logger.error(msg)
+                if tn.sock:
+                    tn.close()
                 os.system("adb kill-server")
                 os.system("adb start-server")
                 os.system("adb forward tcp:%s tcp%s" %(self.view_server_port,self.view_server_port))
-                retry_time -= 1                            
+                retry_time -= 1                          
         
         if None==data or 0==len(data):
             self.m_logger.error("Fail to dump data!")

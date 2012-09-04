@@ -45,6 +45,10 @@ class AdbCommand():
     def startServer(self):
         startCommand = "adb -s %s start-server" %self.device_name
         return self.executeCommand(startCommand)
+    
+    def forwardPort(self, source_port, target_port):
+        forwardCommand = "adb -s %s forward tcp:%s tcp:%s" %(source_port, target_port)
+        return self.executeCommand(forwardCommand)
         
     def installPkg(self, package_name):
         # 安装 package的时候就不需要判断之前有没有安装package 

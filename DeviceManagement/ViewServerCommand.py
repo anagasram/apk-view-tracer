@@ -25,12 +25,14 @@ class ViewServerCommand():
     invalidate_cmd = "INVALIDATE"
     profile_cmd = "PROFILE"
     
-    def __init__(self, logger, device_ip, view_server_port):
+    def __init__(self, logger, device_ip, view_server_port, device_name, monkey_server_port):
         self.class_name = "ViewServerCommand"
         self.m_logger = logger
         
         self.device_ip = device_ip
-        self.view_server_port = view_server_port       
+        self.view_server_port = view_server_port
+        self.device_name = device_name
+        self.monkey_server_port = monkey_server_port
         
     
     #===============================================================================
@@ -84,11 +86,12 @@ class ViewServerCommand():
             except Exception, e:
                 msg = "[%s] Failed to get infos from View Server by Telnet: [%s]" %(self.class_name, str(e))                
                 self.m_logger.error(msg)
-                if tn.sock:
+                if isinstance(tn, telnetlib.Telnet) and tn.sock:
                     tn.close()
                 os.system("adb kill-server")
                 os.system("adb start-server")
-                os.system("adb forward tcp:%s tcp%s" %(self.view_server_port,self.view_server_port))
+                os.system("adb -s %s forward tcp:%s tcp%s" %(self.device_name, self.view_server_port, self.view_server_port))
+                os.system("adb -s %s forward tcp:%s tcp%s" %(self.device_name, self.monkey_server_port, self.monkey_server_port))
                 retry_time -= 1                          
         
         if None==data or 0==len(data):

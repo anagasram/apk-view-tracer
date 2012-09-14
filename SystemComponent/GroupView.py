@@ -52,6 +52,12 @@ class Item():
         
         # has child
         self.getChildProperties(self.node, self.properties_dict)
+        
+        # check again if the onClickListener event register to the list view node, also mean its parent's node
+        if 0 == len(self.properties_dict["mLocation"]):
+            if self.node.mParentNode.mClickable:
+                self.properties_dict["mLocation"] = [self.node.mLocation]
+        
         return True
         
     
@@ -75,7 +81,7 @@ class Item():
             if self.isLeafNode(child):
                 if child.mVisible:
                     properties_dict["mText"].append(child.mText)
-                if child.mActive:                    
+                if child.mClickable:                    
                     properties_dict["mLocation"].append(child.mLocation) # this might be TBD
                     
                 element_parser = ParseElement(child.mElement)

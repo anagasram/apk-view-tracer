@@ -182,6 +182,12 @@ class SoloInterface():
                 return node.mVisible            
         return False
     
+    def isClickableById(self, id):
+        real_id = "id/"+id
+        for node in self.tree_nodes_list:
+            if real_id == node.mId:
+                return node.mClickable
+        return False
     
     def clickViewById(self, id, ReDump=True):
         if 0==len(id):

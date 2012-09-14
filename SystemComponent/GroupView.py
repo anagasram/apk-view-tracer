@@ -41,7 +41,7 @@ class Item():
 
             if self.node.mVisible:         
                 self.properties_dict["mText"] = [self.node.mText]
-            if self.node.mActive:
+            if self.node.mClickable:
                 self.properties_dict["mLocation"] = [self.node.mLocation]
                                     
             element_parser = ParseElement(self.node.mElement)

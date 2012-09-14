@@ -34,3 +34,4 @@ class CTreeNode(object):
     mVisible = False
     mScrollX = 0
     mScrollY = 0
+    mClickable = False

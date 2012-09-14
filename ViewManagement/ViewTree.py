@@ -181,6 +181,7 @@ class ViewTree():
         
         active_state = ViewState(node)
         node.mVisible = element_parser.getVisible()
+        node.mClickable = element_parser.getClickable()
         node.mActive = active_state.getActiveState()        
         
         node.mRect = element_parser.getRectArea()

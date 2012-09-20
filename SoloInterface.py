@@ -388,6 +388,8 @@ class SoloInterface():
         return True
     
     def goBack(self, ReDump=True):
+        # another method:
+        # self.device.adb_console.shell("input keyevent 4")
         if not self.event_controller.press("back"):
             return False
         if ReDump:

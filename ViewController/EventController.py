@@ -33,10 +33,16 @@ class SocketBinder(threading.Thread):
         self.port = monkey_server_port
         
     def run(self):
-        # bind monkey server to port
-        # then monkey server listen this port
-        bind_command = "adb -s %s shell monkey --port %s" %(self.device_name, self.port)
-        os.system(bind_command)
+        while True:
+            # bind monkey server to port
+            # then monkey server listen this port
+            bind_command = "adb -s %s shell monkey --port %s" %(self.device_name, self.port)
+            try:
+                os.system(bind_command)
+            except Exception, e:
+                print "restart monkey service in device: [%s]" %str(e)
+            
+            time.sleep(5*60)
         
         
 #------------------------------------------------------------------------------

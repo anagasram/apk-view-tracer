@@ -74,7 +74,7 @@ class ViewServerCommand():
         port = self.view_server_port
         time_out = 30
 
-        retry_time = 3;
+        retry_time = 5;
         while retry_time>0:
             try:
                 tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
@@ -82,8 +82,13 @@ class ViewServerCommand():
                 tn.write(command + "\n")
                 data = tn.read_until("DONE", timeout=60)
                 tn.close()
-                if not data.endswith("DONE"):
+                if None == data or 0==len(data):
+                    retry_time -= 1
+                    continue
+                
+                if (command.startswith("DUMP")) and (not data.endswith("DONE")):
                     self.m_logger.error("The dump data not end with 'DONE', continue this dump loop")
+                    retry_time -= 1  
                     continue
                 break
             except Exception, e:
@@ -99,6 +104,10 @@ class ViewServerCommand():
         
         if None==data or 0==len(data):
             self.m_logger.error("Fail to dump data!")
+            
+        if (command.startswith("DUMP")) and (not data.endswith("DONE")):
+            data = None
+            
         return data
     
     #===========================================================================

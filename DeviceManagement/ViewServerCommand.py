@@ -80,8 +80,11 @@ class ViewServerCommand():
                 tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
 #               tn = telnetlib.Telnet(host=host, port=port) # this telnetlib is from jython.jar lib
                 tn.write(command + "\n")
-                data = tn.read_until("DONE", timeout=40)
+                data = tn.read_until("DONE", timeout=60)
                 tn.close()
+                if not data.endswith("DONE"):
+                    self.m_logger.error("The dump data not end with 'DONE', continue this dump loop")
+                    continue
                 break
             except Exception, e:
                 msg = "[%s] Failed to get infos from View Server by Telnet: [%s]" %(self.class_name, str(e))                

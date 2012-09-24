@@ -430,6 +430,16 @@ class SoloInterface():
         if reDump:
             self.setUp()
         return True
+    
+#Device Operation with GSM------------------------------------------------------------------------------
+    def sendSMS(self, recv_num, text):
+        return self.device.device_console.sendSMS(recv_num, text)
+    
+    def makePhoneCall(self, phone_num):
+        return self.device.device_console.makePhoneCall(phone_num)
+    
+    def cancelPhoneCall(self, phone_num):
+        return self.device.device_console.cancelPhoneCall(phone_num)
 
 #Operation with Notification------------------------------------------------------------------------------ 
     def callNotification(self):

@@ -7,6 +7,7 @@
 import os
 from AdbCommand import AdbCommand
 from ViewServerCommand import ViewServerCommand
+from DeviceConsole import DeviceConsole
 
 class Device():
     '''
@@ -24,6 +25,7 @@ class Device():
         
         self.adb_console = AdbCommand(self.m_logger, self.device_name, self.device_port)
         self.view_console = ViewServerCommand(self.m_logger, self.device_address, self.view_server_port, self.device_name, self.monkey_server_port)
+        self.device_console = DeviceConsole(self.m_logger, self.device_address, self.device_port)
     
     # 3 state
     # device, offline, bootloader    

@@ -17,6 +17,7 @@ import Logger
 import logging
 import threading
 import time
+from ConstKeyCode import KeyCodeDict
 
 
 #------------------------------------------------------------------------------ 
@@ -127,6 +128,28 @@ class EventController():
                 retry_time -= 1
                 
         return False
+    
+    def sendEventsByTelnet(self, commands=[]):
+        retry_time = 3
+        while retry_time>0:
+            try:
+                #time_out = config.getServerTimeOut()
+                #tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
+                tn = telnetlib.Telnet(host=self.device_address, port=self.monkey_server_port) # this telnetlib is from jython.jar lib
+                for command in commands:   
+                    tn.write(command + "\n")
+                time.sleep(1)
+                tn.close()
+                return True
+            except Exception, e:
+                msg = "[%s] Failed to send event `%s`: [%s] " %(self.class_name, command, str(e))
+                self.m_logger.error(msg)
+                if isinstance(tn, telnetlib.Telnet) and tn.sock:
+                    tn.close()
+                    time.sleep(2)
+                retry_time -= 1
+                
+        return False
         
     def getPropertiesByTelnet(self, command):
         try:
@@ -216,9 +239,44 @@ class EventController():
         command = "touch move %s %s" %(x, y)
         return self.sendEventByTelnet(command)
     
+#    def type(self, text):
+#        command = "type %s" %text
+#        self.sendEventByTelnet(command)
+#        # there has a problem
+#        if True:
+#            return True  
+#        else:
+#            self.press("enter")
+#            return True
+#        
+#        return False
+        
     def type(self, text):
-        command = "type %s" %text
-        self.sendEventByTelnet(command)
+        string_list = []
+        last_string = ""
+        index = 0
+        for char in text:
+            if " " == char:                         
+                if index!=0 and last_string!="":     
+                    string_list.append(last_string)
+                    
+                string_list.append(char)
+                last_string = ""                
+            else:
+                last_string+=char                
+            index += 1
+        if last_string!="":
+            string_list.append(last_string)
+        
+        commands = []
+        command = ""
+        for string in string_list:
+            if " " == string:
+                command = "key down %s" %KeyCodeDict[" "]
+            else:
+                command = "type %s" %string
+            commands.append(command)
+        self.sendEventsByTelnet(commands)
         # there has a problem
         if True:
             return True  
@@ -226,8 +284,8 @@ class EventController():
             self.press("enter")
             return True
         
-        return False
-        
+        return False 
+                
         
     def getCurrentPackageName(self):
         command = "getvar am.current.package"

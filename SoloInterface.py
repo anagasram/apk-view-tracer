@@ -267,7 +267,11 @@ class SoloInterface():
             
         return False
     
+    ## another method: adb shell input text
+    ## the blank '' should be replaced by ASCII code '\x20', but it can not work now.
+    ## the blank '' also can be input by "adb shell input keyevent 62"  or "key down 62"
     def setEditTextById(self, id, text):
+        
         if 0==len(id) or 0==len(text):
             return False
         

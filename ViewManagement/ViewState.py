@@ -47,6 +47,10 @@ class ViewState():
     ## 但是如果，RadioGroup下包含了TextView和一些RadioButton,这个TextView是不可点击的吗？ 
     def getClickableState(self):
         parent_node = self.node.mParentNode
+        
+        if None == parent_node:
+            return self.element_parser.getClickable()
+                    
         parent_element_parser = ParseElement(parent_node.mElement)
         parent_element_parser.parseElmentData()
         parent_ClassName = parent_element_parser.getClassName()

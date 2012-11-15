@@ -10,7 +10,7 @@ from DeviceManagement.Device import Device
 from ViewManagement.ViewTree import ViewTree
 from ViewManagement import ParseElement
 from ViewController.EventController import EventController
-from SystemComponent import Notification, ProgressBar, GroupView, PopupView
+from SystemComponent import Notification, ProgressBar, GroupView, PopupView, ActionBar
 
 class SoloInterface():
     '''
@@ -57,8 +57,11 @@ class SoloInterface():
         # init event controller
         self.event_controller.open()
         
-        self.device_display_width = int(self.event_controller.getDisplayWidth())
-        self.device_display_height = int(self.event_controller.getDisplayHeight())
+        try:
+            self.device_display_width = int(self.event_controller.getDisplayWidth())
+            self.device_display_height = int(self.event_controller.getDisplayHeight())
+        except Exception, e:
+            print e
         # to 480*800 display
         # Notification (y: 0-37  / x: 8-471 )
         self.notification_height = 37
@@ -845,11 +848,83 @@ class SoloInterface():
         pass
     
     def scrollUp(self):
-        pass           
-           
+        pass
+    
+    def scrollToRight(self):
+        try:
+            if not self.event_controller.drag(self.device_display_width/8*6, self.device_display_height/2, 
+                                       self.device_display_width/8*2, self.device_display_height/2, steps=5):
+                return False        
+            self.setUp()
+            return True
+        except Exception, e:
+            self.m_logger.error("Failed to scroll to right. [%s]" %str(e))
+            return False  
+    
+    def scrollToLeft(self):
+        try:
+            if not self.event_controller.drag(self.device_display_width/8*2, self.device_display_height/2, 
+                                       self.device_display_width/8*6, self.device_display_height/2, steps=5):
+                return False        
+            self.setUp()
+            return True
+        except Exception, e:
+            self.m_logger.error("Failed to scroll to right. [%s]" %str(e))
+            return False 
+    
+#Action Bar Operation------------------------------------------------------------------------------             
+    def getActionBarItemsNumber(self, actionbar_id, actionbar_classname=None):
+        if None==actionbar_id or 0==len(actionbar_id):
+            return None
+        
+        real_id = "id/" + actionbar_id
+        for node in self.tree_nodes_list:
+            if real_id==node.mId:
+                element_parser = ParseElement.ParseElement(node.mElement)
+                element_parser.parseElmentData()
+                if None!=actionbar_classname and 0!=len(actionbar_classname):
+                    if actionbar_classname==node.mClassName:
+                        if "list:mItemCount" in element_parser.properties_dict.keys():
+                            return int(element_parser.properties_dict["list:mItemCount"])
+                        else:
+                            actionbar = ActionBar.ActionBar(node)
+                            actionbar.loadAllItems()
+                            return len(actionbar.items_list)
+                else:
+                    if "list:mItemCount" in element_parser.properties_dict.keys():
+                        return int(element_parser.properties_dict["list:mItemCount"])
+                    else:
+                        actionbar = ActionBar.ActionBar(node)
+                        actionbar.loadAllItems()
+                        return len(actionbar.items_list)            
+        return None
+
+    def clickActionBarByIndex(self, actionbar_id, index=0):
+        if None==actionbar_id or 0==len(actionbar_id):
+            return False
+        
+        if None==index or (not isinstance(index, int)):
+            return False
+        
+        real_id = "id/" + actionbar_id
+        item = None
+        for node in self.tree_nodes_list:
+            if real_id==node.mId:
+                actionbar = ActionBar.ActionBar(node)
+                actionbar.loadAllItems()
+                item = actionbar.items_list[index]
+                break
+        if None == item:
+            return False
+        
+        if self.event_controller.tap(item.mLocation.x, item.mLocation.y):
+            self.setUp()
+            return True
+            
+        return False
            
 if __name__=="__main__":
-    solo = SoloInterface()  #device_name="016eb881"
+    solo = SoloInterface(device_name="f0b23e6e")  #device_name="f0b23e6e"
     solo.setUp()
 
 #------------------------------------------------------------------------------ 
@@ -915,8 +990,14 @@ if __name__=="__main__":
 
 #------------------------------------------------------------------------------ 
 
-    solo.scrollToBottom()
-        
+    solo.scrollToRight()
+    solo.scrollToLeft()
+
+#------------------------------------------------------------------------------
+    
+#    print solo.getActionBarItemsNumber("action_bar_container")
+#    solo.clickActionBarByIndex("action_bar_container", 1)
+    
     solo.close()
     print"success to end"
     

@@ -3,6 +3,7 @@ encoding//DeviceManagement/AdbCommand.py=utf-8
 encoding//DeviceManagement/Device.py=utf-8
 encoding//DeviceManagement/DeviceConsole.py=utf-8
 encoding//DeviceManagement/ViewServerCommand.py=utf-8
+encoding//SystemComponent/ActionBar.py=utf-8
 encoding//SystemComponent/GroupView.py=utf-8
 encoding//SystemComponent/Home.py=utf-8
 encoding//SystemComponent/Menu.py=utf-8

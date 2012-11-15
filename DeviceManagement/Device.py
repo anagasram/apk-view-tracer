@@ -118,8 +118,8 @@ class Device():
         
     def open(self):
         try:
-            if not self.checkDevice():
-                return False
+#            if not self.checkDevice():
+#                return False
                 
             if not self.hasService():
                 return False

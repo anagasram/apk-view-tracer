@@ -75,7 +75,9 @@ class ViewServerCommand():
         time_out = 30
 
         retry_time = 5;
-        while retry_time>0:
+        tn = None
+        data = None
+        while retry_time>0:            
             try:
                 tn = telnetlib.Telnet(host=host, port=port, timeout=time_out) # this telnetlib is from python lib
 #               tn = telnetlib.Telnet(host=host, port=port) # this telnetlib is from jython.jar lib
@@ -104,9 +106,9 @@ class ViewServerCommand():
         
         if None==data or 0==len(data):
             self.m_logger.error("Fail to dump data!")
-            
-        if (command.startswith("DUMP")) and (not data.endswith("DONE")):
-            data = None
+        else:
+            if (command.startswith("DUMP")) and (not data.endswith("DONE")):
+                data = None
             
         return data
     
